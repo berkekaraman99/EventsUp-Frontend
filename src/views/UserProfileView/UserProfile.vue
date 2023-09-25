@@ -1,0 +1,440 @@
+<template>
+  <div class="container-fluid">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 mt-3" v-if="loading">
+          <div class="profile-header position-relative placeholder-glow">
+            <div class="profile-banner rounded-4 placeholder"></div>
+            <div class="profile-image placeholder bg-black"></div>
+            <div class="profile-details">
+              <div class="col-4">
+                <h2 class="fw-bold">
+                  <span class="placeholder col-12"></span>
+                </h2>
+                <h5 class="placeholder col-8"></h5>
+                <div>
+                  <span class="placeholder h3 col-3 me-1"></span>
+                  <span class="placeholder h3 col-3 me-1"></span>
+                  <span class="placeholder h3 col-3"></span>
+                  <p class="placeholder col-12 h3"></p>
+                </div>
+              </div>
+              <div class="align-self-baseline">
+                <a class="btn follow placeholder" style="width: 100px" disabled></a>
+              </div>
+            </div>
+          </div>
+
+          <div id="options" class="container my-4">
+            <div class="row">
+              <div class="col-sm-12 col-md-3 text-center my-2">
+                <span class="placeholder col-6 h2"></span>
+              </div>
+
+              <div class="col-sm-12 col-md-3 text-center my-2">
+                <span class="placeholder col-6 h2"></span>
+              </div>
+
+              <div class="col-sm-12 col-md-3 text-center my-2">
+                <span class="placeholder col-6 h2"></span>
+              </div>
+
+              <div class="col-sm-12 col-md-3 text-center my-2">
+                <span class="placeholder col-6 h2"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 mt-3" v-else>
+          <div class="profile-header position-relative rounded-4 shadow-sm bg-white">
+            <img
+              v-if="currentUser.bannerImage != null"
+              class="profile-banner rounded-top-4"
+              :src="currentUser.bannerImage"
+              alt="banner"
+            />
+            <div v-else class="profile-banner rounded-top-4 tw-bg-slate-100"></div>
+
+            <img
+              class="profile-image shadow"
+              :src="currentUser.profileImage"
+              v-if="currentUser.profileImage != null"
+            />
+            <img
+              src="@/assets/images/profile-man.png"
+              alt="profile-man"
+              class="profile-image me-4"
+              v-else-if="currentUser.gender == 2"
+            />
+            <img
+              src="@/assets/images/profile-woman.png"
+              alt="profile-woman"
+              class="profile-image me-4"
+              v-else-if="currentUser.gender == 1"
+            />
+            <img src="@/assets/images/user.png" alt="profile" class="profile-image me-4" v-else />
+            <div class="profile-details">
+              <div>
+                <h2 class="fw-bold">{{ currentUser.firstName }} {{ currentUser.lastName }}</h2>
+                <h5 class="fw-normal">@{{ currentUser.userName }}</h5>
+                <div class="d-flex flex-column flex-sm-row">
+                  <div
+                    class="me-3 pointer"
+                    :data-bs-toggle="
+                      (!currentUser.isFollowing && currentUser.isPrivate) || currentUser.isBlocked
+                        ? null
+                        : 'modal'
+                    "
+                    data-bs-target="#followers"
+                    @click="
+                      (!currentUser.isFollowing && currentUser.isPrivate) || currentUser.isBlocked
+                        ? null
+                        : getFollowers()
+                    "
+                  >
+                    <h3 class="fw-bold d-inline-block">
+                      {{ currentUser.isBlocked ? '-' : currentUser.followersCount }}
+                    </h3>
+                    {{ t('profile.followers') }}
+                  </div>
+
+                  <div
+                    class="me-3 pointer"
+                    :data-bs-toggle="
+                      (!currentUser.isFollowing && currentUser.isPrivate) || currentUser.isBlocked
+                        ? null
+                        : 'modal'
+                    "
+                    data-bs-target="#followings"
+                    @click="
+                      (!currentUser.isFollowing && currentUser.isPrivate) || currentUser.isBlocked
+                        ? null
+                        : getFollowings()
+                    "
+                  >
+                    <h3 class="fw-bold d-inline-block">
+                      {{ currentUser.isBlocked ? '-' : currentUser.followingCount }}
+                    </h3>
+                    {{ t('profile.followings') }}
+                  </div>
+                </div>
+                <!-- Bio -->
+                <p v-if="!currentUser.isPrivate || currentUser.isFollowing" class="my-3">
+                  {{ currentUser.bio }}
+                </p>
+              </div>
+              <div class="d-flex justify-content-center align-self-baseline">
+                <button
+                  class="btn follow px-4 fw-light"
+                  @click="removeFollowRequest(currentUser)"
+                  v-if="currentUser.isFollowRequestSent"
+                >
+                  {{ t('profile.unfollowrequest') }}
+                </button>
+                <button
+                  class="btn follow px-4 fw-light"
+                  @click="followUser(currentUser)"
+                  v-else-if="
+                    currentUser.id !== user.id && !currentUser.isFollowing && !currentUser.isBlocked
+                  "
+                >
+                  {{ t('profile.follow') }}
+                </button>
+                <div class="d-flex align-items-center pointer ms-3">
+                  <div class="dropdown">
+                    <i
+                      class="fa-solid fa-ellipsis fa-2xl"
+                      data-bs-toggle="dropdown"
+                      aria-expanded="false"
+                    ></i>
+                    <ul class="dropdown-menu">
+                      <li
+                        class="dropdown-item"
+                        @click="blockUser(currentUser)"
+                        v-if="!currentUser.isBlocked"
+                      >
+                        <button class="btn w-100 text-danger">
+                          <img src="@/assets/images/ic_block.png" alt="block" height="21" />
+                          {{ t('profile.block') }}
+                        </button>
+                      </li>
+                      <li class="dropdown-item" @click="unblockUser(currentUser)" v-else>
+                        <button class="btn w-100 text-danger">
+                          <img src="@/assets/images/ic_block.png" alt="block" height="21" />
+                          {{ t('profile.unblock') }}
+                        </button>
+                      </li>
+                      <li
+                        class="dropdown-item text-warning-emphasis"
+                        v-if="currentUser.isFollowing"
+                        @click="unfollowUser(currentUser)"
+                      >
+                        <button class="btn w-100 text-warning-emphasis">
+                          {{ t('profile.unfollow') }}
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Followers Modal -->
+          <FollowersModal :id="id" />
+
+          <!-- Followings Modal -->
+          <FollowingsModal :id="id" />
+        </div>
+      </div>
+    </div>
+    <div v-if="loading"></div>
+    <div class="mt-3 mx-3 fs-5" v-else-if="currentUser.isBlocked">
+      <p class="fw-light text-center">{{ t('profile.blockeduser') }}</p>
+    </div>
+    <div
+      id="options"
+      class="w-100 my-4"
+      v-else-if="!currentUser.isPrivate || currentUser.isFollowing"
+    >
+      <div
+        class="card shadow-sm d-flex align-items-center justify-content-around flex-column flex-sm-column flex-md-row rounded-4"
+      >
+        <div class="text-center my-2">
+          <input
+            type="radio"
+            name="group-radio"
+            id="radio-1"
+            class="radio"
+            value="radio1"
+            :checked="category === 'activities'"
+          />
+          <label for="radio-1">
+            <span
+              class="fw-bold fs-5 category"
+              :class="{ selected: category === 'activities' }"
+              id="activities"
+              @click="changeCategory('activities')"
+              >{{ t('profile.activities') }}</span
+            >
+          </label>
+        </div>
+
+        <div class="text-center my-2">
+          <input
+            type="radio"
+            name="group-radio"
+            id="radio-2"
+            class="radio"
+            value="radio2"
+            :checked="category === 'posts'"
+          />
+          <label for="radio-2">
+            <span
+              class="fw-bold fs-5 category"
+              :class="{ selected: category === 'posts' }"
+              id="posts"
+              @click="changeCategory('posts')"
+              >{{ t('profile.posts') }}</span
+            >
+          </label>
+        </div>
+
+        <div class="text-center my-2">
+          <input
+            type="radio"
+            name="group-radio"
+            id="radio-3"
+            class="radio"
+            value="radio3"
+            :checked="category === 'events'"
+          />
+          <label for="radio-3">
+            <span
+              class="fw-bold fs-5 category"
+              :class="{ selected: category === 'events' }"
+              id="events"
+              @click="changeCategory('events')"
+              >{{ t('profile.events') }}</span
+            >
+          </label>
+        </div>
+
+        <div class="text-center my-2">
+          <input
+            type="radio"
+            name="group-radio"
+            id="radio-4"
+            class="radio"
+            value="radio4"
+            :checked="category === 'communities'"
+          />
+          <label for="radio-4">
+            <span
+              class="fw-bold fs-5 category"
+              :class="{ selected: category === 'communities' }"
+              id="communities"
+              @click="changeCategory('communities')"
+              >{{ t('profile.communities') }}</span
+            >
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-3 mx-3 fs-5" v-else>
+      <p class="fw-light">{{ t('profile.profileisprivate') }}</p>
+      <p class="fw-light">
+        {{ t('profile.profileisprivatedescription') }}
+      </p>
+    </div>
+
+    <UserPosts v-if="category === 'posts'" :id="id" />
+    <UserCommunities v-else-if="category === 'communities'" :id="id" />
+    <UserEvents v-else-if="category === 'events'" :id="id" />
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, onBeforeUnmount } from 'vue'
+import UserCommunities from '@/components/common/userprofile/UserCommunities.vue'
+import UserPosts from '@/components/common/userprofile/UserPosts.vue'
+import FollowingsModal from '@/components/shared/FollowingsModal.vue'
+import FollowersModal from '@/components/shared/FollowersModal.vue'
+import UserEvents from '@/components/common/userprofile/UserEvents.vue'
+import { useUserStore } from '@/stores/user'
+import { useAuthStore } from '@/stores/auth'
+import { storeToRefs } from 'pinia'
+import type { IUser } from '@/models/user_model'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
+const props = defineProps({
+  id: {
+    type: String,
+    required: true
+  }
+})
+
+const authStore = useAuthStore()
+const { _user: user } = storeToRefs(authStore)
+const userStore = useUserStore()
+const category = ref('activities')
+
+const loading = ref(true)
+const changeLoadingState = () => {
+  loading.value = !loading.value
+}
+
+userStore.getUserById(props.id).then(changeLoadingState)
+const { _currentUser: currentUser } = storeToRefs(userStore)
+
+const changeCategory = (tab: string) => {
+  category.value = tab
+}
+
+const getFollowers = async () => {
+  await userStore.getUserFollowers(currentUser.value.id)
+}
+
+const getFollowings = async () => {
+  await userStore.getUserFollowings(currentUser.value.id)
+}
+
+const followUser = async (currentUser: IUser) => {
+  try {
+    await userStore.followUser(currentUser.id).then(() => {
+      if (!currentUser.isPrivate) {
+        currentUser.isFollowing = true
+      } else {
+        currentUser.isFollowRequestSent = true
+      }
+    })
+  } catch (error: any) {
+    console.log(error.response.data)
+  }
+}
+
+const unfollowUser = async (user: IUser) => {
+  try {
+    await userStore.unfollowUser(user.id).then(() => (user.isFollowing = false))
+  } catch (error: any) {
+    console.log(error.response.data)
+  }
+}
+
+const blockUser = async (user: IUser) => {
+  const body = new FormData()
+  const userId = user.id
+  body.append('targetId', userId)
+  await userStore.blockUser(body).then(() => (user.isBlocked = true))
+}
+
+const unblockUser = async (user: IUser) => {
+  const body = new FormData()
+  const userId = user.id
+  body.append('targetId', userId)
+  await userStore.unblockUser(body).then(() => (user.isBlocked = false))
+}
+
+const removeFollowRequest = async (currentUser: IUser) => {
+  await userStore
+    .removeFollowRequest(currentUser.id)
+    .then(() => (currentUser.isFollowRequestSent = false))
+}
+
+onBeforeUnmount(() => {
+  userStore.$patch({
+    currentUser: {}
+  })
+})
+</script>
+
+<style scoped>
+#options {
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+}
+.profile-details {
+  margin: 72px 16px 0px 16px;
+  padding: 0.5rem 0.4rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.profile-header {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.category {
+  transition: 0.3s;
+  color: #83818c;
+  padding: 20px;
+  margin: 0 6px;
+  z-index: 1;
+  position: relative;
+}
+
+.category:hover {
+  color: #111;
+  letter-spacing: 1px;
+}
+
+.selected {
+  transition: 0.3s all ease;
+  color: var(--color-primary);
+  padding: 20px;
+  margin: 0 6px;
+  z-index: 2;
+  position: relative;
+  letter-spacing: 1px;
+}
+
+.radio {
+  appearance: none;
+}
+</style>

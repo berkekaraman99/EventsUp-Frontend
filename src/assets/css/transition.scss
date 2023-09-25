@@ -1,0 +1,62 @@
+.animate {
+  transition: all 0.3s ease-in-out;
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+
+@keyframes scaleOut {
+  0% {
+    transform: scale(85%);
+    opacity: 0;
+  }
+
+  100% {
+    transform: scale(100%);
+    opacity: 1;
+  }
+}
+
+.scaleOut {
+  animation-name: scaleOut;
+}
+
+@keyframes translateUp {
+  0% {
+    transform: translateY(-48px);
+    opacity: 0;
+  }
+
+  100% {
+    transform: translateY(-80px);
+    opacity: 1;
+  }
+}
+
+.dropdown-menu {
+  transition: all 0.3s ease-in-out;
+  animation-name: scaleOut;
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3 ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.scaleInOut-enter-active,
+.scaleInOut-leave-active {
+  transition: 0.3s ease;
+  transform: scale(100%);
+}
+
+.scaleInOut-enter-from,
+.scaleInOut-leave-to {
+  opacity: 0;
+  transform: scale(92.5%);
+}

@@ -1,0 +1,203 @@
+:root {
+  --color-primary: #5c60db;
+  --color-primary-hover: #4b4eb5;
+  --color-secondary: #f6f6f6;
+  --color-text: #ffffff;
+  --color-text-dark: #000000;
+  --color-accent: #ff9c66;
+  --color-bg-light: #fff;
+  --color-bg-dark: #111;
+}
+
+button,
+img {
+  -webkit-user-select: none; /* Safari */
+  -ms-user-select: none; /* IE 10 and IE 11 */
+  user-select: none; /* Standard syntax */
+}
+
+#app {
+  height: calc(100vh - 72px);
+}
+
+.profile-image {
+  background-color: grey;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border-radius: 99px;
+  /* border: 1px solid transparent; */
+  height: 160px;
+  width: 160px;
+  position: absolute;
+  top: 152px;
+  left: 16px;
+  object-fit: cover;
+}
+
+.profile-icon {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  height: 48px;
+  width: 48px;
+  border-radius: 99px;
+  object-fit: cover;
+}
+
+.profile-banner {
+  width: 100%;
+  height: 267px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 100%;
+  object-fit: cover;
+}
+
+.search-user-background {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  z-index: -1;
+  border-radius: 6px;
+  filter: blur(4px);
+}
+
+.post-profile-image {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-color: grey;
+  border-radius: 99px;
+  height: 64px;
+  width: 64px;
+  box-shadow: 0px 0px 10px -5px black;
+  object-fit: cover;
+}
+
+.comment-profile-image {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-color: grey;
+  border-radius: 99px;
+  height: 48px;
+  width: 48px;
+  box-shadow: 0px 0px 10px -5px black;
+  object-fit: cover;
+}
+
+.suggestion-profile-image {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-color: grey;
+  border-radius: 99px;
+  height: 48px;
+  width: 48px;
+  object-fit: cover;
+}
+
+#save {
+  border-radius: 8px;
+  transition: 0.3s ease;
+  padding: 12px 16px;
+}
+
+#save:hover {
+  transition: 0.3s ease;
+  background-color: rgb(243, 243, 243);
+}
+
+#save:active {
+  background-color: rgb(0, 105, 0);
+  color: white;
+}
+
+#share {
+  border-radius: 8px;
+  transition: 0.3s ease;
+  padding: 12px 16px;
+}
+
+#share:hover {
+  transition: 0.3s ease;
+  background-color: rgb(243, 243, 243);
+}
+
+#share:active {
+  background-color: rgb(0, 114, 159);
+  color: white;
+}
+
+#comments {
+  border-radius: 8px;
+  transition: 0.3s ease;
+  padding: 12px 16px;
+}
+
+#comments:hover {
+  transition: 0.3s ease;
+  background-color: rgb(243, 243, 243);
+}
+
+#comments:active {
+  background-color: rgb(0, 114, 159);
+  color: white;
+}
+
+#interactions {
+  border-radius: 8px;
+  transition: 0.3s ease;
+  padding: 12px 16px;
+}
+
+#interactions:hover {
+  transition: 0.3s ease;
+  background-color: rgb(243, 243, 243);
+}
+
+#interactions:active {
+  background-color: rgb(0, 114, 159);
+  color: white;
+}
+
+#back {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+#back:hover {
+  background-color: #fff;
+}
+
+textarea {
+  resize: none;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.card {
+  border: none;
+  border-radius: 0.5rem;
+}
+
+.card-footer,
+.card-header {
+  background-color: white;
+}
+.card-header {
+  border-bottom: none;
+}
+
+a.router-link-exact-active {
+  color: var(--color-primary);
+  background-color: rgb(255, 255, 255);
+  /* border: 1px solid var(--color-primary); */
+}
+
+.dropdown-item:active {
+  background-color: var(--color-secondary);
+  color: var(--color-text-dark);
+}
