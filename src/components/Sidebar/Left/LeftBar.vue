@@ -116,7 +116,7 @@
         <div class="w-100" v-for="community in communities" :key="community.id">
           <RouterLink
             :to="{
-              name: 'communitydetails',
+              name: 'community-details',
               params: { id: community.id, name: community.title }
             }"
             class="d-flex align-items-center text-decoration-none text-black community-link"

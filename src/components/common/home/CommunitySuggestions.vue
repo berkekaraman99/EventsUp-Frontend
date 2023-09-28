@@ -6,7 +6,7 @@
     <div class="card border rounded-3 overflow-hidden">
       <div class="card-header px-md-4 px-xl-5">
         <div class="fw-bold text-start text-lg-center fs-6">
-          EventsUp Önerileri
+          {{ t('rightbar.community.suggestions') }}
         </div>
       </div>
       <div class="card-body p-0">
@@ -27,8 +27,8 @@
               name: 'communitydetails',
               params: {
                 id: community.id,
-                name: community.title,
-              },
+                name: community.title
+              }
             }"
             class="text-decoration-none"
           >
@@ -58,7 +58,7 @@
           class="text-center more pointer py-2"
           @click="$router.push({ name: 'communities' })"
         >
-          Daha fazla göster
+          {{ t('rightbar.community.showmore') }}
         </div>
       </div>
     </div>
@@ -66,12 +66,15 @@
 </template>
 
 <script setup lang="ts">
-import { useCommunityStore } from "@/stores/community";
-import { storeToRefs } from "pinia";
+import { useCommunityStore } from '@/stores/community'
+import { storeToRefs } from 'pinia'
+import { useI18n } from 'vue-i18n'
 
-const communityStore = useCommunityStore();
-communityStore.getCommunities();
-const { _communityList: communityList } = storeToRefs(communityStore);
+const { t } = useI18n()
+
+const communityStore = useCommunityStore()
+communityStore.getCommunities()
+const { _communityList: communityList } = storeToRefs(communityStore)
 </script>
 
 <style scoped lang="scss">

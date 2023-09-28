@@ -21,62 +21,76 @@
         <div class="modal-body">
           <!-- <LoadingSpinner v-if="loading" /> -->
           <LoadingVue v-if="loading" />
-          <ul class="container" v-else-if="followers.length > 0">
-            <li
-              class="card shadow-sm px-4 py-3 my-4"
-              v-for="user in followers"
-              v-bind:key="user.id"
-            >
-              <div class="d-flex justify-content-between align-items-center">
-                <div class="d-flex align-items-center">
-                  <div
-                    :style="{
-                      'background-image': `url(${user.profileImage})`,
-                    }"
-                    alt="profile image"
-                    class="post-profile-image me-4"
-                    v-if="user.profileImage != null"
-                  ></div>
-                  <img
-                    src="@/assets/images/profile-man.png"
-                    alt="profile-man"
-                    class="post-profile-image me-4"
-                    v-else-if="user.gender == 2"
-                  />
-                  <img
-                    src="@/assets/images/profile-woman.png"
-                    alt="profile-woman"
-                    class="post-profile-image me-4"
-                    v-else-if="user.gender == 1"
-                  />
-                  <img
-                    src="@/assets/images/user.png"
-                    alt="profile"
-                    class="post-profile-image me-4"
-                    v-else
-                  />
-                  <div>
-                    <RouterLink
-                      :to="{ name: 'userprofile', params: { id: user.id } }"
-                      class="text-decoration-none"
-                    >
-                      <div class="fw-bold text-black" data-bs-dismiss="modal">
-                        {{ user.firstName }} {{ user.lastName }}
-                      </div>
-                    </RouterLink>
-                    <div class="text-secondary">@{{ user.userName }}</div>
-                  </div>
-                </div>
-                <button
-                  class="btn btn-danger"
-                  @click="removeFollower(user.id)"
-                  v-if="authUser.id === id"
-                >
-                  Kaldır
-                </button>
+          <div v-else-if="followers.length > 0">
+            <div class="container">
+              <div class="col-12">
+                <input
+                  type="text"
+                  class="form-control form-control-lg mb-3"
+                  :placeholder="user ? 'Takip ettiklerini ara' : 'Please login to search'"
+                  v-model="text"
+                  @keydown.enter="handleSearch"
+                  :disabled="!user"
+                />
               </div>
-            </li>
-          </ul>
+            </div>
+            <ul class="container" v-if="searchedFollowers.length > 0">
+              <li
+                class="card shadow-sm px-4 py-3 my-4"
+                v-for="user in searchedFollowers"
+                v-bind:key="user.id"
+              >
+                <div class="d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-center">
+                    <div
+                      :style="{
+                        'background-image': `url(${user.profileImage})`
+                      }"
+                      alt="profile image"
+                      class="post-profile-image me-4"
+                      v-if="user.profileImage != null"
+                    ></div>
+                    <img
+                      src="@/assets/images/profile-man.png"
+                      alt="profile-man"
+                      class="post-profile-image me-4"
+                      v-else-if="user.gender == 2"
+                    />
+                    <img
+                      src="@/assets/images/profile-woman.png"
+                      alt="profile-woman"
+                      class="post-profile-image me-4"
+                      v-else-if="user.gender == 1"
+                    />
+                    <img
+                      src="@/assets/images/user.png"
+                      alt="profile"
+                      class="post-profile-image me-4"
+                      v-else
+                    />
+                    <div>
+                      <RouterLink
+                        :to="{ name: 'userprofile', params: { id: user.id } }"
+                        class="text-decoration-none"
+                      >
+                        <div class="fw-bold text-black" data-bs-dismiss="modal">
+                          {{ user.firstName }} {{ user.lastName }}
+                        </div>
+                      </RouterLink>
+                      <div class="text-secondary">@{{ user.userName }}</div>
+                    </div>
+                  </div>
+                  <button
+                    class="btn btn-danger"
+                    @click="removeFollower(user.id)"
+                    v-if="authUser.id === id"
+                  >
+                    Kaldır
+                  </button>
+                </div>
+              </li>
+            </ul>
+          </div>
           <div v-else class="text-center">
             <h4 class="fw-light">Hiç takipçin yok</h4>
           </div>
@@ -87,41 +101,68 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
 // import LoadingSpinner from "@/components/shared/LoadingVue.vue";
-import { useAuthStore } from "@/stores/auth";
-import { ref } from "vue";
-import LoadingVue from "./LoadingVue.vue";
+import { useAuthStore } from '@/stores/auth'
+import { reactive, ref, toRef } from 'vue'
+import LoadingVue from './LoadingVue.vue'
 
 const props = defineProps({
   id: {
     type: String,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
-const emit = defineEmits(["decrementFollowerCount"]);
+const emit = defineEmits(['decrementFollowerCount'])
 
-const userStore = useUserStore();
+const userStore = useUserStore()
+const { _currentUser: user } = storeToRefs(userStore)
 
-const authStore = useAuthStore();
-const { _user: authUser } = storeToRefs(authStore);
+const authStore = useAuthStore()
+const { _user: authUser } = storeToRefs(authStore)
 
-const loading = ref(true);
+const loading = ref(true)
 const changeloading = () => {
-  loading.value = false;
-};
+  loading.value = false
+}
 
-userStore.getUserFollowers(props.id).then(changeloading);
-const { _userFollowers: followers, _statusCode: statusCode } =
-  storeToRefs(userStore);
+const search = reactive({
+  text: ''
+})
+
+const text = toRef(search, 'text')
+
+const handleSearch = async () => {
+  loading.value = true
+  if (search.text.length > 0) {
+    await userStore
+      .searchFollowers({
+        id: user.value.id,
+        text: search.text
+      })
+      .then(() => (loading.value = false))
+  } else {
+    userStore.$patch({
+      searchedUserFollowers: userStore.userFollowers
+    })
+    loading.value = false
+  }
+}
+
+userStore.getUserFollowers(props.id).then(changeloading)
+const {
+  _userFollowers: followers,
+  _searchedFollowers: searchedFollowers,
+  _statusCode: statusCode
+} = storeToRefs(userStore)
 
 const removeFollower = async (id: string) => {
   await userStore.removeUserFromFollowers(id).then(() => {
     if (statusCode.value === 200) {
-      emit("decrementFollowerCount");
+      emit('decrementFollowerCount')
     }
-  });
-};
+  })
+}
 </script>

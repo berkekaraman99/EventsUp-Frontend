@@ -1,19 +1,14 @@
 <template>
-  <span
-    data-text="Thanks for hovering! I'm a tooltip"
-    class="ctooltip ctooltip-left"
+  <span data-text="Thanks for hovering! I'm a tooltip" class="ctooltip ctooltip-left"
     >Hover over me!</span
   >
 </template>
 
-<script lang="ts">
-import { defineComponent } from "vue";
+<script setup lang="ts">
+import { useInterestStore } from '@/stores/interest'
 
-export default defineComponent({
-  setup() {
-    return {};
-  },
-});
+const interestStore = useInterestStore()
+interestStore.getAllInterest()
 </script>
 
 <style scoped lang="scss"></style>

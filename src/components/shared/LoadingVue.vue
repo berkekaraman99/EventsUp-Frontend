@@ -19,9 +19,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 400px;
   width: 100%;
+  height: 200px;
   z-index: 99;
+  position: relative;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 .lds-roller {
   position: relative;

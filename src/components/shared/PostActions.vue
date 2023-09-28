@@ -1,7 +1,7 @@
 <template>
   <div class="row d-flex align-items-center">
     <div
-      class="col-12 col-sm-6 col-md-3 my-1 dropup-center d-flex align-items-center justify-content-center"
+      class="col-6 col-sm-6 col-md-3 my-1 dropup-center d-flex align-items-center justify-content-center"
     >
       <button
         id="interactions"
@@ -98,7 +98,7 @@
         </li>
       </ul>
     </div>
-    <div class="col-12 col-sm-6 col-md-3 my-1">
+    <div class="col-6 col-sm-6 col-md-3 my-1">
       <RouterLink
         :to="{ name: 'postcomments', params: { id: post.id } }"
         class="text-decoration-none text-black d-flex align-items-center justify-content-center"
@@ -112,7 +112,7 @@
         </button>
       </RouterLink>
     </div>
-    <div class="col-12 col-sm-6 col-md-3 my-1 d-flex justify-content-center align-items-center">
+    <div class="col-6 col-sm-6 col-md-3 my-1 d-flex justify-content-center align-items-center">
       <button
         id="share"
         class="btn d-sm-block d-md-flex align-items-center justify-content-center flex-column d-lg-block"
@@ -121,7 +121,7 @@
         <div>{{ t('feed.share') }}</div>
       </button>
     </div>
-    <div class="col-12 col-sm-6 col-md-3 my-1 d-flex align-content-center justify-content-center">
+    <div class="col-6 col-sm-6 col-md-3 my-1 d-flex align-content-center justify-content-center">
       <button
         v-if="post.isSaved"
         id="save"

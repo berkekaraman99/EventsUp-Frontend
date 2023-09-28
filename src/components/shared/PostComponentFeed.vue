@@ -51,7 +51,7 @@
         </div>
       </div>
       <div class="card-body">
-        <div class="my-4 px-3">
+        <div class="my-4 px-1">
           <p>{{ post.description }}</p>
         </div>
         <div :id="`carousel${post.id}`" class="carousel slide" v-if="post.files.length">

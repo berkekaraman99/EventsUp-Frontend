@@ -2,7 +2,7 @@
   <div class="container community shadow-sm mb-5 rounded-3">
     <RouterLink
       :to="{
-        name: 'communitydetails',
+        name: 'community-details',
         params: { id: props.community.id, name: props.community.title }
       }"
       class="text-decoration-none text-dark"

@@ -4,7 +4,7 @@
     <div class="container my-3" v-else-if="post">
       <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 my-4">
-          <div class="card border">
+          <div class="card rounded-4 shadow-sm overflow-hidden">
             <div class="card-header py-3">
               <div class="d-flex justify-content-between">
                 <div class="d-flex align-items-center">
@@ -137,7 +137,7 @@
           </div>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 my-4">
-          <div class="card border">
+          <div class="card rounded-4 shadow-sm overflow-hidden">
             <div class="card-header"><h1>Yorumunuz</h1></div>
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">

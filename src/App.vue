@@ -45,7 +45,7 @@
           }"
         >
           <RouterView v-slot="{ Component, route }">
-            <Transition name="scaleInOut" mode="out-in">
+            <Transition name="customAnimation" mode="out-in">
               <component :is="Component" :key="route.path" />
             </Transition>
           </RouterView>

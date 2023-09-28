@@ -10,10 +10,9 @@
             class="col-12 d-flex align-items-start justify-content-start flex-column flex-sm-row flex-lg-column"
           >
             <!-- <div class="position-absolute link-bar"></div> -->
-            <div
+            <RouterLink
+              :to="{ name: 'community-details' }"
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-              @click="changeCategory('details')"
-              :class="{ selected: category === 'details' }"
             >
               <input
                 type="radio"
@@ -26,12 +25,11 @@
               <label for="radio-1">
                 <span class="fw-bold" id="about">{{ t('community.about') }}</span>
               </label>
-            </div>
+            </RouterLink>
 
-            <div
+            <RouterLink
+              :to="{ name: 'community-posts' }"
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-              @click="changeCategory('posts')"
-              :class="{ selected: category === 'posts' }"
             >
               <input
                 type="radio"
@@ -44,12 +42,11 @@
               <label for="radio-2">
                 <span class="fw-bold" id="posts">{{ t('community.posts') }}</span>
               </label>
-            </div>
+            </RouterLink>
 
-            <div
+            <RouterLink
+              :to="{ name: 'community-participiants' }"
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-              @click="changeCategory('participiants')"
-              :class="{ selected: category === 'participiants' }"
             >
               <input
                 type="radio"
@@ -62,13 +59,12 @@
               <label for="radio-3">
                 <span class="fw-bold" id="participiants">{{ t('community.members') }}</span>
               </label>
-            </div>
+            </RouterLink>
 
-            <div
+            <RouterLink
+              :to="{ name: 'community-settings' }"
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
               v-if="community.adminId === user.id"
-              @click="changeCategory('settings')"
-              :class="{ selected: category === 'settings' }"
             >
               <input
                 type="radio"
@@ -81,7 +77,7 @@
               <label for="radio-4">
                 <span class="fw-bold" id="settings">{{ t('community.settings') }}</span>
               </label>
-            </div>
+            </RouterLink>
           </div>
         </div>
         <!-- Community View -->
@@ -207,11 +203,6 @@ communityStore.getCommunity(props.id).then(() => {
 const { _community: community } = storeToRefs(communityStore)
 
 const category = ref<string>('details')
-
-const changeCategory = (name: string) => {
-  category.value = name
-  router.replace({ name: 'community-' + name })
-}
 
 const join = async (community: ICommunity) => {
   loadingText.value = 'Joining...'

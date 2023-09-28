@@ -188,6 +188,12 @@ export default {
     search: 'Arama',
     explore: 'Keşfet'
   },
+  rightbar: {
+    community: {
+      suggestions: 'Topluluk Önerileri',
+      showmore: 'Daha fazla göster'
+    }
+  },
   forgotpassword: {
     header: 'Şifremi Unuttum?',
     enteremail: 'Emailinizi giriniz',
