@@ -59,7 +59,7 @@ export const useUserStore = defineStore('userStore', {
 
     //GET USER SUGGESTIONS
     async getUserSuggestions() {
-      const res = await instance.get('/User/suggestions?limit=3')
+      const res = await instance.get('/User/suggestions')
       console.log(res.data)
       this.userSuggestions = res.data.data
     },

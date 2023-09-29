@@ -17,17 +17,17 @@
                     }"
                   ></div>
                   <div class="mx-3">
-                    <div class="fw-bold">{{ post.user.firstName }} {{ post.user.lastName }}</div>
+                    <div class="fw-bold">{{ post.user.fullName }}</div>
                     <small>
                       {{ formatTime(post.createdAt) }}
                     </small>
                   </div>
                 </div>
-                <div v-if="post.user.id != user.id">
+                <!-- <div v-if="post.user.id != user.id">
                   <button class="btn follow px-4 fw-light">
                     {{ post.isUserFollowing ? null : 'Follow User' }}
                   </button>
-                </div>
+                </div> -->
               </div>
             </div>
 

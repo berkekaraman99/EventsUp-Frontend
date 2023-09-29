@@ -11,7 +11,7 @@
                     class="comment-profile-image"
                     v-if="comment.user.profileImage != null"
                     :src="comment.user.profileImage"
-                    :alt="comment.user.firstName + comment.user.lastName"
+                    :alt="comment.user.fullName"
                   />
                   <img
                     src="@/assets/images/profile-man.png"
@@ -35,7 +35,7 @@
                 <div class="mx-3">
                   <div>
                     <div class="fw-bold tw-text-sm">
-                      {{ comment.user.firstName }} {{ comment.user.lastName }}
+                      {{ comment.user.fullName }}
                     </div>
                     <div class="tw-text-xs">
                       {{ formatTime(comment.createdAt) }}

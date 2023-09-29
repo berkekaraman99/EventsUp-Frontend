@@ -1,7 +1,6 @@
 export interface ICommunityParticipiant {
-  firstName: string;
-  gender: number;
-  id: string;
-  lastName: string;
-  profileImage: string;
+  fullName: string
+  gender: number
+  id: string
+  profileImage: string
 }

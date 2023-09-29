@@ -1,9 +1,8 @@
 export interface IUserFollowings {
-  firstName: string;
-  gender: number;
-  id: string;
-  isFollowing: boolean;
-  lastName: string;
-  profileImage: string;
-  userName: string;
+  fullName: string
+  gender: number
+  id: string
+  isFollowing: boolean
+  profileImage: string
+  userName: string
 }

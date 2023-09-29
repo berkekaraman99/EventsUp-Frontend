@@ -76,15 +76,21 @@
               validation="required"
               v-on:change="onFileChangeCoverImage"
             />
+            <div class="d-flex align-items-center justify-content-center" v-if="coverPreview">
+              <img :src="coverPreview" alt="cover preview" class="cover-preview" />
+            </div>
 
             <FormKit
               type="file"
               label="Afiş Resmi"
-              accept=".png,.jpg,.jpeg"
+              accept=".png,.jpg,.jpeg,.gif"
               multiple="false"
               validation="required"
               v-on:change="onFileChangeBannerImage"
             />
+            <div class="d-flex align-items-center justify-content center" v-if="bannerPreview">
+              <img :src="bannerPreview" alt="cover preview" class="banner-preview" />
+            </div>
 
             <FormKit
               type="select"
@@ -146,21 +152,34 @@ const communityObject = reactive({
   Location: '',
   IsVisible: true,
   IsPublic: true,
-  CoverImage: null,
+  CoverImage: undefined,
   ParticipiantLimit: '1',
   Description: '',
   Title: '',
-  BannerImage: null
+  BannerImage: undefined
 })
 
+const coverPreview = ref<any>(undefined)
+const bannerPreview = ref<any>(undefined)
+
 const onFileChangeCoverImage = (e: any) => {
-  let files = e.target.files || e.dataTransfer.files
-  communityObject.CoverImage = files[0]
+  let files = e.target.files[0] || e.dataTransfer.files[0]
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    coverPreview.value = e.target?.result
+  }
+  reader.readAsDataURL(files)
+  communityObject.CoverImage = files
 }
 
 const onFileChangeBannerImage = (e: any) => {
-  let files = e.target.files || e.dataTransfer.files
-  communityObject.BannerImage = files[0]
+  let files = e.target.files[0] || e.dataTransfer.files[0]
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    bannerPreview.value = e.target?.result
+  }
+  reader.readAsDataURL(files)
+  communityObject.BannerImage = files
 }
 
 const submitCommunity = async () => {
@@ -229,5 +248,19 @@ div .row {
 
 .group-text {
   font-weight: 300;
+}
+
+.cover-preview {
+  object-fit: contain;
+  height: 200px;
+  border-radius: 1rem;
+  margin: 1rem 0px;
+}
+
+.banner-preview {
+  object-fit: contain;
+  height: 200px;
+  border-radius: 1rem;
+  margin: 1rem 0px;
 }
 </style>

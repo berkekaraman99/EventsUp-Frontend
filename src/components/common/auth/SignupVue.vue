@@ -34,16 +34,7 @@
                   type="text"
                   :label="t('signup.name')"
                   validation="required"
-                  v-model="userObject.firstName"
-                  :classes="{
-                    inner: 'rounded-1'
-                  }"
-                />
-                <FormKit
-                  type="text"
-                  :label="t('signup.surname')"
-                  validation="required"
-                  v-model="userObject.lastName"
+                  v-model="userObject.fullName"
                   :classes="{
                     inner: 'rounded-1'
                   }"
@@ -208,19 +199,17 @@ const handleToast = () => {
 }
 
 const userObject = reactive({
-  firstName: '',
-  lastName: '',
+  fullName: '',
   userName: '',
   email: '',
   password: '',
-  gender: 0
+  gender: '0'
 })
 
 const handleSignUp = async () => {
   if (userObject.userName.length >= 6 && userObject.password.length >= 6) {
     const signUpObject: ISignUpModel = {
-      firstName: userObject.firstName,
-      lastName: userObject.lastName,
+      fullName: userObject.fullName,
       userName: userObject.userName,
       email: userObject.email,
       password: userObject.password,

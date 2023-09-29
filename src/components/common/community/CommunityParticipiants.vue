@@ -7,20 +7,20 @@
           <img
             alt="profile image"
             class="suggestion-profile-image me-4"
-            :src="community.adminImage"
-            v-if="community.adminImage != null"
+            :src="community.admin.profileImage"
+            v-if="community.admin.profileImage != null"
           />
           <img
             src="@/assets/images/profile-man.png"
             alt="profile-man"
             class="suggestion-profile-image me-4"
-            v-else-if="community.adminGender == 2"
+            v-else-if="community.admin.gender == 2"
           />
           <img
             src="@/assets/images/profile-woman.png"
             alt="profile-woman"
             class="suggestion-profile-image me-4"
-            v-else-if="community.adminGender == 1"
+            v-else-if="community.admin.gender == 1"
           />
           <img
             src="@/assets/images/user.png"
@@ -30,10 +30,10 @@
           />
           <span class="fw-bold">
             <RouterLink
-              :to="{ name: 'userprofile', params: { id: community.adminId } }"
+              :to="{ name: 'userprofile', params: { id: community.admin.id } }"
               class="text-decoration-none tw-text-blue-800"
             >
-              <span> {{ community.adminName }} {{ community.adminLastName }} </span>
+              <span> {{ community.admin.fullName }}</span>
             </RouterLink>
           </span>
         </div>
@@ -99,15 +99,14 @@
                     class="text-decoration-none tw-text-blue-800"
                   >
                     <span>
-                      {{ participiant.firstName }}
-                      {{ participiant.lastName }}
+                      {{ participiant.fullName }}
                     </span>
                   </RouterLink>
                 </span>
               </div>
               <div
                 class="d-flex align-items-center pointer ms-3"
-                v-if="user.id === community.adminId"
+                v-if="user.id === community.admin.id"
               >
                 <div class="dropdown">
                   <i
@@ -116,11 +115,11 @@
                     aria-expanded="false"
                   ></i>
                   <ul class="dropdown-menu">
-                    <li class="dropdown-item" v-if="user.id === community.adminId">
+                    <li class="dropdown-item" v-if="user.id === community.admin.id">
                       <i class="fa-solid fa-crown"></i>
                       {{ t('community.assignasadmin') }}
                     </li>
-                    <li class="dropdown-item" v-if="user.id === community.adminId">
+                    <li class="dropdown-item" v-if="user.id === community.admin.id">
                       <i class="fa-solid fa-user-tie"></i>{{ t('community.assignasmoderator') }}
                     </li>
                     <li

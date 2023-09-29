@@ -11,13 +11,13 @@
                   <div
                     class="post-profile-image"
                     :style="{
-                      'background-image': 'url(' + comment.profileImage + ')',
-                      'background-color': 'grey',
+                      'background-image': 'url(' + comment.user.profileImage + ')',
+                      'background-color': 'grey'
                     }"
                   ></div>
                   <div class="mx-3">
                     <div class="fw-bold">
-                      {{ comment.firstName }} {{ comment.lastName }}
+                      {{ comment.user.fullname }}
                     </div>
                     <small>
                       {{ formatTime(comment.createdAt) }}
@@ -64,7 +64,7 @@
                   <div
                     class="post-profile-image me-3 shadow-sm"
                     :style="{
-                      'background-image': `url(${user.profileImage})`,
+                      'background-image': `url(${user.profileImage})`
                     }"
                   ></div>
                 </div>
@@ -98,17 +98,11 @@
                 <FormKit
                   type="button"
                   :label="
-                    isPosting
-                      ? 'Gönderiliyor'
-                      : statusCode !== 200
-                      ? 'Yorum Yap'
-                      : 'Başarılı'
+                    isPosting ? 'Gönderiliyor' : statusCode !== 200 ? 'Yorum Yap' : 'Başarılı'
                   "
                   wrapper-class="mx-auto text-center"
                   @click="createComment"
-                  :disabled="
-                    message.length === 0 || isPosting || statusCode === 200
-                  "
+                  :disabled="message.length === 0 || isPosting || statusCode === 200"
                 />
               </div>
             </div>
@@ -129,11 +123,7 @@
                 v-bind:key="reply.id"
                 :data-index="index"
               >
-                <ReplyVue
-                  :comment="reply"
-                  :post-id="postid"
-                  :user-id="user.id"
-                />
+                <ReplyVue :comment="reply" :post-id="postid" :user-id="user.id" />
               </div>
             </TransitionGroup>
           </div>
@@ -146,103 +136,103 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onBeforeUnmount } from "vue";
-import gsap from "gsap";
-import LoadingSpinner from "@/components/shared/LoadingVue.vue";
-import { useAuthStore } from "@/stores/auth";
-import { storeToRefs } from "pinia";
-import { usePostStore } from "@/stores/post";
-import ReplyVue from "@/components/shared/ReplyVue.vue";
-import moment from "moment";
+import { ref, onBeforeUnmount } from 'vue'
+import gsap from 'gsap'
+import LoadingSpinner from '@/components/shared/LoadingVue.vue'
+import { useAuthStore } from '@/stores/auth'
+import { storeToRefs } from 'pinia'
+import { usePostStore } from '@/stores/post'
+import ReplyVue from '@/components/shared/ReplyVue.vue'
+import moment from 'moment'
 
 const props = defineProps({
   commentid: {
     type: String,
-    required: true,
+    required: true
   },
   postid: {
     type: String,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
 const beforeEnterFeed: any = (el: HTMLElement) => {
-  el.style.opacity = "0";
-  el.style.transform = "translateY(100px)";
-};
+  el.style.opacity = '0'
+  el.style.transform = 'translateY(100px)'
+}
 const enterFeed: any = (el: HTMLElement) => {
-  const index = el.dataset.index ? parseInt(el.dataset.index) : 0;
+  const index = el.dataset.index ? parseInt(el.dataset.index) : 0
   gsap.to(el, {
     opacity: 1,
     y: 0,
     duration: 0.6,
-    delay: 0.1 * index,
-  });
-};
+    delay: 0.1 * index
+  })
+}
 const beforeLeaveFeed: any = (el: HTMLElement) => {
-  el.style.opacity = "1";
-};
+  el.style.opacity = '1'
+}
 const leaveFeed: any = (el: HTMLElement) => {
-  const index = el.dataset.index ? parseInt(el.dataset.index) : 0;
+  const index = el.dataset.index ? parseInt(el.dataset.index) : 0
   gsap.to(el, {
     opacity: 0,
     y: 100,
     duration: 0.6,
-    delay: 0.1 * index,
-  });
-};
+    delay: 0.1 * index
+  })
+}
 
-const loading = ref(true);
+const loading = ref(true)
 const changeLoadingState = () => {
-  loading.value = !loading.value;
-};
+  loading.value = !loading.value
+}
 
-const authStore = useAuthStore();
-const { _user: user } = storeToRefs(authStore);
-const message = ref("");
+const authStore = useAuthStore()
+const { _user: user } = storeToRefs(authStore)
+const message = ref('')
 
-const postStore = usePostStore();
-postStore.getCommentReplies(props.commentid).then(changeLoadingState);
+const postStore = usePostStore()
+postStore.getCommentReplies(props.commentid).then(changeLoadingState)
 
-const { _statusCode: statusCode, _comment: comment } = storeToRefs(postStore);
+const { _statusCode: statusCode, _comment: comment } = storeToRefs(postStore)
 
-const isPosting = ref(false);
+const isPosting = ref(false)
 const changePostingState = () => {
-  isPosting.value = !isPosting.value;
-};
+  isPosting.value = !isPosting.value
+}
 
 const createComment = async () => {
-  changePostingState();
+  changePostingState()
   await postStore
     .createComment({
       postId: props.postid,
       parentCommentId: props.commentid,
-      message: message.value,
+      message: message.value
     })
     .then(async () => {
-      changePostingState();
-      await postStore.getCommentReplies(props.commentid);
+      changePostingState()
+      await postStore.getCommentReplies(props.commentid)
       setTimeout(() => {
         postStore.$patch({
-          statusCode: 0,
-        });
-      }, 2000);
-    });
-  message.value = "";
-};
+          statusCode: 0
+        })
+      }, 2000)
+    })
+  message.value = ''
+}
 
-const { _commentReplies: commentReplies } = storeToRefs(postStore);
+const { _commentReplies: commentReplies } = storeToRefs(postStore)
 
 const formatTime = (time: any) => {
-  return moment(time).fromNow();
-};
+  return moment(time).fromNow()
+}
 
 onBeforeUnmount(() => {
   postStore.$patch({
     post: {},
-    postComments: [],
-  });
-});
+    postComments: []
+  })
+})
 </script>
 
 <style scoped lang="scss">
@@ -269,7 +259,9 @@ onBeforeUnmount(() => {
   padding: 15px 15px 30px;
   border-radius: 3px;
   border: 1px solid grey;
-  font: 13px Tahoma, cursive;
+  font:
+    13px Tahoma,
+    cursive;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 

@@ -13,8 +13,7 @@
           }
         }"
       >
-        <FormKit type="text" :label="t('settings.firstname')" v-model="userObject.firstName" />
-        <FormKit type="text" :label="t('settings.lastname')" v-model="userObject.lastName" />
+        <FormKit type="text" :label="t('settings.firstname')" v-model="userObject.fullName" />
         <FormKit type="text" :label="t('settings.username')" v-model="userObject.userName" />
         <FormKit type="textarea" :label="t('settings.bio')" rows="3" v-model="userObject.bio" />
         <FormKit
@@ -101,20 +100,18 @@ const formatDate = (dateString: string) => {
 }
 
 const userObject = reactive({
-  firstName: user.value.firstName,
-  lastName: user.value.lastName,
+  fullName: user.value.fullName,
   userName: user.value.userName,
-  bio: user.value.bio,
+  bio: user.value.bio as string,
   email: user.value.email,
   birthdayDate: formatDate(user.value.birthdayDate!),
-  gender: user.value.gender,
+  gender: String(user.value.gender),
   title: ''
 })
 
 const updateProfile = async () => {
   const updateProfileModel: UpdateProfileModel = {
-    firstName: userObject.firstName,
-    lastName: userObject.lastName,
+    fullName: userObject.fullName,
     userName: userObject.userName,
     bio: userObject.bio!,
     email: userObject.email,

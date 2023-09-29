@@ -6,8 +6,7 @@ export interface ICommunityPost {
   id: string
   user: {
     id: string
-    firstName: string
-    lastName: string
+    fullName: string
     userName: string
     profileImage: string
     gender: number

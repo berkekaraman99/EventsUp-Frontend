@@ -1,10 +1,10 @@
 <template>
-  <div>
-    <div class="card border rounded-3" id="suggestions" v-if="!loading">
-      <div class="card-header p-0">
-        <h4 class="fw-medium my-3 text-center">Takip Önerileri</h4>
+  <div class="glass-effect" style="width: 300px">
+    <div id="suggestions" v-if="!loading">
+      <div class="p-0">
+        <h4 class="fw-medium my-3 text-center text-white">Takip Önerileri</h4>
       </div>
-      <div class="card-body py-0 tw-px-1 overflow-auto">
+      <div class="py-0 tw-px-1 overflow-auto">
         <ul class="list-unstyled">
           <div
             v-if="suggestions.length === 0"
@@ -14,7 +14,7 @@
           </div>
           <li
             v-else
-            class="py-3 px-3 my-2 suggestion card"
+            class="py-2 px-3 my-1 mx-2 suggestion card"
             v-for="suggested in suggestions"
             v-bind:key="suggested.id"
           >
@@ -22,7 +22,7 @@
               <div class="d-flex align-items-center">
                 <div
                   :style="{
-                    backgroundImage: `url(${suggested.profileImage})`,
+                    backgroundImage: `url(${suggested.profileImage})`
                   }"
                   class="suggestion-profile-image me-4 shadow-sm"
                   v-if="suggested.profileImage"
@@ -51,18 +51,12 @@
                     class="text-decoration-none"
                   >
                     <div class="fw-medium text-black">
-                      {{ suggested.firstName }} {{ suggested.lastName }}
+                      {{ suggested.fullName }}
                     </div>
                   </RouterLink>
                   <!-- <div class="text-secondary">@{{ suggested.userName }}</div> -->
-                  <div class="fw-light">
-                    {{ suggested.mutualFriendCount }} ortak arkadaş
-                  </div>
-                  <button
-                    disabled
-                    class="btn follow px-4"
-                    v-if="suggested.isFollowRequested"
-                  >
+                  <div class="fw-light">{{ suggested.mutualFriendCount }} ortak arkadaş</div>
+                  <button disabled class="btn follow px-4" v-if="suggested.isFollowRequested">
                     Takip İsteği Gönderildi
                   </button>
                   <button
@@ -117,31 +111,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
+import { ref } from 'vue'
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
 
-import type { IFollowSuggestion } from "@/models/follow_suggestion_model";
+import type { IFollowSuggestion } from '@/models/follow_suggestion_model'
 
-const userStore = useUserStore();
-const loading = ref(true);
+const userStore = useUserStore()
+const loading = ref(true)
 const changeLoadingsState = () => {
-  loading.value = !loading.value;
-};
+  loading.value = !loading.value
+}
 
 // userStore.getUserSuggestions().then(changeLoadingsState);
-userStore.getFollowSuggestions().then(changeLoadingsState);
-const { _followSuggestions: suggestions } = storeToRefs(userStore);
+userStore.getFollowSuggestions().then(changeLoadingsState)
+const { _followSuggestions: suggestions } = storeToRefs(userStore)
 
 const followUser = async (user: IFollowSuggestion) => {
   await userStore.followUser(user.id).then(async () => {
     if (user.isPrivate) {
-      user.isFollowRequested = true;
+      user.isFollowRequested = true
     } else {
-      await userStore.getFollowSuggestions();
+      await userStore.getFollowSuggestions()
     }
-  });
-};
+  })
+}
 </script>
 
 <style scoped>
@@ -152,6 +146,7 @@ const followUser = async (user: IFollowSuggestion) => {
 
 .suggestion {
   transition: 0.4s all;
+  background-color: rgba(255, 255, 255, 0.75);
 }
 .suggestion:hover {
   transition: 0.4s all;

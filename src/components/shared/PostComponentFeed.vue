@@ -27,7 +27,7 @@
                 :to="{ name: 'userprofile', params: { id: post.user.id } }"
                 class="text-decoration-none tw-text-blue-800"
               >
-                <div class="fw-bold">{{ post.user.firstName }} {{ post.user.lastName }}</div>
+                <div class="fw-bold">{{ post.user.fullName }}</div>
               </RouterLink>
               <small>
                 {{ formatTime(post.createdAt) }}

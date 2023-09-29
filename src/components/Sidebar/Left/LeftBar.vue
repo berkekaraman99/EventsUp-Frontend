@@ -92,7 +92,7 @@
             </TabVue>
           </RouterLink>
         </div>
-        <div class="tw-bg-slate-200 w-100 text-center py-2 mb-1">
+        <div class="tw-bg-slate-200 w-100 text-center py-2 mb-1" v-if="communities.length > 0">
           <i class="fa-solid fa-people-group"></i>
           <span class="ms-2 fw-bold">{{ t('leftbar.communities') }}</span>
         </div>

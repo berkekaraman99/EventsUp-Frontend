@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="container">
       <div class="row">
-        <div class="col-12 col-lg-8 col-xl-9 mt-3" v-if="loading">
+        <div class="col-12 mt-3" v-if="loading">
           <div class="profile-header position-relative placeholder-glow">
             <div class="profile-banner rounded-4 placeholder"></div>
             <div class="profile-image placeholder bg-black"></div>
@@ -22,7 +22,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 col-lg-8 col-xl-9 mt-3" v-else>
+        <div class="col-12 mt-3" v-else>
           <div class="profile-header position-relative card shadow-sm rounded-4">
             <img
               v-if="currentUser.bannerImage != null"
@@ -56,7 +56,7 @@
 
             <div class="profile-details">
               <div>
-                <h2 class="fw-bold">{{ currentUser.firstName }} {{ currentUser.lastName }}</h2>
+                <h2 class="fw-bold">{{ currentUser.fullName }}</h2>
                 <h5 class="fw-normal">@{{ currentUser.userName }}</h5>
                 <div class="d-flex flex-column flex-sm-row">
                   <div
@@ -98,6 +98,10 @@
                 </p>
               </div>
             </div>
+
+            <div id="suggestion" class="d-none d-sm-none d-md-none d-lg-block">
+              <UserSuggestions />
+            </div>
           </div>
 
           <!-- Followers Modal -->
@@ -109,9 +113,11 @@
           <!-- Follower Requests Modal -->
           <FollowerRequestsModal :id="userId" @update-follower-count="() => (followerCount += 1)" />
         </div>
-        <div class="col-lg-4 col-xl-3 d-none d-sm-none d-lg-block mt-3">
+        <!-- <div
+          class="col-lg-4 col-xl-3 d-none d-sm-none d-lg-flex align-items-center justify-content-center mt-3"
+        >
           <UserSuggestions />
-        </div>
+        </div> -->
       </div>
     </div>
     <div id="options" class="container-fluid my-4 placeholder-glow" v-if="loading">
@@ -400,5 +406,10 @@ label span {
   &:hover {
     background-color: var(--color-secondary);
   }
+}
+
+#suggestion {
+  position: absolute;
+  right: 2rem;
 }
 </style>

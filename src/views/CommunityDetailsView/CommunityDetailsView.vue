@@ -64,7 +64,7 @@
             <RouterLink
               :to="{ name: 'community-settings' }"
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-              v-if="community.adminId === user.id"
+              v-if="community.admin.id === user.id"
             >
               <input
                 type="radio"
@@ -122,7 +122,7 @@
                 <div
                   class="align-self-md-end align-self-sm-center align-self-center my-3 my-sm-3 my-md-0"
                 >
-                  <div v-if="community.adminId !== user.id">
+                  <div v-if="community.admin.id !== user.id">
                     <button class="btn btn-warning" type="button" disabled v-if="loading">
                       <span
                         class="spinner-border spinner-border-sm"

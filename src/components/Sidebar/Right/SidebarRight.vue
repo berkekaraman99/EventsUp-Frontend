@@ -1,11 +1,15 @@
 <template>
-  <div class="col-12 d-flex justify-content-center w-100">
+  <div id="right-bar" class="col-12 d-flex justify-content-center px-2">
     <CommunitySuggestions />
   </div>
 </template>
 
 <script setup lang="ts">
-import CommunitySuggestions from "@/components/common/home/CommunitySuggestions.vue";
+import CommunitySuggestions from '@/components/common/home/CommunitySuggestions.vue'
 </script>
 
-<style scoped></style>
+<style scoped>
+#right-bar {
+  margin-top: 126px;
+}
+</style>

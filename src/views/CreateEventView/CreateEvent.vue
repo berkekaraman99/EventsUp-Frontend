@@ -62,6 +62,13 @@
                 validation="required"
                 v-on:change="onFileChange"
               />
+
+              <div class="d-flex align-items-center p-2 overflow-x-auto rounded-4">
+                <div v-for="(image, index) in imagePreviews" :key="index">
+                  <img :src="image" class="preview" alt="file preview" />
+                </div>
+              </div>
+
               <FormKit
                 type="select"
                 label="Etkinlik Online mı?"
@@ -208,10 +215,27 @@ const eventObject = reactive({
   isVisible: true
 })
 
+const imagePreviews = ref<Array<any>>([])
+
 const onFileChange = (e: any) => {
   let files = e.target.files || e.dataTransfer.files
+
+  if (files.length > 0) {
+    imagePreviews.value = []
+
+    for (let i = 0; i < files.length; i++) {
+      const file = files[i]
+      const reader = new FileReader()
+
+      reader.onload = (e) => {
+        imagePreviews.value.push(e.target?.result)
+      }
+
+      reader.readAsDataURL(file)
+    }
+  }
+
   eventObject.files = files
-  console.log(eventObject.files)
 }
 
 const submitEvent = async () => {
@@ -289,5 +313,11 @@ onBeforeUnmount(() => {
 
 .group-text {
   font-weight: 300;
+}
+
+.preview {
+  height: 160px;
+  object-fit: contain;
+  padding: 0px 0.5rem;
 }
 </style>

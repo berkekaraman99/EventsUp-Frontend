@@ -1,7 +1,7 @@
 <template>
   <div
     id="community-suggestions"
-    class="mb-4 mb-md-4 mb-lg-0 d-none d-md-none d-lg-flex flex-column"
+    class="mb-4 mb-md-4 mb-lg-0 d-none d-md-none d-lg-flex flex-column w-100"
   >
     <div class="card border rounded-3 overflow-hidden">
       <div class="card-header px-md-4 px-xl-5">
@@ -33,11 +33,12 @@
             class="text-decoration-none"
           >
             <div class="d-flex align-items-center">
-              <div
-                :style="{ backgroundImage: `url(${community.coverImage})` }"
-                class="suggestion-profile-image me-4 shadow-sm"
-                v-if="community.coverImage != null"
-              ></div>
+              <div v-if="community.coverImage != null">
+                <div
+                  :style="{ backgroundImage: `url(${community.coverImage})` }"
+                  class="suggestion-profile-image me-4 shadow-sm"
+                ></div>
+              </div>
               <img
                 v-else
                 class="me-4"
@@ -79,7 +80,7 @@ const { _communityList: communityList } = storeToRefs(communityStore)
 
 <style scoped lang="scss">
 #community-suggestions {
-  padding: 12px 0px;
+  padding: 0px 0px;
 
   // @media screen and (max-width: 992px) {
   //   width: 100%;

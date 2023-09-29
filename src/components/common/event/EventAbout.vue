@@ -57,25 +57,25 @@
           <div class="fw-medium text-end">{{ t('event.owner') }}</div>
           <div class="d-flex align-items-center justify-content-end my-3">
             <div class="mx-3">
-              {{ currentEvent.firstName.concat(' ', currentEvent.lastName) }}
+              {{ currentEvent.user.fullName }}
             </div>
             <img
-              v-if="currentEvent.profileImage"
+              v-if="currentEvent.user.profileImage"
               class="post-profile-image"
-              :src="currentEvent.profileImage"
+              :src="currentEvent.user.profileImage"
               alt="profile image"
             />
             <img
               src="@/assets/images/profile-man.png"
               alt="profile-man"
               class="post-profile-image"
-              v-else-if="currentEvent.gender == 2"
+              v-else-if="currentEvent.user.gender == 2"
             />
             <img
               src="@/assets/images/profile-woman.png"
               alt="profile-woman"
               class="post-profile-image"
-              v-else-if="currentEvent.gender == 1"
+              v-else-if="currentEvent.user.gender == 1"
             />
             <img src="@/assets/images/user.png" alt="profile" class="post-profile-image" v-else />
           </div>
@@ -83,7 +83,7 @@
         <div
           id="eventAction"
           class="card-footer fw-bold pointer p-0 m-0 mt-3"
-          v-if="currentEvent.userId !== user.id"
+          v-if="currentEvent.user.id !== user.id"
         >
           <button class="btn btn-secondary w-100 h-100" v-if="processing" disabled>
             <div class="spinner-border text-info" role="status">
@@ -99,7 +99,7 @@
           </button>
           <button
             class="btn btn-danger w-100 h-100"
-            v-else-if="currentEvent.userId !== user.id"
+            v-else-if="currentEvent.user.id !== user.id"
             @click="leaveEvent(currentEvent)"
           >
             Etkinlikten Ayrıl

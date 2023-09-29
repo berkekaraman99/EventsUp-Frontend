@@ -3,18 +3,15 @@
     <div
       class="position-absolute end-0 bottom-0 m-3"
       style="width: 300px"
-      v-if="
-        showToast &&
-        (statusCode === 10001 || statusCode === 10002 || statusCode === 10401)
-      "
+      v-if="showToast && (statusCode === 10001 || statusCode === 10002 || statusCode === 10401)"
     >
-      <div class="card border-1 border-white shadow">
-        <div class="card-header bg-danger text-white">
+      <div class="glass-effect">
+        <div class="text-danger py-1 px-2">
           <div class="d-flex align-items-center justify-content-between">
             <strong>{{ header }}</strong>
           </div>
         </div>
-        <div class="card-body">
+        <div class="p-2">
           <div>{{ content }}</div>
         </div>
       </div>
@@ -26,19 +23,19 @@
 const props = defineProps({
   statusCode: {
     type: Number,
-    required: true,
+    required: true
   },
   showToast: {
     type: Boolean,
-    required: true,
+    required: true
   },
   header: {
-    type: String,
+    type: String
   },
   content: {
-    type: String,
-  },
-});
+    type: String
+  }
+})
 </script>
 
 <style scoped>

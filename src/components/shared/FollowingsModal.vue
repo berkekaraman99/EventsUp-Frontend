@@ -10,7 +10,7 @@
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="followingsLabel">Takipler</h1>
+          <h1 class="modal-title fs-4" id="followingsLabel">Takipler</h1>
           <button
             type="button"
             class="btn-close"
@@ -26,9 +26,7 @@
                 <input
                   type="text"
                   class="form-control form-control-lg mb-3"
-                  :placeholder="
-                    user ? 'Takip ettiklerini ara' : 'Please login to search'
-                  "
+                  :placeholder="user ? 'Takip ettiklerini ara' : 'Please login to search'"
                   v-model="text"
                   @keydown.enter="handleSearch"
                   :disabled="!user"
@@ -52,7 +50,7 @@
                     <div class="d-flex align-items-center">
                       <div
                         :style="{
-                          'background-image': `url(${user.profileImage})`,
+                          'background-image': `url(${user.profileImage})`
                         }"
                         alt="profile image"
                         class="post-profile-image me-4"
@@ -78,7 +76,7 @@
                       />
                       <div>
                         <div class="fw-bold text-black">
-                          {{ user.firstName }} {{ user.lastName }}
+                          {{ user.fullName }}
                         </div>
                         <div class="text-secondary">@{{ user.userName }}</div>
                       </div>
@@ -98,51 +96,53 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from "@/stores/user";
-import { storeToRefs } from "pinia";
-import { reactive, ref, toRef } from "vue";
-import LoadingVue from "./LoadingVue.vue";
+import { useUserStore } from '@/stores/user'
+import { storeToRefs } from 'pinia'
+import { reactive, ref, toRef } from 'vue'
+import LoadingVue from './LoadingVue.vue'
 
 const props = defineProps({
   id: {
     type: String,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
-const userStore = useUserStore();
-const { _currentUser: user } = storeToRefs(userStore);
+const userStore = useUserStore()
+const { _currentUser: user } = storeToRefs(userStore)
 
-const loading = ref(true);
+const loading = ref(true)
 const changeloading = () => {
-  loading.value = false;
-};
+  loading.value = false
+}
 
 const search = reactive({
-  text: "",
-});
+  text: ''
+})
 
-const text = toRef(search, "text");
+const text = toRef(search, 'text')
 
 const handleSearch = async () => {
-  loading.value = true;
+  loading.value = true
   if (search.text.length > 0) {
     await userStore
       .searchFollowings({
         id: user.value.id,
-        text: search.text,
+        text: search.text
       })
-      .then(() => (loading.value = false));
+      .then(() => (loading.value = false))
   } else {
     userStore.$patch({
-      searchedUserFollowings: userStore.userFollowings,
-    });
-    loading.value = false;
+      searchedUserFollowings: userStore.userFollowings
+    })
+    loading.value = false
   }
-};
+}
 
-userStore.getUserFollowings(props.id).then(changeloading);
+userStore.getUserFollowings(props.id).then(changeloading)
 
 const { _userFollowings: followings, _searchedFollowings: searchedFollowings } =
-  storeToRefs(userStore);
+  storeToRefs(userStore)
 </script>
+
+<style scoped></style>

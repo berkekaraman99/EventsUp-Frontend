@@ -74,7 +74,7 @@
                         class="text-decoration-none"
                       >
                         <div class="fw-bold text-black" data-bs-dismiss="modal">
-                          {{ user.firstName }} {{ user.lastName }}
+                          {{ user.fullName }}
                         </div>
                       </RouterLink>
                       <div class="text-secondary">@{{ user.userName }}</div>

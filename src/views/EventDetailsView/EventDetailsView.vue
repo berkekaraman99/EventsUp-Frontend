@@ -65,7 +65,7 @@
 
             <div
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-              v-if="currentEvent.userId === user.id"
+              v-if="currentEvent.user.id === user.id"
               @click="changeCategory('Settings')"
               :class="{ selected: category === 'Settings' }"
             >

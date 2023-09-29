@@ -10,25 +10,25 @@
         <p class="fw-medium">{{ t('community.owner') }}</p>
         <div class="d-flex align-items-center my-3">
           <img
-            v-if="community.adminImage != null"
+            v-if="community.admin.profileImage != null"
             class="post-profile-image"
-            :src="community.adminImage"
+            :src="community.admin.profileImage"
             alt="admin profile"
           />
           <img
             src="@/assets/images/profile-man.png"
             alt="profile-man"
             class="post-profile-image"
-            v-else-if="community.adminGender == 2"
+            v-else-if="community.admin.gender == 2"
           />
           <img
             src="@/assets/images/profile-woman.png"
             alt="profile-woman"
             class="post-profile-image"
-            v-else-if="community.adminGender == 1"
+            v-else-if="community.admin.gender == 1"
           />
           <img src="@/assets/images/user.png" alt="profile" class="post-profile-image" v-else />
-          <div class="mx-3">{{ community.adminName }} {{ community.adminLastName }}</div>
+          <div class="mx-3">{{ community.admin.fullName }}</div>
         </div>
       </div>
     </div>

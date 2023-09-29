@@ -13,10 +13,9 @@ export interface IComment {
   message: string
   replyCount: number
   user: {
-    firstName: string
+    fullName: string
     gender: number
     id: string
-    lastName: string
     profileImage: string
     userName: string
   }

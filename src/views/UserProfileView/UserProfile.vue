@@ -75,7 +75,7 @@
             <img src="@/assets/images/user.png" alt="profile" class="profile-image me-4" v-else />
             <div class="profile-details">
               <div>
-                <h2 class="fw-bold">{{ currentUser.firstName }} {{ currentUser.lastName }}</h2>
+                <h2 class="fw-bold">{{ currentUser.fullName }}</h2>
                 <h5 class="fw-normal">@{{ currentUser.userName }}</h5>
                 <div class="d-flex flex-column flex-sm-row">
                   <div

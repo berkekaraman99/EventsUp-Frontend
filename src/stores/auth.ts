@@ -1,117 +1,108 @@
-import type { IAuthUser } from "@/models/auth_user_model";
-import type { ILogInModel } from "../models/login_model";
-import type { ISignUpModel } from "../models/signup_model";
-import { instance } from "../utils/network_manager";
-import { defineStore } from "pinia";
-import SecureLS from "secure-ls";
+import type { IAuthUser } from '@/models/auth_user_model'
+import type { ILogInModel } from '../models/login_model'
+import type { ISignUpModel } from '../models/signup_model'
+import { instance } from '../utils/network_manager'
+import { defineStore } from 'pinia'
+import SecureLS from 'secure-ls'
 // import router from "@/router";
 
-const ls = new SecureLS({ isCompression: false });
+const ls = new SecureLS({ isCompression: false })
 
-export const useAuthStore = defineStore("authStore", {
+export const useAuthStore = defineStore('authStore', {
   state: () => ({
     user: null as IAuthUser | null,
     accessToken: null as string | null,
     refreshToken: null as string | null,
     userIsAuthorized: false as boolean,
-    statusCode: 0 as number,
+    statusCode: 0 as number
   }),
   getters: {
     _user: (state: any) => state.user as IAuthUser,
     _accessToken: (state: any) => state.accessToken as string | null,
     _refreshToken: (state: any) => state.refreshToken as string | null,
     _userIsAuthorized: (state: any) => state.userIsAuthorized as boolean,
-    _statusCode: (state: any) => state.statusCode as number,
+    _statusCode: (state: any) => state.statusCode as number
   },
 
   actions: {
     // LOGIN
     async login(logInObject: ILogInModel) {
       try {
-        const res = await instance.post("/Authentication/SignIn", logInObject);
-        this.statusCode = res.data.statusCode;
-        console.log(res.data);
+        const res = await instance.post('/Authentication/SignIn', logInObject)
+        this.statusCode = res.data.statusCode
+        console.log(res.data)
 
         if (res.data.isSuccess) {
-          this.accessToken = res.data.data.accessToken;
-          this.refreshToken = res.data.data.refreshToken;
+          this.accessToken = res.data.data.accessToken
+          this.refreshToken = res.data.data.refreshToken
 
-          instance.defaults.headers[
-            "Authorization"
-          ] = `Bearer ${this.accessToken}`;
-          this.userIsAuthorized = true;
+          instance.defaults.headers['Authorization'] = `Bearer ${this.accessToken}`
+          this.userIsAuthorized = true
 
-          const getUserAfterLogin = await instance.get(
-            "/User/GetUserAfterLogin"
-          );
-          this.user = getUserAfterLogin.data.data;
-          console.log(this.user);
-          this.statusCode = res.data.statusCode;
+          // const getUserAfterLogin = await instance.get(
+          //   "/User/GetUserAfterLogin"
+          // );
+
+          await this.getUserAfterLogin()
+          console.log(this.user)
+          this.statusCode = res.data.statusCode
           setTimeout(() => {
-            this.statusCode = 0;
-          }, 3000);
+            this.statusCode = 0
+          }, 3000)
         }
       } catch (error: any) {
-        console.log(error.message);
+        console.log(error.message)
       }
     },
 
     // SIGNUP
     async signup(signUpObject: ISignUpModel) {
       try {
-        this.statusCode = 0;
-        const res = await instance.post("/Authentication/SignUp", signUpObject);
+        this.statusCode = 0
+        const res = await instance.post('/Authentication/SignUp', signUpObject)
         if (res) {
-          this.accessToken = res.data.data.accessToken;
-          this.refreshToken = res.data.data.refreshToken;
+          this.accessToken = res.data.data.accessToken
+          this.refreshToken = res.data.data.refreshToken
 
-          instance.defaults.headers[
-            "Authorization"
-          ] = `Bearer ${this.accessToken}`;
-          this.userIsAuthorized = true;
+          instance.defaults.headers['Authorization'] = `Bearer ${this.accessToken}`
+          this.userIsAuthorized = true
 
-          const getUserAfterLogin = await instance.get(
-            "/User/GetUserAfterLogin"
-          );
-
-          this.statusCode = res.data.statusCode;
-          this.user = getUserAfterLogin.data.data;
+          // const getUserAfterLogin = await instance.get(
+          //   "/User/GetUserAfterLogin"
+          // );
+          await this.getUserAfterLogin()
+          this.statusCode = res.data.statusCode
           setTimeout(() => {
-            this.statusCode = 0;
-          }, 3000);
+            this.statusCode = 0
+          }, 3000)
         }
       } catch (error: any) {
-        console.log(error.message);
+        console.log(error.message)
       }
     },
 
     //LOGIN WITH GOOGLE
     async loginWithGoogle(credential: string) {
       try {
-        const res = await instance.post(
-          "https://localhost:7149/api/authentication/google-login",
-          {
-            idToken: credential,
-          }
-        );
-        console.log(res.data);
-        this.accessToken = res.data.data.accessToken;
-        this.refreshToken = res.data.data.refreshToken;
+        const res = await instance.post('https://localhost:7149/api/authentication/google-login', {
+          idToken: credential
+        })
+        console.log(res.data)
+        this.accessToken = res.data.data.accessToken
+        this.refreshToken = res.data.data.refreshToken
 
-        instance.defaults.headers[
-          "Authorization"
-        ] = `Bearer ${this.accessToken}`;
-        this.userIsAuthorized = true;
+        instance.defaults.headers['Authorization'] = `Bearer ${this.accessToken}`
+        this.userIsAuthorized = true
 
-        const getUserAfterLogin = await instance.get("/User/GetUserAfterLogin");
-        this.user = getUserAfterLogin.data.data;
-        console.log(this.user);
-        this.statusCode = res.data.statusCode;
+        const getUserAfterLogin = await instance.get('/User/GetUserAfterLogin')
+        this.user = getUserAfterLogin.data.data
+        console.log(this.user)
+        this.statusCode = res.data.statusCode
         setTimeout(() => {
-          this.statusCode = 0;
-        }, 3000);
+          this.statusCode = 0
+        }, 3000)
       } catch (error: any) {
-        console.log(error);
+        console.log(error)
       }
     },
 
@@ -119,39 +110,36 @@ export const useAuthStore = defineStore("authStore", {
     async logout() {
       try {
         await instance
-          .post("/authentication/signout", { refreshToken: this.refreshToken })
+          .post('/authentication/signout', { refreshToken: this.refreshToken })
           .then(() => {
             // this.user = null;
-            ls.remove("authStore");
-            useAuthStore().$reset();
-            instance.defaults.headers["Authorization"] = null;
-            location.reload();
-          });
+            ls.remove('authStore')
+            useAuthStore().$reset()
+            instance.defaults.headers['Authorization'] = null
+            location.reload()
+          })
       } catch (error: any) {
-        console.log(error.data);
+        console.log(error.data)
       }
     },
 
     //REFRESH TOKEN
     async refreshUserToken() {
-      const res = await instance.post("/Authentication/RefreshToken", {
-        refreshToken: this.refreshToken,
-      });
+      const res = await instance.post('/Authentication/RefreshToken', {
+        refreshToken: this.refreshToken
+      })
 
-      console.log(res);
+      console.log(res)
     },
 
     //CHANGE PASSWORD
     async changePassword(passwords: Object) {
-      const res = await instance.post(
-        "/authentication/change-password",
-        passwords
-      );
-      this.statusCode = res.data.statusCode;
+      const res = await instance.post('/authentication/change-password', passwords)
+      this.statusCode = res.data.statusCode
       setTimeout(() => {
-        this.statusCode = 0;
-      }, 3000);
-      console.log(res.data);
+        this.statusCode = 0
+      }, 3000)
+      console.log(res.data)
     },
 
     //LOAD USER
@@ -159,74 +147,68 @@ export const useAuthStore = defineStore("authStore", {
       if (this.user != null) {
         // this.user = JSON.parse(user);
       } else if (this.accessToken != null) {
-        const getUserAfterLogin = await instance.get("/User/GetUserAfterLogin");
-        this.user = getUserAfterLogin.data.data;
+        const getUserAfterLogin = await instance.get('/User/GetUserAfterLogin')
+        this.user = getUserAfterLogin.data.data
       }
-      this.userIsAuthorized = true;
+      this.userIsAuthorized = true
       // console.log(this.user);
     },
 
     async getUserAfterLogin() {
-      const res = await instance.get("/User/GetUserAfterLogin");
-      console.log(res.data);
-      this.user = res.data.data;
+      const res = await instance.get('/User/GetUserAfterLogin')
+      console.log(res.data)
+      this.user = res.data.data
       // localStorage.removeItem("user");
       // localStorage.setItem("user", JSON.stringify(this.user));
-      this.loadUser();
+      this.loadUser()
     },
 
     async resetPasswordRequest(mail: string) {
       try {
-        const res = await instance.post(
-          "/authentication/reset-password-request",
-          { mail }
-        );
-        console.log(res.data);
-        this.statusCode = res.data.statusCode;
+        const res = await instance.post('/authentication/reset-password-request', { mail })
+        console.log(res.data)
+        this.statusCode = res.data.statusCode
         setTimeout(() => {
-          this.statusCode = 0;
-        }, 3000);
+          this.statusCode = 0
+        }, 3000)
       } catch (error: any) {
-        console.log(error.message);
+        console.log(error.message)
       }
     },
 
     async resetPassword(credentials: Object) {
       try {
-        const res = await instance.post(
-          "/authentication/reset-password",
-          credentials
-        );
-        console.log(res.data);
-        this.statusCode = res.data.statusCode;
+        const res = await instance.post('/authentication/reset-password', credentials)
+        console.log(res.data)
+        this.statusCode = res.data.statusCode
         setTimeout(() => {
-          this.statusCode = 0;
-        }, 3000);
+          this.statusCode = 0
+        }, 3000)
       } catch (error: any) {
-        console.log(error.message);
+        console.log(error.message)
       }
     },
 
     async checkOTPCode(mail: string, code: string) {
       try {
-        const res = await instance.post("/authentication/check-otp", {
+        const res = await instance.post('/authentication/check-otp', {
           mail,
-          code,
-        });
-        console.log(res.data);
-        this.statusCode = res.data.statusCode;
+          code
+        })
+        console.log(res.data)
+        this.statusCode = res.data.statusCode
         setTimeout(() => {
-          this.statusCode = 0;
-        }, 3000);
+          this.statusCode = 0
+        }, 3000)
       } catch (error: any) {
-        console.log(error.message);
+        console.log(error.message)
       }
-    },
+    }
   },
   persist: {
     storage: {
       getItem: (key) => ls.get(key),
-      setItem: (key, value) => ls.set(key, value),
-    },
-  },
-});
+      setItem: (key, value) => ls.set(key, value)
+    }
+  }
+})

@@ -1,6 +1,6 @@
 user.
 <template>
-  <div class="col-12 col-lg-8 offset-lg-2 my-4 px-2">
+  <div class="col-12 col-sm-12 col-md-12 col-lg-8 offset-lg-2 my-4 px-2">
     <div class="card shadow-sm rounded-4 overflow-hidden">
       <div
         class="position-absolute top-50 start-50 translate-middle z-3 w-100 h-100"
@@ -43,7 +43,7 @@ user.
                 class="text-decoration-none tw-text-blue-800"
               >
                 <div class="fw-bold">
-                  {{ post.user.firstName }} {{ post.user.lastName }}
+                  {{ post.user.fullName }}
                 </div></RouterLink
               >
               <small>
