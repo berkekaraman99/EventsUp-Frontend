@@ -29,7 +29,7 @@
       class="main"
       :class="{
         'container-fluid': $route.name === 'auth' || $route.name === 'forgetpassword',
-        container: $route.name !== 'auth' && $route.name !== 'forgetpassword'
+        'container-md': $route.name !== 'auth' && $route.name !== 'forgetpassword'
       }"
       :style="{
         'padding-top': $route.name === 'auth' || $route.name === 'forgetpassword' ? '0' : '80px'
@@ -38,7 +38,7 @@
       <div class="row overflow-hidden h-100">
         <!-- MAIN - ROUTER.VIEW -->
         <main
-          class="col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9 px-4 px-sm-0 px-md-0"
+          class="col-12 col-sm-12 col-md-12 col-lg-9 col-xl-9 px-2 px-sm-0 px-md-0"
           :class="{
             'col-md-12 col-lg-12 col-xl-12 px-0':
               $route.name !== 'home' && $route.name !== 'search' && $route.name !== 'events'

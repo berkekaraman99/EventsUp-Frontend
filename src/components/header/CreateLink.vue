@@ -4,7 +4,7 @@
       <RouterLink :to="{ name: link.routeName }" class="dropdown-item">
         <button class="btn w-100 d-flex align-items-center">
           <i :class="link.icon"></i>
-          <span class="mx-2">{{ link.content }}</span>
+          <span class="mx-2">{{ t(link.content) }}</span>
         </button>
       </RouterLink>
     </li>
@@ -12,29 +12,30 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-const links = [
+const links = ref<Array<any>>([
   {
     id: 1,
     routeName: 'createCommunity',
-    content: t('header.createcommunity'),
+    content: 'header.createcommunity',
     icon: 'fa-solid fa-people-group'
   },
   {
     id: 2,
     routeName: 'createPost',
-    content: t('header.createpost'),
+    content: 'header.createpost',
     icon: 'fa-solid fa-note-sticky'
   },
   {
     id: 3,
     routeName: 'createEvent',
-    content: t('header.createevent'),
+    content: 'header.createevent',
     icon: 'fa-solid fa-calendar'
   }
-]
+])
 </script>
 
 <style scoped></style>

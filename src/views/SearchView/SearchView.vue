@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <Transition appear @before-enter="beforeEnterTitle" @enter="enterTitle">
-        <h1 class="display-6 fw-bold px-2">{{ t('search.header') }}</h1>
+        <h1 class="display-6 fw-bold">{{ t('search.header') }}</h1>
       </Transition>
     </div>
     <div class="container">
@@ -15,6 +15,7 @@
           :style="{ width: search.text.length > 0 ? '100%' : '' }"
           @keydown.enter="handleSearch"
           :placeholder="t('search.inputplaceholder')"
+          v-focus
         />
       </div>
       <div class="container">
@@ -65,8 +66,8 @@
                   class="post-profile-image me-4"
                   v-else
                 />
-                <div class="tw-bg-black/50 tw-rounded px-1 py-1">
-                  <div class="fw-bold text-white">{{ item.firstName }} {{ item.lastName }}</div>
+                <div class="tw-bg-black/50 tw-rounded-lg px-2 py-1">
+                  <div class="fw-bold text-white">{{ item.fullName }}</div>
                   <div class="text-white-50">@{{ item.userName }}</div>
                 </div>
               </div>
@@ -141,6 +142,10 @@ const handleSearch = async () => {
     searchStore.searchItemList = []
   }
 }
+
+const vFocus = {
+  mounted: (el: HTMLInputElement) => el.focus()
+}
 </script>
 
 <style scoped lang="scss">
@@ -150,9 +155,10 @@ const handleSearch = async () => {
 }
 
 #search {
-  border-radius: 99px;
+  border-radius: 0.5rem;
   // transition: 0.4s ease;
-  transition: 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  // transition: 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   width: 96px;
 
   &::before {

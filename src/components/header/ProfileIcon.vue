@@ -25,19 +25,11 @@
     </div>
 
     <ul class="dropdown-menu dropdown-menu-end z-3">
-      <li>
-        <RouterLink :to="{ name: 'profile' }" class="dropdown-item">
+      <li v-for="link in links" :key="link.id">
+        <RouterLink :to="{ name: link.routeName }" class="dropdown-item">
           <button class="btn w-100">
-            <i class="fa-solid fa-user me-1"></i>
-            {{ t('header.profile') }}
-          </button>
-        </RouterLink>
-      </li>
-      <li>
-        <RouterLink :to="{ name: 'profileSettings' }" class="dropdown-item">
-          <button class="btn w-100">
-            <i class="fa-solid fa-gear me-1"></i>
-            {{ t('header.settings') }}
+            <i :class="link.icon"></i>
+            <span class="mx-2">{{ t(link.content) }}</span>
           </button>
         </RouterLink>
       </li>
@@ -53,7 +45,7 @@
 
 <script setup lang="ts">
 import type { IAuthUser } from '@/models/auth_user_model'
-import type { PropType } from 'vue'
+import { ref, type PropType } from 'vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
@@ -64,6 +56,21 @@ const props = defineProps({
     required: true
   }
 })
+
+const links = ref<Array<any>>([
+  {
+    id: 1,
+    routeName: 'profile',
+    content: 'header.profile',
+    icon: 'fa-solid fa-user'
+  },
+  {
+    id: 2,
+    routeName: 'profileSettings',
+    content: 'header.settings',
+    icon: 'fa-solid fa-gear'
+  }
+])
 
 const emit = defineEmits(['logout'])
 </script>

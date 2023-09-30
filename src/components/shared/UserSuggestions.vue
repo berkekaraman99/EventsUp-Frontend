@@ -2,7 +2,9 @@
   <div class="glass-effect" style="width: 300px">
     <div id="suggestions" v-if="!loading">
       <div class="p-0">
-        <h4 class="fw-medium my-3 text-center text-white">Takip Önerileri</h4>
+        <h4 class="fw-medium my-3 text-center text-white" style="text-shadow: 0px 0px 3px black">
+          Takip Önerileri
+        </h4>
       </div>
       <div class="py-0 tw-px-1 overflow-auto">
         <ul class="list-unstyled">

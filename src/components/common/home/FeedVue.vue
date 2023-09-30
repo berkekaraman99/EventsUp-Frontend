@@ -2,7 +2,7 @@
   <div>
     <div class="container">
       <Transition appear @before-enter="beforeEnterTitle" @enter="enterTitle">
-        <h1 class="fw-bold display-6 px-2">{{ t('feed.header') }}</h1>
+        <h1 class="fw-bold display-6">{{ t('feed.header') }}</h1>
       </Transition>
     </div>
 

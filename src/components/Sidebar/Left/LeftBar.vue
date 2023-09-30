@@ -192,7 +192,7 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
 
 <style lang="scss" scoped>
 #left-bar {
-  transition: 0.3s ease;
+  transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   position: fixed;
   bottom: 0;
   top: 0;

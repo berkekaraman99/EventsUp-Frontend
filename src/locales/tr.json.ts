@@ -138,7 +138,7 @@ export default {
     removebanner: 'Afişi Kaldır',
     removing: 'Kaldırılıyor...',
     removeprofileimage: 'Profil Resmini Kaldır',
-    firstname: 'Tam Adınız',
+    fullName: 'Tam Adınız',
     username: 'Kullanıcı Adı',
     bio: 'Bio',
     email: 'Email',

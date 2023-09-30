@@ -59,7 +59,7 @@ img {
   background-position: center;
   background-size: cover;
   z-index: -1;
-  border-radius: 6px;
+  border-radius: 0.5rem;
   filter: blur(4px);
 }
 
@@ -206,7 +206,7 @@ a.router-link-exact-active {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
-  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.37);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 0.5rem;
 }

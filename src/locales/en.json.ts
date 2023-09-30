@@ -138,7 +138,7 @@ export default {
     removebanner: 'Remove Banner Image',
     removing: 'Removing...',
     removeprofileimage: 'Remove Profile Image',
-    firstname: 'Full Name',
+    fullName: 'Full Name',
     username: 'Username',
     bio: 'Bio',
     email: 'Email',

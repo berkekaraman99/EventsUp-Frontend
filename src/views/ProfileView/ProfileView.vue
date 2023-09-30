@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="container">
+    <div class="container-md">
       <div class="row">
         <div class="col-12 mt-3" v-if="loading">
           <div class="profile-header position-relative placeholder-glow">

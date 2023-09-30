@@ -1,6 +1,6 @@
 <template>
   <div class="container-fluid">
-    <div class="container">
+    <div class="container-md">
       <div class="row">
         <div class="col-12 mt-3" v-if="loading">
           <div class="profile-header position-relative placeholder-glow">
@@ -123,7 +123,9 @@
                   {{ currentUser.bio }}
                 </p>
               </div>
-              <div class="d-flex justify-content-center align-self-baseline">
+              <div
+                class="d-flex justify-content-center align-items-end align-items-sm-center align-self-baseline flex-column-reverse flex-sm-row"
+              >
                 <button
                   class="btn follow px-4 fw-light"
                   @click="removeFollowRequest(currentUser)"
@@ -132,7 +134,7 @@
                   {{ t('profile.unfollowrequest') }}
                 </button>
                 <button
-                  class="btn follow px-4 fw-light"
+                  class="btn follow px-sm-4 fw-light tw-text-sm"
                   @click="followUser(currentUser)"
                   v-else-if="
                     currentUser.id !== user.id && !currentUser.isFollowing && !currentUser.isBlocked

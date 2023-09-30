@@ -13,7 +13,7 @@
           }
         }"
       >
-        <FormKit type="text" :label="t('settings.firstname')" v-model="userObject.fullName" />
+        <FormKit type="text" :label="t('settings.fullName')" v-model="userObject.fullName" />
         <FormKit type="text" :label="t('settings.username')" v-model="userObject.userName" />
         <FormKit type="textarea" :label="t('settings.bio')" rows="3" v-model="userObject.bio" />
         <FormKit

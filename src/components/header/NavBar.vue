@@ -15,7 +15,7 @@
         </span>
       </div>
 
-      <button
+      <!-- <button
         class="navbar-toggler"
         type="button"
         data-bs-toggle="collapse"
@@ -25,10 +25,10 @@
         aria-label="Toggle navigation"
       >
         <span class="navbar-toggler-icon"></span>
-      </button>
+      </button> -->
 
-      <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
-        <div class="d-flex align-items-center justify-content-end mt-2 mt-sm-2 mt-lg-0">
+      <div class="">
+        <div class="d-flex align-items-center justify-content-end">
           <template v-if="userIsAuthorized">
             <div class="d-flex align-items-center justify-content-center" v-if="user">
               <div class="dropdown create-nav">
@@ -64,7 +64,7 @@
                   </div>
                 </div>
                 <ul class="dropdown-menu dropdown-menu-end">
-                  <li><h6 class="dropdown-header">Follow Requests</h6></li>
+                  <li><h6 class="dropdown-header">Notifications</h6></li>
                 </ul>
               </div>
 
