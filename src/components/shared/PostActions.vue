@@ -250,7 +250,7 @@ const savePost = async (post: IPostModel | IFeedPost) => {
   transition: all 0.3s ease;
   border-radius: 0.5rem;
   &:hover {
-    transform: scale(110%);
+    transform: scale(110%) translateY(-0.5rem);
     box-shadow: 0px 0px 0.5rem -2px black;
   }
 }

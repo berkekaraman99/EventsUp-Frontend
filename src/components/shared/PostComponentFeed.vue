@@ -1,6 +1,6 @@
 <template>
   <div class="col-12 my-4 px-2">
-    <div class="card shadow-sm overflow-hidden">
+    <div class="card rounded-4 shadow-sm overflow-hidden">
       <div class="card-header py-3">
         <div class="d-flex justify-content-between">
           <div class="d-flex align-items-center">
@@ -30,6 +30,7 @@
                 <div class="fw-bold">{{ post.user.fullName }}</div>
               </RouterLink>
               <small>
+                @{{ post.user.userName }} -
                 {{ formatTime(post.createdAt) }}
               </small>
             </div>

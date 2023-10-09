@@ -1,11 +1,13 @@
 export interface IEventComment {
-  firstName: string;
-  gender: number;
-  id: string;
-  interactionCount: number;
-  isInteracted: boolean;
-  lastName: string;
-  message: string;
-  profileImage: string;
-  userId: string;
+  id: string
+  interactionCount: number
+  isInteracted: boolean
+  message: string
+  user: {
+    fullName: string
+    gender: number
+    id: string
+    profileImage: string
+    userName: string
+  }
 }

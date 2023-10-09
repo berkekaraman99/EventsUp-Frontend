@@ -80,13 +80,14 @@
                   <div
                     class="post-profile-image"
                     :style="{
-                      'background-image': 'url(' + comment.profileImage + ')',
+                      'background-image': 'url(' + comment.user.profileImage + ')',
                       'background-color': 'grey'
                     }"
                   ></div>
                   <div class="mx-3">
                     <div>
-                      <div class="fw-bold">{{ comment.firstName }} {{ comment.lastName }}</div>
+                      <div class="fw-bold">{{ comment.user.fullName }}</div>
+                      <div class="tw-text-sm text-secondary">@{{ comment.user.userName }}</div>
                       <!-- <small>
                         {{ formatTime(comment.createdAt) }}
                       </small> -->
@@ -109,14 +110,14 @@
                       aria-expanded="false"
                     ></i>
                     <ul class="dropdown-menu dropdown-menu-end">
-                      <li class="dropdown-item" v-if="comment.userId === user.id">
+                      <li class="dropdown-item" v-if="comment.user.id === user.id">
                         <i class="fa-solid fa-pen-to-square"></i>
                         {{ t('event.editcomment') }}
                       </li>
                       <li
                         class="dropdown-item text-danger"
                         @click="deleteComment(comment.id, id)"
-                        v-if="comment.userId === user.id"
+                        v-if="comment.user.id === user.id"
                       >
                         <i class="fa-regular fa-trash-can"></i>
                         {{ t('event.deletecomment') }}

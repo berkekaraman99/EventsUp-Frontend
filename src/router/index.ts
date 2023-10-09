@@ -1,6 +1,12 @@
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
-import { createRouter, createWebHistory } from 'vue-router'
+import {
+  createRouter,
+  createWebHistory,
+  type NavigationGuardNext,
+  type RouteLocationNormalized,
+  type RouteRecord
+} from 'vue-router'
 
 const routes = [
   // {
@@ -145,16 +151,18 @@ const router = createRouter({
   routes
 })
 
-router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore()
-  const { _user: user } = storeToRefs(authStore)
-  const authNotRequiredRoutes: string[] = ['auth', 'forgetpassword']
+router.beforeEach(
+  (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
+    const authStore = useAuthStore()
+    const { _user: user } = storeToRefs(authStore)
+    const authNotRequiredRoutes: string[] = ['auth', 'forgetpassword']
 
-  if (user.value === null && !authNotRequiredRoutes.includes(to.name)) {
-    next({ name: 'auth' })
-  } else if (user.value !== null && authNotRequiredRoutes.includes(to.name)) {
-    next({ name: 'home' })
-  } else next()
-})
+    if (user.value === null && !authNotRequiredRoutes.includes(to.name?.toString() ?? '')) {
+      next({ name: 'auth' })
+    } else if (user.value !== null && authNotRequiredRoutes.includes(to.name?.toString() ?? '')) {
+      next({ name: 'home' })
+    } else next()
+  }
+)
 
 export default router

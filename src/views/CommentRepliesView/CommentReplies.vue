@@ -4,7 +4,7 @@
     <div class="container my-3" v-else-if="comment">
       <div class="row">
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 my-4">
-          <div class="card border">
+          <div class="card rounded-4 shadow-sm overflow-hidden">
             <div class="card-header py-3">
               <div class="d-flex justify-content-between">
                 <div class="d-flex align-items-center">
@@ -17,7 +17,7 @@
                   ></div>
                   <div class="mx-3">
                     <div class="fw-bold">
-                      {{ comment.user.fullname }}
+                      {{ comment.user.fullName }}
                     </div>
                     <small>
                       {{ formatTime(comment.createdAt) }}
@@ -56,7 +56,7 @@
           </div>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 my-4">
-          <div class="card border">
+          <div class="card rounded-4 shadow-sm overflow-hidden">
             <div class="card-header"><h1>Yorumunuz</h1></div>
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">
@@ -107,7 +107,7 @@
               </div>
             </div>
           </div>
-          <h4 class="col-12 mt-4">Yorumlar</h4>
+          <h4 class="col-12 mt-4 mx-3">Yorumlar</h4>
 
           <div>
             <TransitionGroup
@@ -126,6 +126,9 @@
                 <ReplyVue :comment="reply" :post-id="postid" :user-id="user.id" />
               </div>
             </TransitionGroup>
+          </div>
+          <div class="text-center fw-light fs-4 my-3" v-if="commentReplies.length === 0">
+            Yorum bulunamadı
           </div>
         </div>
       </div>

@@ -2,27 +2,27 @@
   <div>
     <div class="row">
       <div class="col-12 my-4">
-        <div class="card border">
+        <div class="card rounded-4 shadow-sm overflow-hidden">
           <div class="card-header">
             <div class="d-flex align-items-center justify-content-between">
               <div class="d-flex align-items-center">
                 <img
                   class="comment-profile-image"
-                  v-if="comment.profileImage != null"
-                  :src="comment.profileImage"
-                  :alt="comment.firstName + comment.lastName"
+                  v-if="comment.user.profileImage != null"
+                  :src="comment.user.profileImage"
+                  :alt="comment.user.fullName"
                 />
                 <img
                   src="@/assets/images/profile-man.png"
                   alt="profile-man"
                   class="comment-profile-image"
-                  v-else-if="comment.gender == 2"
+                  v-else-if="comment.user.gender == 2"
                 />
                 <img
                   src="@/assets/images/profile-woman.png"
                   alt="profile-woman"
                   class="comment-profile-image"
-                  v-else-if="comment.gender == 1"
+                  v-else-if="comment.user.gender == 1"
                 />
                 <img
                   src="@/assets/images/user.png"
@@ -33,10 +33,10 @@
                 <div class="mx-3">
                   <div>
                     <div class="fw-bold tw-text-sm">
-                      {{ props.comment.firstName }} {{ props.comment.lastName }}
+                      {{ comment.user.fullName }}
                     </div>
                     <div class="tw-text-xs">
-                      {{ formatTime(props.comment.createdAt) }}
+                      {{ formatTime(comment.createdAt) }}
                     </div>
                   </div>
                 </div>
@@ -51,15 +51,12 @@
                   <ul class="dropdown-menu dropdown-menu-end">
                     <li
                       class="dropdown-item"
-                      v-if="props.comment.userId === props.userId"
+                      v-if="comment.user.id === userId"
                       @click="editComment()"
                     >
                       <i class="fa-solid fa-pen-to-square"></i> Yorumu Düzenle
                     </li>
-                    <li
-                      class="dropdown-item text-danger"
-                      v-if="props.comment.userId === props.userId"
-                    >
+                    <li class="dropdown-item text-danger" v-if="comment.user.id === userId">
                       <i class="fa-regular fa-trash-can"></i>
                       Yorumu Sil
                     </li>
@@ -95,13 +92,7 @@
               <div class="d-flex flex-column px-2">
                 <FormKit
                   type="submit"
-                  :label="
-                    loading
-                      ? 'Loading'
-                      : statusCode !== 200
-                      ? 'Edit'
-                      : 'Success'
-                  "
+                  :label="loading ? 'Loading' : statusCode !== 200 ? 'Edit' : 'Success'"
                   :disabled="loading || statusCode === 200"
                   :classes="{ input: 'w-100' }"
                   @click="updateComment(props.comment)"
@@ -139,7 +130,7 @@
                 <RouterLink
                   :to="{
                     name: 'CommentReplies',
-                    params: { postid: postId, commentid: comment.id },
+                    params: { postid: postId, commentid: comment.id }
                   }"
                   @click="setComment(comment)"
                 >
@@ -159,75 +150,75 @@
 </template>
 
 <script setup lang="ts">
-import moment from "moment";
-import type { IComment } from "@/models/comment_model";
-import type { PropType } from "vue";
-import { ref } from "vue";
-import { usePostStore } from "@/stores/post";
-import { storeToRefs } from "pinia";
+import moment from 'moment'
+import type { IComment } from '@/models/comment_model'
+import type { PropType } from 'vue'
+import { ref } from 'vue'
+import { usePostStore } from '@/stores/post'
+import { storeToRefs } from 'pinia'
 
 const props = defineProps({
   comment: {
     type: Object as PropType<IComment>,
-    required: true,
+    required: true
   },
   userId: {
     type: String,
-    required: true,
+    required: true
   },
   postId: {
     type: String,
-    required: true,
-  },
-});
+    required: true
+  }
+})
 
-const postStore = usePostStore();
-const { _statusCode: statusCode } = storeToRefs(postStore);
+const postStore = usePostStore()
+const { _statusCode: statusCode } = storeToRefs(postStore)
 
-const message = ref(props.comment.message);
-const loading = ref(false);
+const message = ref(props.comment.message)
+const loading = ref(false)
 const changeLoadingState = () => {
-  loading.value = !loading.value;
-};
+  loading.value = !loading.value
+}
 
 const setComment = (comment: IComment) => {
   postStore.$patch({
     comment: comment,
-    commentReplies: [],
-  });
-  postStore.commentNode.push(comment);
-};
+    commentReplies: []
+  })
+  postStore.commentNode.push(comment)
+}
 
-const isCommentEditable = ref(false);
+const isCommentEditable = ref(false)
 
 const editComment = () => {
-  isCommentEditable.value = true;
-};
+  isCommentEditable.value = true
+}
 
 const cancelEditing = () => {
-  isCommentEditable.value = false;
-};
+  isCommentEditable.value = false
+}
 
 const updateComment = async (comment: IComment) => {
-  changeLoadingState();
+  changeLoadingState()
   await postStore.editComment(props.comment.id, message.value).then(() => {
-    changeLoadingState();
+    changeLoadingState()
     if (statusCode.value === 200) {
-      comment.message = message.value;
-      comment.isEdited = true;
+      comment.message = message.value
+      comment.isEdited = true
     }
-    isCommentEditable.value = false;
+    isCommentEditable.value = false
     setTimeout(() => {
       postStore.$patch({
-        statusCode: 0,
-      });
-    }, 3000);
-  });
-};
+        statusCode: 0
+      })
+    }, 3000)
+  })
+}
 
 const formatTime = (time: any) => {
-  return moment(time).fromNow();
-};
+  return moment(time).fromNow()
+}
 </script>
 
 <style scoped lang="scss">
@@ -242,7 +233,9 @@ const formatTime = (time: any) => {
   padding: 15px 15px 30px;
   border-radius: 3px;
   border: 1px solid grey;
-  font: 13px Tahoma, cursive;
+  font:
+    13px Tahoma,
+    cursive;
   transition: all 0.3s ease;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 

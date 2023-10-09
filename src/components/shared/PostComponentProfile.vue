@@ -47,6 +47,7 @@ user.
                 </div></RouterLink
               >
               <small>
+                @{{ post.user.userName }} -
                 {{ formatTime(post.createdAt) }}
               </small>
             </div>

@@ -42,7 +42,7 @@
               :to="{ name: 'userprofile', params: { id: attend.id } }"
               class="text-decoration-none tw-text-blue-800"
             >
-              <span class="fw-bold"> {{ attend.firstName }} {{ attend.lastName }} </span>
+              <span class="fw-bold"> {{ attend.fullName }} </span>
             </RouterLink>
           </div>
         </div>
