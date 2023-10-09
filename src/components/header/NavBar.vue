@@ -1,5 +1,5 @@
 <template>
-  <nav id="navbar" class="navbar navbar-expand-lg bg-body-tertiary shadow-sm">
+  <nav id="navbar" class="navbar navbar-expand-lg shadow-sm">
     <div class="container-fluid d-flex">
       <div class="d-flex align-items-center justify-content-center">
         <span
@@ -120,6 +120,9 @@ const logout = async () => {
   z-index: 3;
   border-radius: 8px;
   margin: 0.75rem 1rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  background-color: rgba(255, 255, 255, 0.5);
   // @media (min-width: 992px) {
   //   left: 192px;
   // }

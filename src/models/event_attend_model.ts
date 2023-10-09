@@ -1,7 +1,7 @@
 export interface IEventAttend {
-  firstName: string;
-  gender: number;
-  id: string;
-  lastName: string;
-  profileImage: string;
+  fullName: string
+  gender: number
+  id: string
+  userName: string
+  profileImage: string
 }

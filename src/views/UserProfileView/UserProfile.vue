@@ -194,14 +194,8 @@
     <div class="mt-3 mx-3 fs-5" v-else-if="currentUser.isBlocked">
       <p class="fw-light text-center">{{ t('profile.blockeduser') }}</p>
     </div>
-    <div
-      id="options"
-      class="w-100 my-4"
-      v-else-if="!currentUser.isPrivate || currentUser.isFollowing"
-    >
-      <div
-        class="card shadow-sm d-flex align-items-center justify-content-around flex-column flex-sm-column flex-md-row rounded-4"
-      >
+    <div id="options" class="w-100" v-else-if="!currentUser.isPrivate || currentUser.isFollowing">
+      <div class="card shadow-sm flex-column flex-sm-column flex-md-row">
         <div class="text-center my-2">
           <input
             type="radio"
@@ -393,10 +387,30 @@ onBeforeUnmount(() => {
 })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 #options {
-  padding-left: 0.75rem;
-  padding-right: 0.75rem;
+  padding: 0px 0.75rem;
+  margin: 16px 0px;
+
+  & div {
+    border-radius: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    @media (min-width: 768px) and (max-width: 992px) {
+      border-radius: 0px;
+    }
+  }
+
+  @media (min-width: 768px) and (max-width: 992px) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+  }
 }
 .profile-details {
   margin: 72px 16px 0px 16px;

@@ -132,13 +132,13 @@
                   v-if="community.coverImage != null"
                   class="cover-preview tw-bg-slate-200"
                   :src="community.coverImage"
-                  :alt="community.title"
+                  alt=""
                 />
                 <img
                   v-else
                   class="cover-preview"
                   src="@/assets/images/ic_community_avatar.png"
-                  alt="test"
+                  alt=""
                 />
               </template>
               <template v-slot:name>
@@ -201,6 +201,7 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
   margin: 0.75rem 0.5rem;
   z-index: 4;
   width: 208px;
+
   // @media (min-width: 992px) {
   //   width: 208px;
   // }

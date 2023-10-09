@@ -19,6 +19,7 @@
                   <div class="mx-3">
                     <div class="fw-bold">{{ post.user.fullName }}</div>
                     <small>
+                      @{{ post.user.userName }} -
                       {{ formatTime(post.createdAt) }}
                     </small>
                   </div>
@@ -188,7 +189,7 @@
               </div>
             </div>
           </div>
-          <h4 class="col-12 mt-4">Yorumlar</h4>
+          <h4 class="col-12 mt-4 mx-3">Yorumlar</h4>
 
           <div>
             <TransitionGroup
@@ -212,6 +213,9 @@
                 />
               </div>
             </TransitionGroup>
+          </div>
+          <div class="text-center fw-light fs-4 my-3" v-if="comments.length === 0">
+            Yorum bulunamadı
           </div>
         </div>
       </div>

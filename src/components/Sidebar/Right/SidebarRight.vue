@@ -10,6 +10,6 @@ import CommunitySuggestions from '@/components/common/home/CommunitySuggestions.
 
 <style scoped>
 #right-bar {
-  margin-top: 126px;
+  margin-top: 32px;
 }
 </style>

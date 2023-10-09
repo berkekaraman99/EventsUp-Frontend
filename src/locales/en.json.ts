@@ -9,7 +9,7 @@ export default {
     signup: 'Sign Up',
     profile: 'Profile',
     settings: 'Settings',
-    logout: 'Exit',
+    logout: 'Logout',
     createcommunity: 'Create Community',
     createpost: 'Create Post',
     createevent: 'Create Event'

@@ -38,6 +38,7 @@
                       {{ comment.user.fullName }}
                     </div>
                     <div class="tw-text-xs">
+                      @{{ comment.user.userName }} -
                       {{ formatTime(comment.createdAt) }}
                     </div>
                   </div>

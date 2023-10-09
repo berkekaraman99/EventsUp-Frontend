@@ -114,4 +114,8 @@ const deleteUser = async () => {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.modal-content {
+  background-color: white;
+}
+</style>
