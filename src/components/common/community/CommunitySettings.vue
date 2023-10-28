@@ -102,7 +102,7 @@
           </div>
         </div>
 
-        <div v-if="community.adminId === user.id" class="tile">
+        <div v-if="community.admin.id === user.id" class="tile">
           <div disabled v-if="loading">
             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
             Deleting...

@@ -61,7 +61,7 @@
                       :to="{ name: 'userprofile', params: { id: user.id } }"
                       class="text-decoration-none"
                     >
-                      <div class="fw-bold text-black">{{ user.firstName }} {{ user.lastName }}</div>
+                      <div class="fw-bold text-black">{{ user.fullName }}</div>
                     </RouterLink>
                     <div class="text-secondary">@{{ user.userName }}</div>
                   </div>
@@ -90,7 +90,7 @@
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 import { ref } from 'vue'
-import LoadingSpinner from '@/components/shared/LoadingVue.vue'
+import LoadingSpinner from '@/components/shared/TheLoading.vue'
 
 const props = defineProps({
   id: {

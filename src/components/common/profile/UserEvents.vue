@@ -26,7 +26,7 @@
 import { ref } from 'vue'
 import gsap from 'gsap'
 import moment from 'moment'
-import LoadingSpinner from '@/components/shared/LoadingVue.vue'
+import LoadingSpinner from '@/components/shared/TheLoading.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useEventStore } from '@/stores/event'
 import { storeToRefs } from 'pinia'

@@ -11,8 +11,8 @@
           >
             <div
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-              @click="changeCategory('About')"
-              :class="{ selected: category === 'About' }"
+              @click="changeComponent('EventAbout')"
+              :class="{ selected: component === 'EventAbout' }"
             >
               <input
                 type="radio"
@@ -20,7 +20,7 @@
                 id="radio-1"
                 class="radio"
                 value="radio1"
-                :checked="category === 'About'"
+                :checked="component === 'EventAbout'"
               />
               <label for="radio-1">
                 <span class="fw-bold" id="about">{{ t('event.about') }}</span>
@@ -29,8 +29,8 @@
 
             <div
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-              @click="changeCategory('Attendees')"
-              :class="{ selected: category === 'Attendees' }"
+              @click="changeComponent('EventAttendees')"
+              :class="{ selected: component === 'EventAttendees' }"
             >
               <input
                 type="radio"
@@ -38,7 +38,7 @@
                 id="radio-2"
                 class="radio"
                 value="radio2"
-                :checked="category === 'Attendees'"
+                :checked="component === 'EventAttendees'"
               />
               <label for="radio-2">
                 <span class="fw-bold" id="attendees">{{ t('event.attendees') }}</span>
@@ -47,8 +47,8 @@
 
             <div
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-              @click="changeCategory('Comments')"
-              :class="{ selected: category === 'Comments' }"
+              @click="changeComponent('EventComments')"
+              :class="{ selected: component === 'EventComments' }"
             >
               <input
                 type="radio"
@@ -56,7 +56,7 @@
                 id="radio-3"
                 class="radio"
                 value="radio3"
-                :checked="category === 'Comments'"
+                :checked="component === 'EventComments'"
               />
               <label for="radio-3">
                 <span class="fw-bold" id="event-comments">{{ t('event.comments') }}</span>
@@ -66,8 +66,8 @@
             <div
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
               v-if="currentEvent.user.id === user.id"
-              @click="changeCategory('Settings')"
-              :class="{ selected: category === 'Settings' }"
+              @click="changeComponent('EventSettings')"
+              :class="{ selected: component === 'EventSettings' }"
             >
               <input
                 type="radio"
@@ -75,7 +75,7 @@
                 id="radio-4"
                 class="radio"
                 value="radio4"
-                :checked="category === 'Settings'"
+                :checked="component === 'EventSettings'"
               />
               <label for="radio-4">
                 <span class="fw-bold" id="posts">{{ t('event.settings') }}</span>
@@ -169,19 +169,22 @@
               </div>
             </div>
             <div class="card-footer">
-              <Transition mode="out-in" name="scaleInOut">
-                <EventAbout :currentEvent="currentEvent" v-if="category === 'About'" />
-                <EventAttendees :attendees="eventAttendees" v-else-if="category === 'Attendees'" />
+              <!-- <Transition mode="out-in" name="scaleInOut">
+                <EventAbout :currentEvent="currentEvent" v-if="component === 'About'" />
+                <EventAttendees :attendees="eventAttendees" v-else-if="component === 'Attendees'" />
                 <EventComments
                   @update-comments="updateComments"
                   :id="id"
-                  v-else-if="category === 'Comments'"
+                  v-else-if="component === 'Comments'"
                 />
                 <EventSettings
                   :id="id"
                   :currentEvent="currentEvent"
-                  v-else-if="category === 'Settings'"
+                  v-else-if="component === 'Settings'"
                 />
+              </Transition> -->
+              <Transition name="scaleInOut" mode="out-in">
+                <component :is="component" />
               </Transition>
             </div>
           </div>
@@ -191,9 +194,9 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, onUnmounted } from 'vue'
-import LoadingSpinner from '@/components/shared/LoadingVue.vue'
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
+import LoadingSpinner from '@/components/shared/TheLoading.vue'
 import { useEventStore } from '@/stores/event'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
@@ -203,40 +206,65 @@ import EventComments from '@/components/common/event/EventComments.vue'
 import EventSettings from '@/components/common/event/EventSettings.vue'
 import { useI18n } from 'vue-i18n'
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
+export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
+  components: {
+    EventAbout,
+    EventAttendees,
+    EventComments,
+    EventSettings
+  },
+  setup(props) {
+    const { t } = useI18n()
+
+    const eventStore = useEventStore()
+    const loading = ref(true)
+    const changeLoadingState = () => {
+      loading.value = !loading.value
+    }
+
+    const authStore = useAuthStore()
+    const { _user: user } = storeToRefs(authStore)
+
+    eventStore.getEventById(props.id).then(changeLoadingState)
+    eventStore.getEventAttendees(props.id)
+    const { _currentEvent: currentEvent, _eventAttendees: eventAttendees } = storeToRefs(eventStore)
+
+    const updateComments = async () => {
+      await eventStore.getEventComments(props.id)
+    }
+
+    const component = ref<string>('EventAbout')
+    const changeComponent = (name: string) => {
+      component.value = name
+    }
+    return {
+      t,
+      eventStore,
+      loading,
+      user,
+      currentEvent,
+      eventAttendees,
+      updateComments,
+      component,
+      changeComponent
+    }
+  },
+  provide() {
+    return {
+      updateComments: this.updateComments
+    }
+  },
+  unmounted() {
+    this.eventStore.$patch({
+      currentEvent: {}
+    })
   }
-})
-const { t } = useI18n()
-
-const eventStore = useEventStore()
-const loading = ref(true)
-const changeLoadingState = () => {
-  loading.value = !loading.value
-}
-
-const authStore = useAuthStore()
-const { _user: user } = storeToRefs(authStore)
-
-eventStore.getEventById(props.id).then(changeLoadingState)
-eventStore.getEventAttendees(props.id)
-const { _currentEvent: currentEvent, _eventAttendees: eventAttendees } = storeToRefs(eventStore)
-
-const updateComments = async () => {
-  await eventStore.getEventComments(props.id)
-}
-
-const category = ref('About')
-const changeCategory = (name: string) => {
-  category.value = name
-}
-
-onUnmounted(() => {
-  eventStore.$patch({
-    currentEvent: {}
-  })
 })
 </script>
 

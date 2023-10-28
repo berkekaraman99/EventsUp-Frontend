@@ -15,7 +15,7 @@
           v-bind:key="post.id"
           :data-index="index"
         >
-          <PostComponentProfile :post="post" />
+          <PostsInProfile :post="post" />
         </div>
       </TransitionGroup>
     </div>
@@ -28,20 +28,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import gsap from 'gsap'
-import PostComponentProfile from '@/components/shared/PostComponentProfile.vue'
-import LoadingSpinner from '@/components/shared/LoadingVue.vue'
+import PostsInProfile from '@/components/shared/PostsInProfile.vue'
+import LoadingSpinner from '@/components/shared/TheLoading.vue'
 import { usePostStore } from '@/stores/post'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
+import { useUserStore } from '@/stores/user'
 
 const { t } = useI18n()
-
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
-  }
-})
 
 const beforeEnterPosts: any = (el: HTMLElement) => {
   el.style.opacity = '0'
@@ -70,13 +64,15 @@ const leavePosts: any = (el: HTMLElement) => {
 }
 
 const postStore = usePostStore()
+const userStore = useUserStore()
+const { _currentUser: currentUser } = storeToRefs(userStore)
 
 const loading = ref(true)
 const changeLoadingState = () => {
   loading.value = !loading.value
 }
 
-postStore.getUserPosts(props.id).then(changeLoadingState)
+postStore.getUserPosts(currentUser.value.id).then(changeLoadingState)
 const { _userPosts: userPosts } = storeToRefs(postStore)
 </script>
 

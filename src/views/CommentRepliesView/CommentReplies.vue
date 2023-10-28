@@ -141,7 +141,7 @@
 <script setup lang="ts">
 import { ref, onBeforeUnmount } from 'vue'
 import gsap from 'gsap'
-import LoadingSpinner from '@/components/shared/LoadingVue.vue'
+import LoadingSpinner from '@/components/shared/TheLoading.vue'
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
 import { usePostStore } from '@/stores/post'

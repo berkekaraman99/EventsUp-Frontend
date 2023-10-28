@@ -110,54 +110,58 @@
   </Transition>
 </template>
 
-<script setup lang="ts">
-import type { IEventModel } from '@/models/event_model'
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useEventStore } from '@/stores/event'
 import moment from 'moment'
 import { storeToRefs } from 'pinia'
-import type { PropType } from 'vue'
-import { ref } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+export default defineComponent({
+  setup() {
+    const { t } = useI18n()
+    const authStore = useAuthStore()
+    const eventStore = useEventStore()
+    const { _user: user } = storeToRefs(authStore)
+    const { _currentEvent: currentEvent } = storeToRefs(eventStore)
 
-const props = defineProps({
-  currentEvent: {
-    type: Object as PropType<IEventModel>,
-    required: true
+    const processing = ref(false)
+    const changeProcessing = () => {
+      processing.value = !processing.value
+    }
+
+    const formatTime = (time: any) => {
+      return moment(time).format('DD MMMM YYYY, hh:mm')
+    }
+
+    const joinEvent = async (cEvent: any) => {
+      changeProcessing()
+      await eventStore.joinEvent(currentEvent.value.id).then(() => {
+        cEvent.isAttendeed = true
+        changeProcessing()
+      })
+    }
+
+    const leaveEvent = async (cEvent: any) => {
+      changeProcessing()
+      await eventStore.leaveEvent(currentEvent.value.id).then(() => {
+        cEvent.isAttendeed = false
+        changeProcessing()
+      })
+    }
+
+    return {
+      t,
+      user,
+      processing,
+      joinEvent,
+      leaveEvent,
+      formatTime,
+      currentEvent
+    }
   }
 })
-
-const authStore = useAuthStore()
-const eventStore = useEventStore()
-
-const { _user: user } = storeToRefs(authStore)
-
-const processing = ref(false)
-const changeProcessing = () => {
-  processing.value = !processing.value
-}
-
-const formatTime = (time: any) => {
-  return moment(time).format('DD MMMM YYYY, hh:mm')
-}
-
-const joinEvent = async (cEvent: any) => {
-  changeProcessing()
-  await eventStore.joinEvent(props.currentEvent.id).then(() => {
-    cEvent.isAttendeed = true
-    changeProcessing()
-  })
-}
-
-const leaveEvent = async (cEvent: any) => {
-  changeProcessing()
-  await eventStore.leaveEvent(props.currentEvent.id).then(() => {
-    cEvent.isAttendeed = false
-    changeProcessing()
-  })
-}
 </script>
 
 <style scoped></style>

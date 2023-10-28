@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import gsap from 'gsap'
-import LoadingSpinner from '@/components/shared/LoadingVue.vue'
+import LoadingSpinner from '@/components/shared/TheLoading.vue'
 import { useCommunityStore } from '@/stores/community'
 import { storeToRefs } from 'pinia'
 import CommunityVue from '@/components/common/community/CommunityVue.vue'

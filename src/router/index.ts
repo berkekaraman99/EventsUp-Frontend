@@ -27,35 +27,35 @@ const routes = [
   {
     path: '/communities',
     name: 'communities',
-    component: () => import('@/views/CommunityView/CommunitiesView.vue')
+    component: () => import('@/views/CommunitiesView/CommunitiesView.vue')
   },
   {
-    path: '/community/:id/:name',
+    path: '/community/:id',
     name: 'communitydetails',
     component: () => import('@/views/CommunityDetailsView/CommunityDetailsView.vue'),
-    props: true,
-    children: [
-      {
-        path: '',
-        name: 'community-details',
-        component: () => import('@/components/common/community/CommunityAbout.vue')
-      },
-      {
-        path: 'posts',
-        name: 'community-posts',
-        component: () => import('@/components/common/community/CommunityPosts.vue')
-      },
-      {
-        path: 'participiants',
-        name: 'community-participiants',
-        component: () => import('@/components/common/community/CommunityParticipiants.vue')
-      },
-      {
-        path: 'settings',
-        name: 'community-settings',
-        component: () => import('@/components/common/community/CommunitySettings.vue')
-      }
-    ]
+    props: true
+    // children: [
+    //   {
+    //     path: '',
+    //     name: 'community-details',
+    //     component: () => import('@/components/common/community/CommunityAbout.vue')
+    //   },
+    //   {
+    //     path: 'posts',
+    //     name: 'community-posts',
+    //     component: () => import('@/components/common/community/CommunityPosts.vue')
+    //   },
+    //   {
+    //     path: 'participiants',
+    //     name: 'community-participiants',
+    //     component: () => import('@/components/common/community/CommunityParticipiants.vue')
+    //   },
+    //   {
+    //     path: 'settings',
+    //     name: 'community-settings',
+    //     component: () => import('@/components/common/community/CommunitySettings.vue')
+    //   }
+    // ]
   },
   {
     path: '/event/:id',

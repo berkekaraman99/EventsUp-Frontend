@@ -9,7 +9,7 @@
       </div>
     </div>
     <div class="card-body">
-      <div v-if="currentEvent.userId === user.id" class="tile">
+      <div v-if="currentEvent.user.id === user.id" class="tile">
         <div disabled v-if="loading">
           <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
           Deleting...
@@ -25,56 +25,47 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import type { IEventModel } from '@/models/event_model'
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useEventStore } from '@/stores/event'
 import { storeToRefs } from 'pinia'
-import type { PropType } from 'vue'
-import { onBeforeUnmount, ref } from 'vue'
 import { useRouter } from 'vue-router'
-
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+export default defineComponent({
+  setup() {
+    const { t } = useI18n()
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
-  },
-  currentEvent: {
-    type: Object as PropType<IEventModel>,
-    required: true
-  }
-})
-
-const router = useRouter()
-const loading = ref(false)
-const changeLoadingState = () => {
-  loading.value = !loading.value
-}
-
-const authStore = useAuthStore()
-const { _user: user } = storeToRefs(authStore)
-
-const eventStore = useEventStore()
-const { _statusCode: statusCode } = storeToRefs(eventStore)
-
-const deleteEvent = async () => {
-  changeLoadingState()
-  await eventStore.deleteEvent(props.id).then(() => {
-    changeLoadingState()
-    if (statusCode.value === 200) {
-      router.back()
+    const router = useRouter()
+    const loading = ref(false)
+    const changeLoadingState = () => {
+      loading.value = !loading.value
     }
-  })
-}
 
-onBeforeUnmount(() => {
-  eventStore.$patch({
-    statusCode: 0
-  })
+    const authStore = useAuthStore()
+    const { _user: user } = storeToRefs(authStore)
+
+    const eventStore = useEventStore()
+    const { _statusCode: statusCode, _currentEvent: currentEvent } = storeToRefs(eventStore)
+
+    const deleteEvent = async () => {
+      changeLoadingState()
+      await eventStore.deleteEvent(currentEvent.value.id).then(() => {
+        changeLoadingState()
+        if (statusCode.value === 200) {
+          router.back()
+        }
+      })
+    }
+
+    return { t, loading, eventStore, user, deleteEvent, currentEvent }
+  },
+  beforeUnmount() {
+    this.eventStore.$patch({
+      statusCode: 0
+    })
+  }
 })
 </script>
 

@@ -4,7 +4,7 @@
       <h3>{{ t('community.posts') }}</h3>
       <Transition name="scaleInOut" mode="out-in">
         <div class="my-5" v-if="loading">
-          <LoadingVue />
+          <TheLoading />
         </div>
         <div class="my-5" v-else-if="communityPosts.length === 0">
           <p class="text-center fw-light">{{ t('community.postnotfound') }}</p>
@@ -24,7 +24,7 @@
                 v-bind:key="post.id"
                 :data-index="index"
               >
-                <PostComponentFeed :post="post" />
+                <FeedPosts :post="post" />
               </div>
             </TransitionGroup>
           </div>
@@ -38,9 +38,9 @@
 import { usePostStore } from '@/stores/post'
 import { storeToRefs } from 'pinia'
 import { gsap } from 'gsap'
-import PostComponentFeed from '@/components/shared/PostComponentFeed.vue'
+import FeedPosts from '@/components/shared/FeedPosts.vue'
 import { ref } from 'vue'
-import LoadingVue from '@/components/shared/LoadingVue.vue'
+import TheLoading from '@/components/shared/TheLoading.vue'
 
 import { useI18n } from 'vue-i18n'
 import { useCommunityStore } from '@/stores/community'

@@ -57,7 +57,7 @@
     </div>
     <Transition name="scaleInOut" mode="out-in">
       <div v-if="loading">
-        <LoadingVue />
+        <TheLoading />
       </div>
       <div v-else>
         <div v-for="participiant in searchedParticipiants" :key="participiant.id">
@@ -140,7 +140,7 @@
 </template>
 
 <script setup lang="ts">
-import LoadingVue from '@/components/shared/LoadingVue.vue'
+import TheLoading from '@/components/shared/TheLoading.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useCommunityStore } from '@/stores/community'
 import { storeToRefs } from 'pinia'

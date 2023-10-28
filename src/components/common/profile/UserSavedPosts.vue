@@ -6,7 +6,7 @@
     </div>
     <div v-else-if="savedPosts.length > 0">
       <div class="row" v-for="post in savedPosts" v-bind:key="post.id">
-        <PostComponentFeed :post="post" />
+        <FeedPosts :post="post" />
       </div>
     </div>
   </Transition>
@@ -14,8 +14,8 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import LoadingSpinner from '@/components/shared/LoadingVue.vue'
-import PostComponentFeed from '@/components/shared/PostComponentFeed.vue'
+import LoadingSpinner from '@/components/shared/TheLoading.vue'
+import FeedPosts from '@/components/shared/FeedPosts.vue'
 import { usePostStore } from '@/stores/post'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'

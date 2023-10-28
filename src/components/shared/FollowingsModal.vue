@@ -19,7 +19,7 @@
           ></button>
         </div>
         <div class="modal-body">
-          <LoadingVue v-if="loading" />
+          <TheLoading v-if="loading" />
           <div v-else>
             <div class="container">
               <div class="col-12">
@@ -27,7 +27,7 @@
                   type="text"
                   class="form-control form-control-lg mb-3"
                   :placeholder="user ? 'Takip ettiklerini ara' : 'Please login to search'"
-                  v-model="text"
+                  v-model="search"
                   @keydown.enter="handleSearch"
                   :disabled="!user"
                 />
@@ -36,7 +36,7 @@
             <ul class="container" v-if="followings.length > 0">
               <li
                 class="card shadow-sm px-4 py-3 my-4"
-                v-for="user in searchedFollowings"
+                v-for="user in followings"
                 v-bind:key="user.id"
               >
                 <RouterLink
@@ -99,7 +99,7 @@
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
 import { reactive, ref, toRef } from 'vue'
-import LoadingVue from './LoadingVue.vue'
+import TheLoading from './TheLoading.vue'
 
 const props = defineProps({
   id: {
@@ -116,33 +116,25 @@ const changeloading = () => {
   loading.value = false
 }
 
-const search = reactive({
-  text: ''
-})
-
-const text = toRef(search, 'text')
+const search = ref<string>('')
 
 const handleSearch = async () => {
   loading.value = true
-  if (search.text.length > 0) {
+  if (search.value.length > 0) {
     await userStore
-      .searchFollowings({
-        id: user.value.id,
-        text: search.text
-      })
+      .getUserFollowings(user.value.id, search.value)
       .then(() => (loading.value = false))
   } else {
-    userStore.$patch({
-      searchedUserFollowings: userStore.userFollowings
-    })
+    // userStore.$patch({
+    //   searchedUserFollowings: userStore.userFollowings
+    // })
     loading.value = false
   }
 }
 
-userStore.getUserFollowings(props.id).then(changeloading)
+userStore.getUserFollowings(props.id, '').then(changeloading)
 
-const { _userFollowings: followings, _searchedFollowings: searchedFollowings } =
-  storeToRefs(userStore)
+const { _userFollowings: followings } = storeToRefs(userStore)
 </script>
 
 <style scoped></style>

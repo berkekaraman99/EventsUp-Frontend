@@ -1,17 +1,13 @@
 <template>
   <div class="col-12 col-sm-12 col-md-6">
-    <ToastSuccess
-      :show-toast="showToast"
-      :status-code="statusCode"
-      :header="header"
-      :content="content"
-    />
-    <ToastDanger
-      :show-toast="showToast"
-      :status-code="statusCode"
-      :header="header"
-      :content="content"
-    />
+    <Teleport to="body">
+      <the-toast
+        :show-toast="showToast"
+        :status-code="statusCode"
+        :header="header"
+        :content="content"
+      ></the-toast>
+    </Teleport>
     <div class="container-fluid d-flex justify-content-center overflow-auto vh-100">
       <div class="row w-100 align-items-center mt-4">
         <div class="col-md-12 col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
@@ -104,7 +100,7 @@
             <div class="text-center mt-4 tw-text-sm">
               <p>
                 {{ t('signup.haveanaccount') }}
-                <span class="text-primary pointer" @click="changetype">{{
+                <span class="text-primary pointer" @click="changetype('the-signin')">{{
                   t('signup.login')
                 }}</span>
               </p>
@@ -161,11 +157,9 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { inject, reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { ISignUpModel } from '@/models/signup_model'
-import ToastSuccess from '@/components/shared/ToastSuccess.vue'
-import ToastDanger from '@/components/shared/ToastDanger.vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
@@ -174,9 +168,11 @@ const { t } = useI18n()
 
 const emit = defineEmits(['changetype'])
 
-const changetype = () => {
-  emit('changetype', 'login')
-}
+const changetype = inject('change-type') as Function
+
+// const changetype = () => {
+//   emit('changetype', 'login')
+// }
 
 const isAccepted = ref(false)
 const authStore = useAuthStore()
@@ -237,6 +233,10 @@ const handleSignUp = async () => {
             setTimeout(() => {
               router.push({ name: 'home' })
             }, 2500)
+          } else {
+            header.value = 'Kayıt Başarısız'
+            content.value = 'Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz'
+            handleToast()
           }
         })
       console.log(userObject)

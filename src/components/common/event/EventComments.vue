@@ -116,7 +116,7 @@
                       </li>
                       <li
                         class="dropdown-item text-danger"
-                        @click="deleteComment(comment.id, id)"
+                        @click="deleteComment(comment.id, currentEvent.id)"
                         v-if="comment.user.id === user.id"
                       >
                         <i class="fa-regular fa-trash-can"></i>
@@ -141,67 +141,78 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useEventStore } from '@/stores/event'
 import { storeToRefs } from 'pinia'
-import { onBeforeUnmount, ref } from 'vue'
-
 import { useI18n } from 'vue-i18n'
+import { inject } from 'vue'
 
-const { t } = useI18n()
+export default defineComponent({
+  setup() {
+    const { t } = useI18n()
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
-  }
-})
+    // const emit = defineEmits(['updateComments'])
+    const updateComments = inject('updateComments') as Function
 
-console.log(props.id)
+    const authStore = useAuthStore()
+    const { _user: user } = storeToRefs(authStore)
+    const message = ref('')
 
-const emit = defineEmits(['updateComments'])
+    const isPosting = ref(false)
+    const changePostingState = () => {
+      isPosting.value = !isPosting.value
+    }
 
-const authStore = useAuthStore()
-const { _user: user } = storeToRefs(authStore)
-const message = ref('')
+    const eventStore = useEventStore()
+    const {
+      _statusCode: statusCode,
+      _eventComments: eventComments,
+      _currentEvent: currentEvent
+    } = storeToRefs(eventStore)
 
-const isPosting = ref(false)
-const changePostingState = () => {
-  isPosting.value = !isPosting.value
-}
+    eventStore.getEventComments(currentEvent.value.id)
 
-const eventStore = useEventStore()
-eventStore.getEventComments(props.id)
-
-const { _statusCode: statusCode, _eventComments: eventComments } = storeToRefs(eventStore)
-
-const createComment = async () => {
-  changePostingState()
-  await eventStore
-    .createComment({
-      message: message.value,
-      eventId: props.id
-    })
-    .then(() => {
-      emit('updateComments')
+    const createComment = async () => {
       changePostingState()
-      setTimeout(() => {
-        eventStore.$patch({
-          statusCode: 0
+      await eventStore
+        .createComment({
+          message: message.value,
+          eventId: currentEvent.value.id
         })
-      }, 2000)
+        .then(() => {
+          updateComments
+          changePostingState()
+          setTimeout(() => {
+            eventStore.$patch({
+              statusCode: 0
+            })
+          }, 2000)
+        })
+    }
+
+    const deleteComment = async (commentId: string, eventId: string) => {
+      await eventStore.deleteComment(commentId, eventId)
+    }
+    return {
+      t,
+      user,
+      createComment,
+      deleteComment,
+      statusCode,
+      eventComments,
+      eventStore,
+      currentEvent,
+      message,
+      isPosting
+    }
+  },
+  beforeUnmount() {
+    this.eventStore.$patch({
+      statusCode: 0
     })
-}
-
-const deleteComment = async (commentId: string, eventId: string) => {
-  await eventStore.deleteComment(commentId, eventId)
-}
-
-onBeforeUnmount(() => {
-  eventStore.$patch({
-    statusCode: 0
-  })
+  }
 })
 </script>
 

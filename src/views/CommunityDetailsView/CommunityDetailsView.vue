@@ -10,9 +10,9 @@
             class="col-12 d-flex align-items-start justify-content-start flex-column flex-sm-row flex-lg-column"
           >
             <!-- <div class="position-absolute link-bar"></div> -->
-            <RouterLink
-              :to="{ name: 'community-details' }"
+            <div
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
+              @click="changeComponent('CommunityAbout')"
             >
               <input
                 type="radio"
@@ -20,15 +20,15 @@
                 id="radio-1"
                 class="radio"
                 value="radio1"
-                :checked="category === 'details'"
+                :checked="component === 'CommunityAbout'"
               />
               <label for="radio-1">
                 <span class="fw-bold" id="about">{{ t('community.about') }}</span>
               </label>
-            </RouterLink>
+            </div>
 
-            <RouterLink
-              :to="{ name: 'community-posts' }"
+            <div
+              @click="changeComponent('CommunityPosts')"
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
             >
               <input
@@ -37,15 +37,15 @@
                 id="radio-2"
                 class="radio"
                 value="radio2"
-                :checked="category === 'posts'"
+                :checked="component === 'CommunityPosts'"
               />
               <label for="radio-2">
                 <span class="fw-bold" id="posts">{{ t('community.posts') }}</span>
               </label>
-            </RouterLink>
+            </div>
 
-            <RouterLink
-              :to="{ name: 'community-participiants' }"
+            <div
+              @click="changeComponent('CommunityParticipiants')"
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
             >
               <input
@@ -54,15 +54,15 @@
                 id="radio-3"
                 class="radio"
                 value="radio3"
-                :checked="category === 'participiants'"
+                :checked="component === 'CommunityParticipiants'"
               />
               <label for="radio-3">
                 <span class="fw-bold" id="participiants">{{ t('community.members') }}</span>
               </label>
-            </RouterLink>
+            </div>
 
-            <RouterLink
-              :to="{ name: 'community-settings' }"
+            <div
+              @click="changeComponent('CommunitySettings')"
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
               v-if="community.admin.id === user.id"
             >
@@ -72,12 +72,12 @@
                 id="radio-4"
                 class="radio"
                 value="radio4"
-                :checked="category === 'settings'"
+                :checked="component === 'CommunitySettings'"
               />
               <label for="radio-4">
                 <span class="fw-bold" id="settings">{{ t('community.settings') }}</span>
               </label>
-            </RouterLink>
+            </div>
           </div>
         </div>
         <!-- Community View -->
@@ -145,11 +145,14 @@
                 </div>
               </div>
               <br />
-              <RouterView v-slot="{ Component, route }">
+              <!-- <RouterView v-slot="{ Component, route }">
                 <Transition name="scaleInOut" mode="out-in">
                   <component :is="Component" :key="route.path" />
                 </Transition>
-              </RouterView>
+              </RouterView> -->
+              <Transition name="scaleInOut" mode="out-in">
+                <component :is="component" />
+              </Transition>
             </div>
           </div>
         </div>
@@ -158,79 +161,105 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, type Ref, onBeforeUnmount } from 'vue'
-
+<script lang="ts">
+import { defineComponent, ref, type Ref } from 'vue'
 import { useCommunityStore } from '@/stores/community'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
-import LoadingSpinner from '@/components/shared/LoadingVue.vue'
-
 import type { ICommunity } from '@/models/community_model'
-
 import { useI18n } from 'vue-i18n'
 import { useRouter } from 'vue-router'
+import CommunityAbout from '@/components/common/community/CommunityAbout.vue'
+import CommunityParticipiants from '@/components/common/community/CommunityParticipiants.vue'
+import CommunitySettings from '@/components/common/community/CommunitySettings.vue'
+import CommunityPosts from '@/components/common/community/CommunityPosts.vue'
+import LoadingSpinner from '@/components/shared/TheLoading.vue'
 
-const { t } = useI18n()
-
-const router = useRouter()
-
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
+export default defineComponent({
+  props: {
+    id: {
+      type: String,
+      required: true
+    },
+    name: {
+      type: String,
+      required: true
+    }
   },
-  name: {
-    type: String,
-    required: true
+  components: {
+    CommunityAbout,
+    CommunityParticipiants,
+    CommunitySettings,
+    CommunityPosts,
+    LoadingSpinner
+  },
+  setup(props) {
+    const component = ref<string>('CommunityAbout')
+    const { t } = useI18n()
+    const router = useRouter()
+    const isLoading = ref(true)
+    const loading = ref(false)
+    const loadingText = ref('')
+
+    const changeloadingState = (state: Ref<boolean>) => {
+      state.value = !state.value
+    }
+
+    const changeComponent = (name: string) => {
+      component.value = name
+    }
+
+    const authStore = useAuthStore()
+    const { _user: user } = storeToRefs(authStore)
+
+    const communityStore = useCommunityStore()
+    communityStore.getCommunity(props.id).then(() => {
+      changeloadingState(isLoading)
+    })
+    const { _community: community } = storeToRefs(communityStore)
+
+    const join = async (community: ICommunity) => {
+      loadingText.value = 'Joining...'
+      changeloadingState(loading)
+      await communityStore.joinCommunity(props.id).then(async () => {
+        community.isParticipiant = !community.isParticipiant
+        community.participiantsCount++
+        await communityStore.getCommunityParticipiants(props.id)
+        changeloadingState(loading)
+      })
+    }
+
+    const leave = async (community: ICommunity) => {
+      loadingText.value = 'Leaving...'
+      changeloadingState(loading)
+      await communityStore.leaveCommunity(props.id).then(async () => {
+        community.isParticipiant = !community.isParticipiant
+        community.participiantsCount--
+        await communityStore.getCommunityParticipiants(props.id)
+        changeloadingState(loading)
+      })
+    }
+    return {
+      t,
+      component,
+      communityStore,
+      router,
+      user,
+      community,
+      join,
+      leave,
+      changeComponent,
+      loading,
+      loadingText,
+      isLoading
+    }
+  },
+  beforeUnmount() {
+    this.communityStore.$patch({
+      community: {},
+      participiants: []
+    })
   }
-})
-
-const isLoading = ref(true)
-const loading = ref(false)
-const loadingText = ref('')
-const changeloadingState = (state: Ref<boolean>) => {
-  state.value = !state.value
-}
-
-const authStore = useAuthStore()
-const { _user: user } = storeToRefs(authStore)
-
-const communityStore = useCommunityStore()
-communityStore.getCommunity(props.id).then(() => {
-  changeloadingState(isLoading)
-})
-const { _community: community } = storeToRefs(communityStore)
-
-const category = ref<string>('details')
-
-const join = async (community: ICommunity) => {
-  loadingText.value = 'Joining...'
-  changeloadingState(loading)
-  await communityStore.joinCommunity(props.id).then(async () => {
-    community.isParticipiant = !community.isParticipiant
-    community.participiantsCount++
-    await communityStore.getCommunityParticipiants(props.id)
-    changeloadingState(loading)
-  })
-}
-
-const leave = async (community: ICommunity) => {
-  loadingText.value = 'Leaving...'
-  changeloadingState(loading)
-  await communityStore.leaveCommunity(props.id).then(async () => {
-    community.isParticipiant = !community.isParticipiant
-    community.participiantsCount--
-    await communityStore.getCommunityParticipiants(props.id)
-    changeloadingState(loading)
-  })
-}
-
-onBeforeUnmount(() => {
-  communityStore.$patch({
-    community: {},
-    participiants: []
-  })
 })
 </script>
 

@@ -153,12 +153,12 @@
             id="radio-1"
             class="radio"
             value="radio1"
-            :checked="category === 'activities'"
+            :checked="component === 'activities'"
           />
           <label for="radio-1">
             <span
               class="fw-bold category"
-              :class="{ selected: category === 'activities' }"
+              :class="{ selected: component === 'activities' }"
               id="activities"
               @click="changeCategory('activities')"
               >{{ t('profile.activities') }}</span
@@ -173,14 +173,14 @@
             id="radio-2"
             class="radio"
             value="radio2"
-            :checked="category === 'posts'"
+            :checked="component === 'UserPosts'"
           />
           <label for="radio-2">
             <span
               class="fw-bold category"
-              :class="{ selected: category === 'posts' }"
+              :class="{ selected: component === 'UserPosts' }"
               id="posts"
-              @click="changeCategory('posts')"
+              @click="changeCategory('UserPosts')"
               >{{ t('profile.posts') }}</span
             >
           </label>
@@ -193,14 +193,14 @@
             id="radio-3"
             class="radio"
             value="radio3"
-            :checked="category === 'events'"
+            :checked="component === 'UserEvents'"
           />
           <label for="radio-3">
             <span
               class="fw-bold category"
-              :class="{ selected: category === 'events' }"
+              :class="{ selected: component === 'UserEvents' }"
               id="events"
-              @click="changeCategory('events')"
+              @click="changeCategory('UserEvents')"
               >{{ t('profile.events') }}</span
             >
           </label>
@@ -213,14 +213,14 @@
             id="radio-4"
             class="radio"
             value="radio4"
-            :checked="category === 'communities'"
+            :checked="component === 'UserCommunities'"
           />
           <label for="radio-4">
             <span
               class="fw-bold category"
-              :class="{ selected: category === 'communities' }"
+              :class="{ selected: component === 'UserCommunities' }"
               id="communities"
-              @click="changeCategory('communities')"
+              @click="changeCategory('UserCommunities')"
               >{{ t('profile.communities') }}</span
             >
           </label>
@@ -233,14 +233,14 @@
             id="radio-5"
             class="radio"
             value="radio5"
-            :checked="category === 'saved'"
+            :checked="component === 'UserSavedPosts'"
           />
           <label for="radio-5">
             <span
               class="fw-bold category"
-              :class="{ selected: category === 'saved' }"
+              :class="{ selected: component === 'UserSavedPosts' }"
               id="saved"
-              @click="changeCategory('saved')"
+              @click="changeCategory('UserSavedPosts')"
               >{{ t('profile.saved') }}</span
             >
           </label>
@@ -248,16 +248,15 @@
       </div>
     </div>
     <div>
-      <UserPosts v-if="category === 'posts'" :userId="userId" />
-      <UserCommunities v-else-if="category === 'communities'" />
-      <UserEvents v-else-if="category === 'events'" />
-      <UserSavedPosts v-else-if="category === 'saved'" />
+      <Transition name="scaleInOut" mode="out-in">
+        <component :is="component" />
+      </Transition>
     </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, onBeforeUnmount } from 'vue'
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 import UserCommunities from '@/components/common/profile/UserCommunities.vue'
 import UserPosts from '@/components/common/profile/UserPosts.vue'
 import FollowingsModal from '@/components/shared/FollowingsModal.vue'
@@ -271,47 +270,75 @@ import { useUserStore } from '@/stores/user'
 import FollowerRequestsModal from '@/components/shared/FollowerRequestsModal.vue'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+export default defineComponent({
+  components: {
+    UserCommunities,
+    UserPosts,
+    UserEvents,
+    UserSavedPosts,
+    FollowingsModal,
+    FollowersModal,
+    UserSuggestions,
+    FollowerRequestsModal
+  },
+  setup() {
+    const { t } = useI18n()
 
-const followerCount = ref(0)
-const followingCount = ref(0)
+    const followerCount = ref(0)
+    const followingCount = ref(0)
 
-const authStore = useAuthStore()
-const { _user: user } = storeToRefs(authStore)
-const userId = user.value.id
+    const authStore = useAuthStore()
+    const { _user: user } = storeToRefs(authStore)
+    const userId = user.value.id
 
-const userStore = useUserStore()
+    const userStore = useUserStore()
 
-const category = ref('activities')
-const loading = ref(true)
-const changeLoadingState = () => {
-  loading.value = !loading.value
-}
-const { _currentUser: currentUser, _userFollowersRequests: followersRequests } =
-  storeToRefs(userStore)
+    const component = ref('UserCommunities')
+    const loading = ref(true)
+    const changeLoadingState = () => {
+      loading.value = !loading.value
+    }
+    const { _currentUser: currentUser, _userFollowersRequests: followersRequests } =
+      storeToRefs(userStore)
 
-userStore.getUserById(user.value.id).then(() => {
-  changeLoadingState()
-  followerCount.value = currentUser.value.followersCount
-  followingCount.value = currentUser.value.followingCount
-})
+    userStore.getUserById(user.value.id).then(() => {
+      changeLoadingState()
+      followerCount.value = currentUser.value.followersCount
+      followingCount.value = currentUser.value.followingCount
+    })
 
-const changeCategory = (tab: string) => {
-  category.value = tab
-}
+    const changeCategory = (tab: string) => {
+      component.value = tab
+    }
 
-const getFollowers = async () => {
-  await userStore.getUserFollowers(userId)
-}
+    const getFollowers = async () => {
+      await userStore.getUserFollowers(userId, '')
+    }
 
-const getFollowings = async () => {
-  await userStore.getUserFollowings(userId)
-}
-
-onBeforeUnmount(() => {
-  userStore.$patch({
-    currentUser: {}
-  })
+    const getFollowings = async () => {
+      await userStore.getUserFollowings(userId, '')
+    }
+    return {
+      t,
+      loading,
+      component,
+      changeCategory,
+      getFollowers,
+      getFollowings,
+      followersRequests,
+      userId,
+      userStore,
+      currentUser,
+      followerCount,
+      followingCount,
+      user
+    }
+  },
+  beforeUnmount() {
+    this.userStore.$patch({
+      currentUser: {}
+    })
+  }
 })
 </script>
 

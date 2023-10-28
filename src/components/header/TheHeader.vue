@@ -85,7 +85,8 @@
   </nav>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
+import { defineComponent } from 'vue'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import { useRouter } from 'vue-router'
@@ -93,21 +94,31 @@ import CreateLink from './CreateLink.vue'
 import ProfileIcon from './ProfileIcon.vue'
 import { useI18n } from 'vue-i18n'
 
-const emit = defineEmits(['toggle-bar'])
+export default defineComponent({
+  components: {
+    CreateLink,
+    ProfileIcon
+  },
+  setup() {
+    const { t } = useI18n()
 
-const togglebar = () => {
-  emit('toggle-bar')
-}
+    const router = useRouter()
+    const authStore = useAuthStore()
+    const { _user: user, _userIsAuthorized: userIsAuthorized } = storeToRefs(authStore)
 
-const { t } = useI18n()
+    const logout = async () => {
+      await authStore.logout()
+    }
 
-const router = useRouter()
-const authStore = useAuthStore()
-const { _user: user, _userIsAuthorized: userIsAuthorized } = storeToRefs(authStore)
-
-const logout = async () => {
-  await authStore.logout()
-}
+    return {
+      logout,
+      router,
+      user,
+      userIsAuthorized,
+      t
+    }
+  }
+})
 </script>
 
 <style scoped lang="scss">

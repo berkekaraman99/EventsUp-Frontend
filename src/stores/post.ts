@@ -83,9 +83,7 @@ export const usePostStore = defineStore('postStore', {
 
     async getPostComments(id: string) {
       try {
-        const res = await instance.get(
-          `/post/${id}/comments?filter=InteractionDescending&skip=0&take=10`
-        )
+        const res = await instance.get(`/post/${id}/comments?skip=0&take=10`)
         console.log(res.data.data)
         this.postComments = res.data.data
       } catch (error: any) {

@@ -1,17 +1,13 @@
 <template>
   <div class="col-12 col-sm-12 col-md-6">
-    <ToastSuccess
-      :show-toast="showToast"
-      :status-code="statusCode"
-      :header="header"
-      :content="content"
-    />
-    <ToastDanger
-      :show-toast="showToast"
-      :status-code="statusCode"
-      :header="header"
-      :content="content"
-    />
+    <Teleport to="body">
+      <the-toast
+        :show-toast="showToast"
+        :status-code="statusCode"
+        :header="header"
+        :content="content"
+      ></the-toast>
+    </Teleport>
     <div
       class="container-fluid d-flex align-items-center justify-content-center overflow-auto min-vh-100"
     >
@@ -105,7 +101,9 @@
           <div class="text-center mt-4">
             <p>
               {{ t('login.donthaveaccount') }}
-              <span class="text-primary pointer" @click="changetype">{{ t('login.signup') }}</span>
+              <span class="text-primary pointer" @click="changeType('the-signup')">{{
+                t('login.signup')
+              }}</span>
             </p>
           </div>
 
@@ -147,20 +145,21 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import type { ILogInModel } from '@/models/login_model'
-import ToastSuccess from '@/components/shared/ToastSuccess.vue'
-import ToastDanger from '@/components/shared/ToastDanger.vue'
 import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { type GoogleLogin, type CallbackTypes } from 'vue3-google-login'
+import { inject } from 'vue'
 
 const { t } = useI18n()
 
 const emit = defineEmits(['changetype'])
 
-const changetype = () => {
-  emit('changetype', 'signup')
+const changetype = inject('change-type') as Function
+
+const changeType = (name: string) => {
+  changetype(name)
 }
 
 const callback: CallbackTypes.CredentialCallback = async (response) => {
@@ -182,6 +181,10 @@ const callback: CallbackTypes.CredentialCallback = async (response) => {
         setTimeout(() => {
           router.push({ name: 'home' })
         }, 2500)
+      } else {
+        header.value = 'Giriş Başarısız'
+        content.value = 'Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz'
+        handleToast()
       }
     })
 }

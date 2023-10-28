@@ -140,7 +140,7 @@
 </template>
 
 <script setup lang="ts">
-import LoadingSpinner from '@/components/shared/LoadingVue.vue'
+import LoadingSpinner from '@/components/shared/TheLoading.vue'
 import { useAuthStore } from '@/stores/auth'
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
@@ -150,7 +150,7 @@ import ChangeProfileImage from '@/components/common/settings/ChangeProfileImage.
 import ChangeBannerImage from '@/components/common/settings/ChangeBannerImage.vue'
 import EditProfile from '@/components/common/settings/EditProfile.vue'
 import DeleteAccount from '@/components/common/settings/DeleteAccount.vue'
-import LocaleChangerVue from '@/components/LocaleChanger.vue'
+import LocaleChangerVue from '@/components/common/settings/LocaleChanger.vue'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()

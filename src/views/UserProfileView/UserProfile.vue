@@ -203,14 +203,14 @@
             id="radio-1"
             class="radio"
             value="radio1"
-            :checked="category === 'activities'"
+            :checked="component === 'activities'"
           />
           <label for="radio-1">
             <span
               class="fw-bold fs-5 category"
-              :class="{ selected: category === 'activities' }"
+              :class="{ selected: component === 'activities' }"
               id="activities"
-              @click="changeCategory('activities')"
+              @click="changeComponent('activities')"
               >{{ t('profile.activities') }}</span
             >
           </label>
@@ -223,14 +223,14 @@
             id="radio-2"
             class="radio"
             value="radio2"
-            :checked="category === 'posts'"
+            :checked="component === 'UserPosts'"
           />
           <label for="radio-2">
             <span
               class="fw-bold fs-5 category"
-              :class="{ selected: category === 'posts' }"
+              :class="{ selected: component === 'UserPosts' }"
               id="posts"
-              @click="changeCategory('posts')"
+              @click="changeComponent('UserPosts')"
               >{{ t('profile.posts') }}</span
             >
           </label>
@@ -243,14 +243,14 @@
             id="radio-3"
             class="radio"
             value="radio3"
-            :checked="category === 'events'"
+            :checked="component === 'UserEvents'"
           />
           <label for="radio-3">
             <span
               class="fw-bold fs-5 category"
-              :class="{ selected: category === 'events' }"
+              :class="{ selected: component === 'UserEvents' }"
               id="events"
-              @click="changeCategory('events')"
+              @click="changeComponent('UserEvents')"
               >{{ t('profile.events') }}</span
             >
           </label>
@@ -263,14 +263,14 @@
             id="radio-4"
             class="radio"
             value="radio4"
-            :checked="category === 'communities'"
+            :checked="component === 'UserCommunities'"
           />
           <label for="radio-4">
             <span
               class="fw-bold fs-5 category"
-              :class="{ selected: category === 'communities' }"
+              :class="{ selected: component === 'UserCommunities' }"
               id="communities"
-              @click="changeCategory('communities')"
+              @click="changeComponent('UserCommunities')"
               >{{ t('profile.communities') }}</span
             >
           </label>
@@ -284,15 +284,16 @@
         {{ t('profile.profileisprivatedescription') }}
       </p>
     </div>
-
-    <UserPosts v-if="category === 'posts'" :id="id" />
-    <UserCommunities v-else-if="category === 'communities'" :id="id" />
-    <UserEvents v-else-if="category === 'events'" :id="id" />
+    <div v-if="!currentUser.isPrivate || currentUser.isFollowing">
+      <Transition name="scaleInOut" mode="out-in">
+        <component :is="component" />
+      </Transition>
+    </div>
   </div>
 </template>
 
-<script setup lang="ts">
-import { ref, onBeforeUnmount } from 'vue'
+<script lang="ts">
+import { defineComponent, ref } from 'vue'
 import UserCommunities from '@/components/common/userprofile/UserCommunities.vue'
 import UserPosts from '@/components/common/userprofile/UserPosts.vue'
 import FollowingsModal from '@/components/shared/FollowingsModal.vue'
@@ -304,86 +305,112 @@ import { storeToRefs } from 'pinia'
 import type { IUser } from '@/models/user_model'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+export default defineComponent({
+  components: {
+    UserCommunities,
+    UserPosts,
+    UserEvents,
+    FollowingsModal,
+    FollowersModal
+  },
+  props: {
+    id: {
+      type: String,
+      required: true
+    }
+  },
+  setup(props) {
+    const { t } = useI18n()
+    const authStore = useAuthStore()
+    const { _user: user } = storeToRefs(authStore)
+    const userStore = useUserStore()
+    const component = ref<string>('UserCommunities')
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
-  }
-})
+    const loading = ref(true)
+    const changeLoadingState = () => {
+      loading.value = !loading.value
+    }
 
-const authStore = useAuthStore()
-const { _user: user } = storeToRefs(authStore)
-const userStore = useUserStore()
-const category = ref('activities')
+    userStore.getUserById(props.id).then(changeLoadingState)
+    const { _currentUser: currentUser } = storeToRefs(userStore)
 
-const loading = ref(true)
-const changeLoadingState = () => {
-  loading.value = !loading.value
-}
+    const changeComponent = (tab: string) => {
+      component.value = tab
+    }
 
-userStore.getUserById(props.id).then(changeLoadingState)
-const { _currentUser: currentUser } = storeToRefs(userStore)
+    const getFollowers = async () => {
+      await userStore.getUserFollowers(currentUser.value.id, '')
+    }
 
-const changeCategory = (tab: string) => {
-  category.value = tab
-}
+    const getFollowings = async () => {
+      await userStore.getUserFollowings(currentUser.value.id, '')
+    }
 
-const getFollowers = async () => {
-  await userStore.getUserFollowers(currentUser.value.id)
-}
-
-const getFollowings = async () => {
-  await userStore.getUserFollowings(currentUser.value.id)
-}
-
-const followUser = async (currentUser: IUser) => {
-  try {
-    await userStore.followUser(currentUser.id).then(() => {
-      if (!currentUser.isPrivate) {
-        currentUser.isFollowing = true
-      } else {
-        currentUser.isFollowRequestSent = true
+    const followUser = async (currentUser: IUser) => {
+      try {
+        await userStore.followUser(currentUser.id).then(() => {
+          if (!currentUser.isPrivate) {
+            currentUser.isFollowing = true
+          } else {
+            currentUser.isFollowRequestSent = true
+          }
+        })
+      } catch (error: any) {
+        console.log(error.response.data)
       }
+    }
+
+    const unfollowUser = async (user: IUser) => {
+      try {
+        await userStore.unfollowUser(user.id).then(() => (user.isFollowing = false))
+      } catch (error: any) {
+        console.log(error.response.data)
+      }
+    }
+
+    const blockUser = async (user: IUser) => {
+      const body = new FormData()
+      const userId = user.id
+      body.append('targetId', userId)
+      await userStore.blockUser(body).then(() => (user.isBlocked = true))
+    }
+
+    const unblockUser = async (user: IUser) => {
+      const body = new FormData()
+      const userId = user.id
+      body.append('targetId', userId)
+      await userStore.unblockUser(body).then(() => (user.isBlocked = false))
+    }
+
+    const removeFollowRequest = async (currentUser: IUser) => {
+      await userStore
+        .removeFollowRequest(currentUser.id)
+        .then(() => (currentUser.isFollowRequestSent = false))
+    }
+
+    return {
+      t,
+      user,
+      component,
+      loading,
+      currentUser,
+      changeComponent,
+      getFollowers,
+      getFollowings,
+      followUser,
+      unfollowUser,
+      blockUser,
+      unblockUser,
+      removeFollowRequest,
+      userStore,
+      id: user.value.id
+    }
+  },
+  beforeUnmount() {
+    this.userStore.$patch({
+      currentUser: {}
     })
-  } catch (error: any) {
-    console.log(error.response.data)
   }
-}
-
-const unfollowUser = async (user: IUser) => {
-  try {
-    await userStore.unfollowUser(user.id).then(() => (user.isFollowing = false))
-  } catch (error: any) {
-    console.log(error.response.data)
-  }
-}
-
-const blockUser = async (user: IUser) => {
-  const body = new FormData()
-  const userId = user.id
-  body.append('targetId', userId)
-  await userStore.blockUser(body).then(() => (user.isBlocked = true))
-}
-
-const unblockUser = async (user: IUser) => {
-  const body = new FormData()
-  const userId = user.id
-  body.append('targetId', userId)
-  await userStore.unblockUser(body).then(() => (user.isBlocked = false))
-}
-
-const removeFollowRequest = async (currentUser: IUser) => {
-  await userStore
-    .removeFollowRequest(currentUser.id)
-    .then(() => (currentUser.isFollowRequestSent = false))
-}
-
-onBeforeUnmount(() => {
-  userStore.$patch({
-    currentUser: {}
-  })
 })
 </script>
 

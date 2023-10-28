@@ -20,7 +20,7 @@
         </div>
         <div class="modal-body">
           <!-- <LoadingSpinner v-if="loading" /> -->
-          <LoadingVue v-if="loading" />
+          <TheLoading v-if="loading" />
           <div v-else-if="followers.length > 0">
             <div class="container">
               <div class="col-12">
@@ -28,16 +28,16 @@
                   type="text"
                   class="form-control form-control-lg mb-3"
                   :placeholder="user ? 'Takip ettiklerini ara' : 'Please login to search'"
-                  v-model="text"
+                  v-model="search"
                   @keydown.enter="handleSearch"
                   :disabled="!user"
                 />
               </div>
             </div>
-            <ul class="container" v-if="searchedFollowers.length > 0">
+            <ul class="container" v-if="followers.length > 0">
               <li
                 class="card shadow-sm px-4 py-3 my-4"
-                v-for="user in searchedFollowers"
+                v-for="user in followers"
                 v-bind:key="user.id"
               >
                 <div class="d-flex justify-content-between align-items-center">
@@ -103,10 +103,10 @@
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user'
 import { storeToRefs } from 'pinia'
-// import LoadingSpinner from "@/components/shared/LoadingVue.vue";
+// import LoadingSpinner from "@/components/shared/TheLoading.vue";
 import { useAuthStore } from '@/stores/auth'
 import { reactive, ref, toRef } from 'vue'
-import LoadingVue from './LoadingVue.vue'
+import TheLoading from './TheLoading.vue'
 
 const props = defineProps({
   id: {
@@ -128,35 +128,24 @@ const changeloading = () => {
   loading.value = false
 }
 
-const search = reactive({
-  text: ''
-})
-
-const text = toRef(search, 'text')
+const search = ref<string>('')
 
 const handleSearch = async () => {
   loading.value = true
-  if (search.text.length > 0) {
+  if (search.value.length > 0) {
     await userStore
-      .searchFollowers({
-        id: user.value.id,
-        text: search.text
-      })
+      .getUserFollowers(user.value.id, search.value)
       .then(() => (loading.value = false))
   } else {
-    userStore.$patch({
-      searchedUserFollowers: userStore.userFollowers
-    })
+    // userStore.$patch({
+    //   searchedUserFollowers: userStore.userFollowers
+    // })
     loading.value = false
   }
 }
 
-userStore.getUserFollowers(props.id).then(changeloading)
-const {
-  _userFollowers: followers,
-  _searchedFollowers: searchedFollowers,
-  _statusCode: statusCode
-} = storeToRefs(userStore)
+userStore.getUserFollowers(props.id, '').then(changeloading)
+const { _userFollowers: followers, _statusCode: statusCode } = storeToRefs(userStore)
 
 const removeFollower = async (id: string) => {
   await userStore.removeUserFromFollowers(id).then(() => {

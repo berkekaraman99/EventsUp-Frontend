@@ -29,7 +29,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import gsap from 'gsap'
-import LoadingSpinner from '@/components/shared/LoadingVue.vue'
+import LoadingSpinner from '@/components/shared/TheLoading.vue'
 import EventsVue from '@/components/common/event/EventsVue.vue'
 import { useEventStore } from '@/stores/event'
 import { useAuthStore } from '@/stores/auth'

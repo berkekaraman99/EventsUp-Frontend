@@ -24,20 +24,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import gsap from 'gsap'
-import LoadingSpinner from '@/components/shared/LoadingVue.vue'
+import LoadingSpinner from '@/components/shared/TheLoading.vue'
 import { useCommunityStore } from '@/stores/community'
 import { storeToRefs } from 'pinia'
 import CommunityVue from '../community/CommunityVue.vue'
 import { useI18n } from 'vue-i18n'
+import { useUserStore } from '@/stores/user'
 
 const { t } = useI18n()
-
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
-  }
-})
 
 const beforeEnterCommunity: any = (el: HTMLElement) => {
   el.style.opacity = '0'
@@ -54,13 +48,15 @@ const enterCommunity: any = (el: HTMLElement) => {
 }
 
 const communityStore = useCommunityStore()
+const userStore = useUserStore()
+const { _currentUser: currentUser } = storeToRefs(userStore)
 
 const loading = ref(true)
 const changeLoadingState = () => {
   loading.value = !loading.value
 }
 
-communityStore.getUserCommunities(props.id).then(changeLoadingState)
+communityStore.getUserCommunities(currentUser.value.id).then(changeLoadingState)
 const { _userCommunities: userCommunities } = storeToRefs(communityStore)
 </script>
 

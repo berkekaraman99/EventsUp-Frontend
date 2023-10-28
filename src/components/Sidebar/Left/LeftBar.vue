@@ -116,8 +116,8 @@
         <div class="w-100" v-for="community in communities" :key="community.id">
           <RouterLink
             :to="{
-              name: 'community-details',
-              params: { id: community.id, name: community.title }
+              name: 'communitydetails',
+              params: { id: community.id }
             }"
             class="d-flex align-items-center text-decoration-none text-black community-link"
             :data-text="community.title"
@@ -158,12 +158,6 @@ import { useCommunityStore } from '@/stores/community'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import TabVue from '@/components/Sidebar/Left/TabVue.vue'
-
-const emit = defineEmits(['toggle-bar'])
-
-const togglebar = () => {
-  emit('toggle-bar')
-}
 
 const x = window.matchMedia('(max-width: 992px)')
 

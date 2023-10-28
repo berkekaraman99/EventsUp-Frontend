@@ -8,6 +8,7 @@ import io from 'socket.io-client'
 import vue3GoogleLogin from 'vue3-google-login'
 import { formkitConfig } from './configs/formkit.config'
 import { i18n } from './configs/i18n.config'
+import TheToast from '@/components/shared/TheToast.vue'
 
 //Google Auth
 import * as credentials from './data/google-credentials.json'
@@ -34,5 +35,7 @@ app.use(i18n)
 app.use(vue3GoogleLogin, {
   clientId: credentials.default.web.client_id
 })
+
+app.component('the-toast', TheToast)
 
 app.mount('#app')

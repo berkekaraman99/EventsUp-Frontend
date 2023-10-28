@@ -33,7 +33,7 @@
           </button>
         </RouterLink>
       </li>
-      <li class="dropdown-item" @click="emit('logout')">
+      <li class="dropdown-item" @click="$emit('logout')">
         <button class="btn w-100 text-danger">
           <i class="fa-solid fa-arrow-right-from-bracket me-1"></i>
           {{ t('header.logout') }}
@@ -43,36 +43,43 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script lang="ts">
+import { defineComponent, ref, type PropType } from 'vue'
 import type { IAuthUser } from '@/models/auth_user_model'
-import { ref, type PropType } from 'vue'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+export default defineComponent({
+  props: {
+    user: {
+      type: Object as PropType<IAuthUser>,
+      required: true
+    }
+  },
+  emits: ['logout'],
+  setup() {
+    const { t } = useI18n()
 
-const props = defineProps({
-  user: {
-    type: Object as PropType<IAuthUser>,
-    required: true
+    const links = ref<Array<any>>([
+      {
+        id: 1,
+        routeName: 'profile',
+        content: 'header.profile',
+        icon: 'fa-solid fa-user'
+      },
+      {
+        id: 2,
+        routeName: 'profileSettings',
+        content: 'header.settings',
+        icon: 'fa-solid fa-gear'
+      }
+    ])
+
+    return {
+      links,
+      t
+    }
   }
 })
-
-const links = ref<Array<any>>([
-  {
-    id: 1,
-    routeName: 'profile',
-    content: 'header.profile',
-    icon: 'fa-solid fa-user'
-  },
-  {
-    id: 2,
-    routeName: 'profileSettings',
-    content: 'header.settings',
-    icon: 'fa-solid fa-gear'
-  }
-])
-
-const emit = defineEmits(['logout'])
 </script>
 
 <style scoped>

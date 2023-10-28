@@ -25,20 +25,14 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import gsap from 'gsap'
-import LoadingSpinner from '@/components/shared/LoadingVue.vue'
+import LoadingSpinner from '@/components/shared/TheLoading.vue'
 import { useEventStore } from '@/stores/event'
 import { storeToRefs } from 'pinia'
 import EventsVue from '../event/EventsVue.vue'
 import { useI18n } from 'vue-i18n'
+import { useUserStore } from '@/stores/user'
 
 const { t } = useI18n()
-
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
-  }
-})
 
 const beforeEnterEvent: any = (el: HTMLElement) => {
   el.style.opacity = '0'
@@ -60,7 +54,10 @@ const changeLoadingState = () => {
   loading.value = !loading.value
 }
 
-eventStore.getUserEvents(props.id).then(changeLoadingState)
+const userStore = useUserStore()
+const { _currentUser: currentUser } = storeToRefs(userStore)
+
+eventStore.getUserEvents(currentUser.value.id).then(changeLoadingState)
 const { _userEvents: userEvents } = storeToRefs(eventStore)
 </script>
 

@@ -1,9 +1,6 @@
 <template>
-  <div
-    id="community-suggestions"
-    class="mb-4 mb-md-4 mb-lg-0 d-none d-md-none d-lg-flex flex-column w-100"
-  >
-    <div class="card border rounded-3 overflow-hidden">
+  <div class="mb-4 mb-md-4 mb-lg-0 d-none d-md-none d-lg-flex flex-column w-100">
+    <div class="card border overflow-hidden" id="community-suggestions">
       <div class="card-header px-md-4 px-xl-5">
         <div class="fw-bold text-start text-lg-center fs-6">
           {{ t('rightbar.community.suggestions') }}
@@ -26,8 +23,7 @@
             :to="{
               name: 'communitydetails',
               params: {
-                id: community.id,
-                name: community.title
+                id: community.id
               }
             }"
             class="text-decoration-none"
@@ -114,5 +110,9 @@ const { _communityList: communityList } = storeToRefs(communityStore)
 
 .card {
   z-index: 0;
+}
+
+#community-suggestions {
+  border-radius: 1em;
 }
 </style>

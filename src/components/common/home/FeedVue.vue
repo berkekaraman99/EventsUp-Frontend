@@ -16,7 +16,7 @@
         @leave="leaveFeed"
       >
         <div class="row" v-for="(post, index) in postFeed" v-bind:key="post.id" :data-index="index">
-          <PostComponentFeed :post="post" />
+          <FeedPosts :post="post" />
         </div>
       </TransitionGroup>
     </div>
@@ -29,8 +29,8 @@
 <script setup lang="ts">
 import { onBeforeUnmount, ref } from 'vue'
 import gsap from 'gsap'
-import PostComponentFeed from '@/components/shared/PostComponentFeed.vue'
-import LoadingSpinner from '@/components/shared/LoadingVue.vue'
+import FeedPosts from '@/components/shared/FeedPosts.vue'
+import LoadingSpinner from '@/components/shared/TheLoading.vue'
 import { usePostStore } from '@/stores/post'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'

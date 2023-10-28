@@ -9,7 +9,7 @@
       </div>
 
       <!-- ATTEND CARD -->
-      <div v-for="attend in props.attendees" :key="attend.id">
+      <div v-for="attend in attendees" :key="attend.id">
         <div
           class="card my-3 border hover:tw-bg-slate-100 tw-transition tw-ease-in-out tw-duration-350"
         >
@@ -51,16 +51,19 @@
   </Transition>
 </template>
 
-<script setup lang="ts">
-import type { IEventAttend } from '@/models/event_attend_model'
+<script lang="ts">
+import { defineComponent } from 'vue'
+import { useEventStore } from '@/stores/event'
+import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 
-const { t } = useI18n()
+export default defineComponent({
+  setup() {
+    const { t } = useI18n()
+    const eventStore = useEventStore()
+    const { _eventAttendees: eventAttendees } = storeToRefs(eventStore)
 
-const props = defineProps({
-  attendees: {
-    type: Array<IEventAttend>,
-    required: true
+    return { attendees: eventAttendees, t }
   }
 })
 </script>

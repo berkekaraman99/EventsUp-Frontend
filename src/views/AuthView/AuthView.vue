@@ -2,22 +2,39 @@
   <div class="container-fluid d-flex">
     <Background />
     <Transition name="fade" mode="out-in">
-      <Login v-if="authtype === 'login'" @changetype="changetype" />
-      <SignupVue v-else-if="authtype === 'signup'" @changetype="changetype" />
+      <component :is="authtype"></component>
     </Transition>
   </div>
 </template>
 
-<script setup lang="ts">
-import Login from "@/components/common/auth/LogIn.vue";
-import SignupVue from "@/components/common/auth/SignupVue.vue";
-import Background from "@/components/common/auth/BackgroundVue.vue";
-import { ref } from "vue";
+<script lang="ts">
+import { defineComponent } from 'vue'
+import TheSignin from '@/components/common/auth/TheSignin.vue'
+import TheSignup from '@/components/common/auth/TheSignup.vue'
+import Background from '@/components/common/auth/BackgroundVue.vue'
 
-const authtype = ref("login");
-const changetype = (type: string) => {
-  authtype.value = type;
-};
+export default defineComponent({
+  components: {
+    'the-signin': TheSignin,
+    'the-signup': TheSignup,
+    Background
+  },
+  data() {
+    return {
+      authtype: 'the-signin'
+    }
+  },
+  methods: {
+    changetype(type: string) {
+      this.authtype = type
+    }
+  },
+  provide() {
+    return {
+      'change-type': this.changetype
+    }
+  }
+})
 </script>
 
 <style scoped>
