@@ -44,13 +44,13 @@
                   ]"
                   v-model="codeSendStyle"
                 />
-                <template #stepNext="{ handlers, node }">
+                <template #stepNext="{ handlers }">
                   <FormKit
                     type="button"
                     @click="
                       resetPasswordRequest().then(() => {
                         if (statusCode === 200) {
-                          handlers.incrementStep(1, node.context)()
+                          handlers.incrementStep(1)()
                           authStore.$patch({
                             statusCode: 0
                           })
@@ -132,13 +132,13 @@
                 <FormKit type="button" :disabled="codeSended" @click="sendCode">
                   {{ t('forgotpassword.resendcode') }}
                 </FormKit>
-                <template #stepNext="{ handlers, node }">
+                <template #stepNext="{ handlers }">
                   <FormKit
                     type="button"
                     @click="
                       checkCode(mail, code).then(() => {
                         if (statusCode === 200) {
-                          handlers.incrementStep(1, node.context)()
+                          handlers.incrementStep(1)()
                           authStore.$patch({
                             statusCode: 0
                           })

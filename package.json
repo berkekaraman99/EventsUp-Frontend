@@ -1,7 +1,8 @@
 {
   "name": "eventsup-frontend-ts",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
+  "main": "main.js",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
@@ -9,7 +10,8 @@
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
-    "format": "prettier --write src/"
+    "format": "prettier --write src/",
+    "electron:start": "electron ."
   },
   "dependencies": {
     "@formkit/addons": "^1.1.0",
@@ -38,6 +40,7 @@
     "@vue/eslint-config-typescript": "^12.0.0",
     "@vue/tsconfig": "^0.4.0",
     "autoprefixer": "^10.4.16",
+    "electron": "^27.0.2",
     "eslint": "^8.49.0",
     "eslint-plugin-vue": "^9.17.0",
     "npm-run-all2": "^6.0.6",

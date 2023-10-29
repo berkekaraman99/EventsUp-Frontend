@@ -4,7 +4,7 @@ import router from './router'
 import { createPinia } from 'pinia'
 import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
 import { plugin as formKitPlugin } from '@formkit/vue'
-import io from 'socket.io-client'
+// import io from 'socket.io-client'
 import vue3GoogleLogin from 'vue3-google-login'
 import { formkitConfig } from './configs/formkit.config'
 import { i18n } from './configs/i18n.config'
@@ -17,16 +17,16 @@ import * as credentials from './data/google-credentials.json'
 import './style.css'
 import '@/assets/css/style.scss'
 
-const URL = 'http://localhost:4000'
-const socket = io(URL, {
-  autoConnect: false
-})
+// const URL = 'http://localhost:4000'
+// const socket = io(URL, {
+//   autoConnect: false
+// })
 
 const pinia = createPinia()
 pinia.use(piniaPluginPersistedstate)
 const app = createApp(App)
 
-app.provide('socket', socket)
+// app.provide('socket', socket)
 
 app.use(pinia)
 app.use(router)
