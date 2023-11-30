@@ -1,5 +1,5 @@
 <template>
-  <div id="right-bar" class="col-12 d-flex justify-content-center px-2">
+  <div id="right-bar" class="d-flex justify-content-center px-2">
     <CommunitySuggestions />
   </div>
 </template>

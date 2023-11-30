@@ -1,8 +1,11 @@
 <template>
-  <div class="mb-4 mb-md-4 mb-lg-0 d-none d-md-none d-lg-flex flex-column w-100">
-    <div class="card border overflow-hidden" id="community-suggestions">
+  <div
+    id="community-suggestion"
+    class="mb-4 mb-md-4 mb-lg-0 d-none d-md-none d-lg-flex flex-column"
+  >
+    <div class="card rounded-4 border overflow-hidden">
       <div class="card-header px-md-4 px-xl-5">
-        <div class="fw-bold text-start text-lg-center fs-6">
+        <div class="fw-bold text-start text-lg-center fs-5">
           {{ t('rightbar.community.suggestions') }}
         </div>
       </div>
@@ -15,7 +18,7 @@
         </div>
         <div
           v-else
-          class="d-flex card-body align-items-start p-3 hover-effect"
+          class="d-flex align-items-start p-3 community-suggest"
           v-for="community in communityList"
           :key="community.id"
         >
@@ -32,7 +35,7 @@
               <div v-if="community.coverImage != null">
                 <div
                   :style="{ backgroundImage: `url(${community.coverImage})` }"
-                  class="suggestion-profile-image me-4 shadow-sm"
+                  class="suggestion-profile-image me-4 shadow-sm border"
                 ></div>
               </div>
               <img
@@ -43,8 +46,11 @@
                 style="object-fit: cover; height: 48px; width: 48px"
               />
               <div>
-                <div class="fw-light text-black">
-                  {{ community.title }}
+                <div class="text-black text-shadow-e">
+                  <div class="fw-medium">{{ community.title }}</div>
+                  <div>
+                    <i class="fa-solid fa-users fa-sm"></i> {{ community.participiantsCount }}
+                  </div>
                 </div>
               </div>
             </div>
@@ -75,26 +81,12 @@ const { _communityList: communityList } = storeToRefs(communityStore)
 </script>
 
 <style scoped lang="scss">
-#community-suggestions {
-  padding: 0px 0px;
+.community-suggest {
+  transition: 0.3s ease;
+  background-color: white;
 
-  // @media screen and (max-width: 992px) {
-  //   width: 100%;
-  // }
-  // @media screen and (max-width: 576px) {
-  //   top: 60px;
-  // }
-  // @media screen and (min-width: 993px) {
-  //   position: fixed;
-  //   width: max-content;
-  //   max-width: 330px;
-  // }
-}
-
-.hover-effect {
-  transition: 0.35s ease;
   &:hover {
-    background-color: whitesmoke;
+    background-color: #f1f1f1;
   }
 }
 
@@ -108,11 +100,20 @@ const { _communityList: communityList } = storeToRefs(communityStore)
   }
 }
 
-.card {
-  z-index: 0;
+.suggestion-bg {
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  z-index: -2;
+  filter: blur(0.25rem);
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
 }
 
-#community-suggestions {
-  border-radius: 1em;
+.text-shadow-e {
+  text-shadow: 0 0 5px white;
 }
 </style>

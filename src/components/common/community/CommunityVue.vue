@@ -1,12 +1,6 @@
 <template>
   <div class="container community shadow-sm mb-5 rounded-3">
-    <RouterLink
-      :to="{
-        name: 'communitydetails',
-        params: { id: props.community.id }
-      }"
-      class="text-decoration-none text-dark"
-    >
+    <RouterLink :to="communityLink" class="text-decoration-none text-dark">
       <div class="row">
         <div class="col-sm-12 col-md-4 d-sm-flex align-items-sm-center justify-content-sm-center">
           <img
@@ -50,12 +44,19 @@
 
 <script setup lang="ts">
 import type { ICommunityPreview } from '@/models/community_preview_model'
-import type { PropType } from 'vue'
+import { computed, type PropType } from 'vue'
 
 const props = defineProps({
   community: {
     type: Object as PropType<ICommunityPreview>,
     required: true
+  }
+})
+
+const communityLink = computed(() => {
+  return {
+    name: 'communitydetails',
+    params: { id: props.community.id }
   }
 })
 

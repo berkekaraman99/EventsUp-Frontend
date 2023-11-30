@@ -22,7 +22,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 mt-3" v-else>
+        <div class="col-12 mt-3 mb-sm-0 mb-md-3 mb-lg-0" v-else>
           <div class="profile-header position-relative card shadow-sm rounded-4">
             <img
               v-if="currentUser.bannerImage != null"
@@ -346,6 +346,7 @@ export default defineComponent({
 #options {
   padding: 0px 0.75rem;
   margin: 16px 0px;
+  z-index: 9;
 
   & div {
     border-radius: 1rem;
@@ -365,6 +366,7 @@ export default defineComponent({
     right: 0;
     margin: 0;
     padding: 0;
+    border-top: 1px solid grey;
   }
 }
 .profile-details {
@@ -373,6 +375,9 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media (min-width: 768px) and (max-width: 992px) {
+  }
 }
 
 .profile-header {

@@ -1,11 +1,5 @@
 <template>
-  <RouterLink
-    :to="{
-      name: 'eventdetails',
-      params: { id: props.userEvent.id }
-    }"
-    class="text-decoration-none text-dark"
-  >
+  <RouterLink :to="eventLink" class="text-decoration-none text-dark">
     <div class="container event mb-5 shadow-sm hover:tw-bg-slate-50">
       <div class="row">
         <div class="col-sm-12 col-md-4 d-grid align-content-center">
@@ -64,6 +58,7 @@ import type { PropType } from 'vue'
 import moment from 'moment'
 
 import { useI18n } from 'vue-i18n'
+import { computed } from 'vue'
 
 const { t } = useI18n()
 
@@ -71,6 +66,13 @@ const props = defineProps({
   userEvent: {
     type: Object as PropType<IEventPreview>,
     required: true
+  }
+})
+
+const eventLink = computed(() => {
+  return {
+    name: 'eventdetails',
+    params: { id: props.userEvent.id }
   }
 })
 

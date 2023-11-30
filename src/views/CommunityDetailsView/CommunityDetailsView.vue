@@ -9,61 +9,30 @@
             id="sidebar"
             class="col-12 d-flex align-items-start justify-content-start flex-column flex-sm-row flex-lg-column"
           >
-            <!-- <div class="position-absolute link-bar"></div> -->
+            <!-- <div class="position-absolute link-bar"></di v> -->
             <div
+              v-for="sidebarLink in sidebarLinks"
+              :key="sidebarLink.id"
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-              @click="changeComponent('CommunityAbout')"
+              :class="{ selected: component === sidebarLink.name }"
+              @click="changeComponent(sidebarLink.name)"
             >
               <input
                 type="radio"
                 name="group-radio"
-                id="radio-1"
+                :id="sidebarLink.radio"
                 class="radio"
-                value="radio1"
-                :checked="component === 'CommunityAbout'"
+                :value="sidebarLink.value"
+                :checked="component === sidebarLink.name"
               />
-              <label for="radio-1">
-                <span class="fw-bold" id="about">{{ t('community.about') }}</span>
+              <label :for="sidebarLink.radio">
+                <span class="fw-bold" id="about">{{ t(sidebarLink.text) }}</span>
               </label>
             </div>
-
-            <div
-              @click="changeComponent('CommunityPosts')"
-              class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-            >
-              <input
-                type="radio"
-                name="group-radio"
-                id="radio-2"
-                class="radio"
-                value="radio2"
-                :checked="component === 'CommunityPosts'"
-              />
-              <label for="radio-2">
-                <span class="fw-bold" id="posts">{{ t('community.posts') }}</span>
-              </label>
-            </div>
-
-            <div
-              @click="changeComponent('CommunityParticipiants')"
-              class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-            >
-              <input
-                type="radio"
-                name="group-radio"
-                id="radio-3"
-                class="radio"
-                value="radio3"
-                :checked="component === 'CommunityParticipiants'"
-              />
-              <label for="radio-3">
-                <span class="fw-bold" id="participiants">{{ t('community.members') }}</span>
-              </label>
-            </div>
-
             <div
               @click="changeComponent('CommunitySettings')"
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
+              :class="{ selected: component === 'CommunitySettings' }"
               v-if="community.admin.id === user.id"
             >
               <input
@@ -180,10 +149,6 @@ export default defineComponent({
     id: {
       type: String,
       required: true
-    },
-    name: {
-      type: String,
-      required: true
     }
   },
   components: {
@@ -200,6 +165,30 @@ export default defineComponent({
     const isLoading = ref(true)
     const loading = ref(false)
     const loadingText = ref('')
+
+    const sidebarLinks = [
+      {
+        id: 1,
+        radio: 'radio-1',
+        value: 'radio1',
+        name: 'CommunityAbout',
+        text: 'community.about'
+      },
+      {
+        id: 2,
+        radio: 'radio-2',
+        value: 'radio2',
+        name: 'CommunityPosts',
+        text: 'community.posts'
+      },
+      {
+        id: 3,
+        radio: 'radio-3',
+        value: 'radio3',
+        name: 'CommunityParticipiants',
+        text: 'community.members'
+      }
+    ]
 
     const changeloadingState = (state: Ref<boolean>) => {
       state.value = !state.value
@@ -251,7 +240,8 @@ export default defineComponent({
       changeComponent,
       loading,
       loadingText,
-      isLoading
+      isLoading,
+      sidebarLinks
     }
   },
   beforeUnmount() {
@@ -330,6 +320,7 @@ export default defineComponent({
       color: var(--color-primary);
       box-shadow: inset 8px 0px 0px -2px grey;
       border: 1px solid grey;
+      border-radius: 0 0.5rem 0.5rem 0;
     }
   }
 }
@@ -339,6 +330,7 @@ export default defineComponent({
   background-color: var(--color-secondary);
   box-shadow: inset 8px 0px 0px -2px var(--color-primary);
   border: 1px solid var(--color-primary);
+  border-radius: 0 0.5rem 0.5rem 0;
 }
 
 // .link-bar {

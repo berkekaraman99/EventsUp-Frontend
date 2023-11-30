@@ -4,13 +4,14 @@ const path = require('node:path')
 
 function createWindow() {
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1280,
+    height: 720,
     webPreferences: {
       nodeIntegration: true,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
-      devTools: true
+      devTools: true,
+      webSecurity: false
     }
   })
 

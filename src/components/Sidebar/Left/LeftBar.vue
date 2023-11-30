@@ -1,8 +1,8 @@
 <template>
-  <div id="left-bar" class="bg-body-tertiary border-end shadow">
+  <div id="left-bar" class="border-end shadow">
     <!-- OFFCANVAS -->
     <div
-      class="offcanvas offcanvas-start overflow-y-auto"
+      class="offcanvas offcanvas-start overflow-y-auto shadow"
       tabindex="-1"
       id="offcanvasExample"
       aria-labelledby="offcanvasExampleLabel"
@@ -158,8 +158,7 @@ import { useCommunityStore } from '@/stores/community'
 import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import TabVue from '@/components/Sidebar/Left/TabVue.vue'
-
-const x = window.matchMedia('(max-width: 992px)')
+import { watch } from 'vue'
 
 const { t } = useI18n()
 
@@ -167,21 +166,15 @@ const authStore = useAuthStore()
 const { _user: user } = storeToRefs(authStore)
 
 const communityStore = useCommunityStore()
-communityStore.getAuthUserCommunities(user.value.id)
+if (user.value) {
+  communityStore.getAuthUserCommunities(user.value.id)
+}
+
+watch(user, async () => {
+  await communityStore.getAuthUserCommunities(user.value.id)
+})
+
 const { _authUserCommunities: communities } = storeToRefs(communityStore)
-
-// let barX = 0
-// let barY = 0
-
-// const moveBar = (event: MouseEvent) => {
-//   barX = (event.target as HTMLElement).getBoundingClientRect().left
-//   barY =
-//     ((event.target as HTMLElement).getBoundingClientRect().bottom -
-//       (event.target as HTMLElement).getBoundingClientRect().top) /
-//       2 +
-//     (event.target as HTMLElement).getBoundingClientRect().y -
-//     100
-// }
 </script>
 
 <style lang="scss" scoped>
@@ -190,24 +183,19 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
   position: fixed;
   bottom: 0;
   top: 0;
-  left: -224px;
+  left: -240px;
   border-radius: 8px;
   margin: 0.75rem 0.5rem;
-  z-index: 4;
-  width: 208px;
-
-  // @media (min-width: 992px) {
-  //   width: 208px;
-  // }
-  // @media (max-width: 991px) {
-  //   width: 64px;
-  // }
+  z-index: 99;
 }
 
 .offcanvas {
   max-width: 240px;
-  border-radius: 0.5rem;
-  margin: 0.75rem 0.5rem;
+  border-radius: 0 0.5em 0.5em 0;
+  margin: 0.75rem 0;
+  background-color: rgba($color: #ffffff, $alpha: 0.8);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
 }
 
 .explore {
@@ -246,15 +234,18 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
   padding: 0 4px;
   display: flex;
   border-radius: 0.5rem;
-  border: 1px solid white;
+  border: 1px solid rgba($color: #ffffff, $alpha: 0.67);
   text-decoration: none;
   color: rgb(27, 27, 27);
+  background-color: rgba($color: #ffffff, $alpha: 0.67);
 
   &:hover {
     &:not(a.router-link-exact-active) {
       color: var(--color-primary);
       box-shadow: inset 8px 0px 0px -2px grey;
       border: 1px solid grey;
+      border-radius: 0 0.5rem 0.5rem 0;
+      background-color: rgba($color: #ffffff, $alpha: 1);
     }
   }
 }
@@ -268,15 +259,18 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
   padding: 4px 4px;
   display: flex;
   border-radius: 0.5rem;
-
+  border: 1px solid rgba($color: #ffffff, $alpha: 0.67);
   text-decoration: none;
   color: rgb(27, 27, 27);
+  background-color: rgba($color: #ffffff, $alpha: 0.67);
 
   &:hover {
     &:not(a.router-link-exact-active) {
       color: var(--color-primary);
       box-shadow: inset 8px 0px 0px -2px grey;
       border: 1px solid grey;
+      border-radius: 0 0.5rem 0.5rem 0;
+      background-color: rgba($color: #ffffff, $alpha: 1);
     }
   }
 }
@@ -298,6 +292,7 @@ a.router-link-exact-active {
   font-weight: bold;
   box-shadow: inset 8px 0px 0px -2px var(--color-primary);
   border: 1px solid var(--color-primary);
+  border-radius: 0 0.5rem 0.5rem 0;
 }
 
 // .ctooltip {

@@ -45,7 +45,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 mt-3" v-else>
+        <div class="col-12 mt-3 mb-sm-0 mb-md-3 mb-lg-0" v-else>
           <div class="profile-header position-relative rounded-4 shadow-sm bg-white">
             <img
               v-if="currentUser.bannerImage != null"
@@ -418,6 +418,7 @@ export default defineComponent({
 #options {
   padding: 0px 0.75rem;
   margin: 16px 0px;
+  z-index: 9;
 
   & div {
     border-radius: 1rem;
@@ -437,6 +438,7 @@ export default defineComponent({
     right: 0;
     margin: 0;
     padding: 0;
+    border-top: 1px solid grey;
   }
 }
 .profile-details {

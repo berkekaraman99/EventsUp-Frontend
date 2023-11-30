@@ -38,10 +38,6 @@ export const useAuthStore = defineStore('authStore', {
           instance.defaults.headers['Authorization'] = `Bearer ${this.accessToken}`
           this.userIsAuthorized = true
 
-          // const getUserAfterLogin = await instance.get(
-          //   "/User/GetUserAfterLogin"
-          // );
-
           await this.getUserAfterLogin()
           console.log(this.user)
           this.statusCode = res.data.statusCode

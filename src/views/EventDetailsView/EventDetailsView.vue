@@ -10,56 +10,22 @@
             class="col-12 d-flex align-items-start justify-content-start flex-column flex-sm-row flex-lg-column"
           >
             <div
+              v-for="sidebarLink in sidebarLinks"
+              :key="sidebarLink.id"
               class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-              @click="changeComponent('EventAbout')"
-              :class="{ selected: component === 'EventAbout' }"
+              @click="changeComponent(sidebarLink.name)"
+              :class="{ selected: component === sidebarLink.name }"
             >
               <input
                 type="radio"
                 name="group-radio"
-                id="radio-1"
+                :id="sidebarLink.radio"
                 class="radio"
-                value="radio1"
-                :checked="component === 'EventAbout'"
+                :value="sidebarLink.value"
+                :checked="component === sidebarLink.name"
               />
-              <label for="radio-1">
-                <span class="fw-bold" id="about">{{ t('event.about') }}</span>
-              </label>
-            </div>
-
-            <div
-              class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-              @click="changeComponent('EventAttendees')"
-              :class="{ selected: component === 'EventAttendees' }"
-            >
-              <input
-                type="radio"
-                name="group-radio"
-                id="radio-2"
-                class="radio"
-                value="radio2"
-                :checked="component === 'EventAttendees'"
-              />
-              <label for="radio-2">
-                <span class="fw-bold" id="attendees">{{ t('event.attendees') }}</span>
-              </label>
-            </div>
-
-            <div
-              class="nav-link d-flex align-items-center justify-content-center justify-content-lg-start"
-              @click="changeComponent('EventComments')"
-              :class="{ selected: component === 'EventComments' }"
-            >
-              <input
-                type="radio"
-                name="group-radio"
-                id="radio-3"
-                class="radio"
-                value="radio3"
-                :checked="component === 'EventComments'"
-              />
-              <label for="radio-3">
-                <span class="fw-bold" id="event-comments">{{ t('event.comments') }}</span>
+              <label :for="sidebarLink.radio">
+                <span class="fw-bold" id="about">{{ t(sidebarLink.text) }}</span>
               </label>
             </div>
 
@@ -217,10 +183,35 @@ export default defineComponent({
     EventAbout,
     EventAttendees,
     EventComments,
-    EventSettings
+    EventSettings,
+    LoadingSpinner
   },
   setup(props) {
     const { t } = useI18n()
+
+    const sidebarLinks = [
+      {
+        id: 1,
+        radio: 'radio-1',
+        value: 'radio1',
+        name: 'EventAbout',
+        text: 'event.about'
+      },
+      {
+        id: 3,
+        radio: 'radio-3',
+        value: 'radio3',
+        name: 'EventAttendees',
+        text: 'event.attendees'
+      },
+      {
+        id: 2,
+        radio: 'radio-2',
+        value: 'radio2',
+        name: 'EventComments',
+        text: 'event.comments'
+      }
+    ]
 
     const eventStore = useEventStore()
     const loading = ref(true)
@@ -252,7 +243,8 @@ export default defineComponent({
       eventAttendees,
       updateComments,
       component,
-      changeComponent
+      changeComponent,
+      sidebarLinks
     }
   },
   provide() {
@@ -288,24 +280,28 @@ export default defineComponent({
   font-weight: 500;
   height: 40px;
   width: 100%;
-  // border-radius: 12px;
   transition: 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);
   padding: 0px 12px;
   margin: 3px 0px;
-  border-top-right-radius: 0.5rem;
-  border-bottom-right-radius: 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid white;
+  cursor: pointer;
 
   @media (max-width: 992px) {
     margin: 3px 4px;
   }
 
-  &:hover {
-    color: var(--color-primary);
-    box-shadow: inset 8px 0px 0px -2px grey;
+  @media (min-width: 993px) {
+    padding-left: 1.2rem;
   }
 
-  span {
-    margin-left: 6px;
+  &:hover {
+    &:not(.selected) {
+      color: var(--color-primary);
+      box-shadow: inset 8px 0px 0px -2px grey;
+      border: 1px solid grey;
+      border-radius: 0 0.5rem 0.5rem 0;
+    }
   }
 }
 
@@ -313,6 +309,8 @@ export default defineComponent({
   color: var(--color-primary);
   background-color: var(--color-secondary);
   box-shadow: inset 8px 0px 0px -2px var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: 0 0.5rem 0.5rem 0;
 }
 
 #eventAction {

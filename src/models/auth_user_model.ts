@@ -1,4 +1,4 @@
-export interface IAuthUser {
+export type IAuthUser = {
   bannerImage: string | null
   bio: string | null
   birthdayDate: string | null
