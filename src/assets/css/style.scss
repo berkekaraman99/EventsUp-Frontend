@@ -27,30 +27,28 @@ pre {
   border-radius: 7px;
 }
 
-::-webkit-scrollbar-corner {
-  background: rgba(0, 0, 0, 0.5);
-}
+// ::-webkit-scrollbar-corner {
+//   background: rgba(0, 0, 0, 0.5);
+// }
 
-* {
-  scrollbar-width: thin;
-  scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color);
-}
+// * {
+//   scrollbar-width: thin;
+//   scrollbar-color: var(--scroll-bar-color) var(--scroll-bar-bg-color);
+// }
+// *::-webkit-scrollbar {
+//   width: 12px;
+//   height: 12px;
+// }
 
-/* Works on Chrome, Edge, and Safari */
-*::-webkit-scrollbar {
-  width: 12px;
-  height: 12px;
-}
+// *::-webkit-scrollbar-track {
+//   background: var(--scroll-bar-bg-color);
+// }
 
-*::-webkit-scrollbar-track {
-  background: var(--scroll-bar-bg-color);
-}
-
-*::-webkit-scrollbar-thumb {
-  background-color: var(--scroll-bar-color);
-  border-radius: 20px;
-  border: 3px solid var(--scroll-bar-bg-color);
-}
+// *::-webkit-scrollbar-thumb {
+//   background-color: var(--scroll-bar-color);
+//   border-radius: 20px;
+//   border: 3px solid var(--scroll-bar-bg-color);
+// }
 
 body {
   background-color: rgb(236, 236, 236);
@@ -60,24 +58,20 @@ body * {
   font-family: 'Roboto', Arial, Helvetica, sans-serif;
 }
 
-.modal-content {
-  background-color: rgb(236, 236, 236);
-}
-
 .follow {
-  background-color: #24a0ed;
+  background-color: var(--color-primary);
   color: white;
   border-radius: 99px;
 
   &:hover {
-    background-color: #1b74ac;
+    background-color: var(--color-primary-hover);
     color: white;
   }
 }
 
 .carousel-control-prev,
 .carousel-control-next {
-  opacity: 0;
+  opacity: 0.1;
 
   &:hover {
     opacity: 1;

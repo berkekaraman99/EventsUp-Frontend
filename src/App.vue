@@ -30,9 +30,6 @@
             'container-fluid': $route.name === 'auth' || $route.name === 'forgetpassword',
             'container-lg': $route.name !== 'auth' && $route.name !== 'forgetpassword'
           }"
-          :style="{
-            'padding-top': $route.name === 'auth' || $route.name === 'forgetpassword' ? '0' : '80px'
-          }"
         >
           <div class="row overflow-hidden h-100">
             <!-- MAIN - ROUTER.VIEW -->
@@ -68,22 +65,28 @@
   </div>
 </template>
 
-<script lang="ts">
-import { defineComponent } from 'vue'
+<script setup lang="ts">
+import { defineComponent, watchEffect } from 'vue'
 import SidebarRight from './components/Sidebar/Right/SidebarRight.vue'
 import TheHeader from './components/header/TheHeader.vue'
 import LeftBar from '@/components/Sidebar/Left/LeftBar.vue'
 import BaseApp from './components/UI/BaseApp.vue'
 
-export default defineComponent({
-  components: {
-    TheHeader,
-    SidebarRight,
-    LeftBar,
-    BaseApp
-  },
-  setup() {
-    return {}
+const body = document.querySelector('body')
+
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches }) => {
+  if (matches) {
+    body?.setAttribute('data-bs-theme', 'dark')
+  } else {
+    body?.setAttribute('data-bs-theme', 'light')
+  }
+})
+
+watchEffect(() => {
+  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+    body?.setAttribute('data-bs-theme', 'dark')
+  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+    body?.setAttribute('data-bs-theme', 'light')
   }
 })
 </script>

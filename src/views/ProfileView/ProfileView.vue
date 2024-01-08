@@ -247,7 +247,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div v-if="!loading">
       <Transition name="scaleInOut" mode="out-in">
         <component :is="component" />
       </Transition>
@@ -412,6 +412,7 @@ label span {
   z-index: 1;
   position: relative;
   font-size: 1.25rem;
+  cursor: pointer;
 
   @media (min-width: 768px) and (max-width: 992px) {
     font-size: 0.9rem;
@@ -422,7 +423,7 @@ label span {
   }
 
   &:hover {
-    color: #111;
+    // color: #111;
     letter-spacing: 1px;
   }
 }
@@ -460,6 +461,7 @@ label span {
 
 #suggestion {
   position: absolute;
+  bottom: 2rem;
   right: 2rem;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12 my-4 px-2">
+  <div class="col-12 my-4 px-0 px-sm-2" style="min-width: 359px">
     <div class="card rounded-4 shadow-sm overflow-hidden">
       <div class="card-header py-3">
         <div class="d-flex justify-content-between">
@@ -25,7 +25,7 @@
             <div class="mx-3">
               <RouterLink
                 :to="{ name: 'userprofile', params: { id: post.user.id } }"
-                class="text-decoration-none tw-text-blue-800"
+                class="text-decoration-none"
               >
                 <div class="fw-bold">{{ post.user.fullName }}</div>
               </RouterLink>
@@ -58,7 +58,7 @@
         <div :id="`carousel${post.id}`" class="carousel slide" v-if="post.files.length">
           <div class="carousel-inner">
             <div
-              class="carousel-item bg-black overflow-hidden rounded-3"
+              class="carousel-item overflow-hidden rounded-3"
               :class="{ active: post.files[0] === file }"
               style="transition: 0.35s ease-in-out; max-height: 400px"
               v-for="file in post.files"
@@ -88,7 +88,7 @@
             data-bs-slide="prev"
             v-if="post.files.length !== 1"
           >
-            <i class="fa-solid fa-circle-chevron-left fa-lg"></i>
+            <i class="fa-solid fa-circle-chevron-left fa-lg text-body"></i>
             <span class="visually-hidden">Previous</span>
           </button>
           <button
@@ -98,7 +98,7 @@
             data-bs-slide="next"
             v-if="post.files.length !== 1"
           >
-            <i class="fa-solid fa-circle-chevron-right fa-lg"></i>
+            <i class="fa-solid fa-circle-chevron-right fa-lg text-body"></i>
             <span class="visually-hidden">Next</span>
           </button>
         </div>

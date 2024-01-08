@@ -46,17 +46,17 @@
           </div>
         </div>
         <div class="col-12 mt-3 mb-sm-0 mb-md-3 mb-lg-0" v-else>
-          <div class="profile-header position-relative rounded-4 shadow-sm bg-white">
+          <div class="profile-header position-relative card rounded-4 shadow-sm">
             <img
               v-if="currentUser.bannerImage != null"
               class="profile-banner rounded-top-4"
               :src="currentUser.bannerImage"
               alt="banner"
             />
-            <div v-else class="profile-banner rounded-top-4 tw-bg-slate-100"></div>
+            <div v-else class="profile-banner rounded-top-4 bg-secondary"></div>
 
             <img
-              class="profile-image shadow"
+              class="profile-image bg-body shadow"
               :src="currentUser.profileImage"
               v-if="currentUser.profileImage != null"
             />
@@ -462,11 +462,11 @@ export default defineComponent({
   margin: 0 6px;
   z-index: 1;
   position: relative;
-}
+  cursor: pointer;
 
-.category:hover {
-  color: #111;
-  letter-spacing: 1px;
+  &:hover {
+    letter-spacing: 1px;
+  }
 }
 
 .selected {

@@ -13,7 +13,7 @@
             <TabVue>
               <template v-slot:icon>
                 <span
-                  class="pointer rounded-3 p-2 tw-transition tw-ease-in-out tw-duration-350 hover:tw-bg-slate-200"
+                  class="pointer rounded-3 p-2 tw-transition tw-ease-in-out tw-duration-350 bars"
                   data-bs-toggle="offcanvas"
                   data-bs-target="#offcanvasExample"
                   aria-controls="offcanvasExample"
@@ -31,7 +31,11 @@
               transform: 'translateY(' + barY + 'px)'
             }"
           ></div> -->
-          <RouterLink :to="{ name: 'home' }" class="sidebar-link" :data-text="t('leftbar.feed')">
+          <RouterLink
+            :to="{ name: 'home' }"
+            class="text-body sidebar-link bg-body-tertiary border"
+            :data-text="t('leftbar.feed')"
+          >
             <TabVue
               data-bs-toggle="offcanvas"
               data-bs-target="#offcanvasExample"
@@ -45,7 +49,7 @@
           </RouterLink>
           <RouterLink
             :to="{ name: 'events' }"
-            class="sidebar-link"
+            class="text-body sidebar-link bg-body-tertiary border"
             :data-text="t('leftbar.myevents')"
           >
             <TabVue
@@ -61,7 +65,7 @@
           </RouterLink>
           <RouterLink
             :to="{ name: 'communities' }"
-            class="sidebar-link"
+            class="text-body sidebar-link bg-body-tertiary border"
             :data-text="t('leftbar.communities')"
           >
             <TabVue
@@ -77,7 +81,7 @@
           </RouterLink>
           <RouterLink
             :to="{ name: 'search' }"
-            class="sidebar-link"
+            class="text-body sidebar-link bg-body-tertiary border"
             :data-text="t('leftbar.search')"
           >
             <TabVue
@@ -92,7 +96,7 @@
             </TabVue>
           </RouterLink>
         </div>
-        <div class="tw-bg-slate-200 w-100 text-center py-2 mb-1" v-if="communities.length > 0">
+        <div class="bg-body-secondary w-100 text-center py-2 mb-1" v-if="communities.length > 0">
           <i class="fa-solid fa-people-group"></i>
           <span class="ms-2 fw-bold">{{ t('leftbar.communities') }}</span>
         </div>
@@ -119,7 +123,7 @@
               name: 'communitydetails',
               params: { id: community.id }
             }"
-            class="d-flex align-items-center text-decoration-none text-black community-link"
+            class="d-flex align-items-center text-body community-link bg-body-tertiary border"
             :data-text="community.title"
           >
             <TabVue
@@ -192,8 +196,8 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
 .offcanvas {
   max-width: 240px;
   border-radius: 0 0.5em 0.5em 0;
-  margin: 0.75rem 0;
-  background-color: rgba($color: #ffffff, $alpha: 0.8);
+  // margin: 0.75rem 0;
+  // background-color: rgba($color: #ffffff, $alpha: 0.8);
   -webkit-backdrop-filter: blur(20px);
   backdrop-filter: blur(20px);
 }
@@ -234,18 +238,18 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
   padding: 0 4px;
   display: flex;
   border-radius: 0.5rem;
-  border: 1px solid rgba($color: #ffffff, $alpha: 0.67);
+  // border: 1px solid rgba($color: #ffffff, $alpha: 0.67);
   text-decoration: none;
-  color: rgb(27, 27, 27);
-  background-color: rgba($color: #ffffff, $alpha: 0.67);
+  // color: rgb(27, 27, 27);
+  // background-color: rgba($color: #ffffff, $alpha: 0.67);
 
   &:hover {
     &:not(a.router-link-exact-active) {
-      color: var(--color-primary);
+      color: var(--color-primary) !important;
       box-shadow: inset 8px 0px 0px -2px grey;
       border: 1px solid grey;
       border-radius: 0 0.5rem 0.5rem 0;
-      background-color: rgba($color: #ffffff, $alpha: 1);
+      // background-color: rgba($color: #ffffff, $alpha: 1);
     }
   }
 }
@@ -259,18 +263,18 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
   padding: 4px 4px;
   display: flex;
   border-radius: 0.5rem;
-  border: 1px solid rgba($color: #ffffff, $alpha: 0.67);
+  // border: 1px solid rgba($color: #ffffff, $alpha: 0.67);
   text-decoration: none;
-  color: rgb(27, 27, 27);
-  background-color: rgba($color: #ffffff, $alpha: 0.67);
+  // color: rgb(27, 27, 27);
+  // background-color: rgba($color: #ffffff, $alpha: 0.67);
 
   &:hover {
     &:not(a.router-link-exact-active) {
-      color: var(--color-primary);
+      color: var(--color-primary) !important;
       box-shadow: inset 8px 0px 0px -2px grey;
       border: 1px solid grey;
       border-radius: 0 0.5rem 0.5rem 0;
-      background-color: rgba($color: #ffffff, $alpha: 1);
+      // background-color: rgba($color: #ffffff, $alpha: 1);
     }
   }
 }
@@ -287,7 +291,7 @@ a {
 }
 
 a.router-link-exact-active {
-  color: var(--color-primary);
+  color: var(--color-primary) !important;
   background-color: #f5f5f5;
   font-weight: bold;
   box-shadow: inset 8px 0px 0px -2px var(--color-primary);

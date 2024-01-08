@@ -73,7 +73,7 @@
                         :to="{ name: 'userprofile', params: { id: user.id } }"
                         class="text-decoration-none"
                       >
-                        <div class="fw-bold text-black" data-bs-dismiss="modal">
+                        <div class="fw-bold text-body" data-bs-dismiss="modal">
                           {{ user.fullName }}
                         </div>
                       </RouterLink>

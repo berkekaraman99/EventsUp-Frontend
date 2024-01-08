@@ -46,7 +46,7 @@
                 style="object-fit: cover; height: 48px; width: 48px"
               />
               <div>
-                <div class="text-black text-shadow-e">
+                <div class="text-body">
                   <div class="fw-medium">{{ community.title }}</div>
                   <div>
                     <i class="fa-solid fa-users fa-sm"></i> {{ community.participiantsCount }}
@@ -83,11 +83,6 @@ const { _communityList: communityList } = storeToRefs(communityStore)
 <style scoped lang="scss">
 .community-suggest {
   transition: 0.3s ease;
-  background-color: white;
-
-  &:hover {
-    background-color: #f1f1f1;
-  }
 }
 
 .more {
@@ -111,9 +106,5 @@ const { _communityList: communityList } = storeToRefs(communityStore)
   top: 0;
   right: 0;
   bottom: 0;
-}
-
-.text-shadow-e {
-  text-shadow: 0 0 5px white;
 }
 </style>

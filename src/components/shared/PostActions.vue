@@ -10,30 +10,57 @@
         class="btn d-sm-block d-md-flex align-items-center justify-content-center flex-column d-lg-block"
         @click="post.isInteracted == null ? null : removeInteraction(post)"
       >
-        <div v-if="post.isInteracted == null">
-          <i class="fa-regular fa-face-smile fa-lg my-3"></i>
-          <div>{{ t('feed.interact') }}</div>
-        </div>
-        <div v-else-if="post.isInteracted.interaction === 0">
-          <img src="@/assets/images/interactions/ic_like.png" alt="Like" height="32" />
-          <div>{{ t('feed.liked') }}</div>
-        </div>
-        <div v-else-if="post.isInteracted.interaction === 1">
-          <img src="@/assets/images/interactions/ic_celebrate.png" alt="Like" height="32" />
-          <div>{{ t('feed.congratulations') }}</div>
-        </div>
-        <div v-else-if="post.isInteracted.interaction === 2">
-          <img src="@/assets/images/interactions/ic_support.png" alt="Like" height="32" />
-          <div>{{ t('feed.supportive') }}</div>
-        </div>
-        <div v-else-if="post.isInteracted.interaction === 3">
-          <img src="@/assets/images/interactions/ic_insight.png" alt="Like" height="32" />
-          <div>{{ t('feed.insightfull') }}</div>
-        </div>
-        <div v-else-if="post.isInteracted.interaction === 4">
-          <img src="@/assets/images/interactions/ic_dislike.png" alt="Like" height="32" />
-          <div>{{ t('feed.disliked') }}</div>
-        </div>
+        <Transition name="emoteAnim" mode="out-in">
+          <div v-if="post.isInteracted == null">
+            <i class="fa-regular fa-face-smile fa-lg my-3"></i>
+            <div>{{ t('feed.interact') }}</div>
+          </div>
+          <div v-else-if="post.isInteracted.interaction === 0">
+            <img
+              class="emote"
+              src="@/assets/images/interactions/ic_like.png"
+              alt="Like"
+              height="32"
+            />
+            <div>{{ t('feed.liked') }}</div>
+          </div>
+          <div v-else-if="post.isInteracted.interaction === 1">
+            <img
+              class="emote"
+              src="@/assets/images/interactions/ic_celebrate.png"
+              alt="Like"
+              height="32"
+            />
+            <div>{{ t('feed.congratulations') }}</div>
+          </div>
+          <div v-else-if="post.isInteracted.interaction === 2">
+            <img
+              class="emote"
+              src="@/assets/images/interactions/ic_support.png"
+              alt="Like"
+              height="32"
+            />
+            <div>{{ t('feed.supportive') }}</div>
+          </div>
+          <div v-else-if="post.isInteracted.interaction === 3">
+            <img
+              class="emote"
+              src="@/assets/images/interactions/ic_insight.png"
+              alt="Like"
+              height="32"
+            />
+            <div>{{ t('feed.insightfull') }}</div>
+          </div>
+          <div v-else-if="post.isInteracted.interaction === 4">
+            <img
+              class="emote"
+              src="@/assets/images/interactions/ic_dislike.png"
+              alt="Like"
+              height="32"
+            />
+            <div>{{ t('feed.disliked') }}</div>
+          </div>
+        </Transition>
       </button>
       <ul class="dropdown-menu shadow-sm horizontal p-0">
         <li>
@@ -98,10 +125,10 @@
         </li>
       </ul>
     </div>
-    <div class="col-6 col-sm-6 col-md-3 my-1">
+    <div class="col-6 col-sm-6 col-md-3 my-1" v-if="$route.name !== 'postcomments'">
       <RouterLink
         :to="{ name: 'postcomments', params: { id: post.id } }"
-        class="text-decoration-none text-black d-flex align-items-center justify-content-center"
+        class="text-decoration-none text-body d-flex align-items-center justify-content-center"
       >
         <button
           id="comments"
@@ -123,21 +150,15 @@
     </div>
     <div class="col-6 col-sm-6 col-md-3 my-1 d-flex align-content-center justify-content-center">
       <button
-        v-if="post.isSaved"
         id="save"
         class="btn d-sm-block d-md-flex align-items-center justify-content-center flex-column d-lg-block"
-      >
-        <i class="fa-solid fa-bookmark fa-lg my-3"></i>
-        <div>{{ t('feed.saved') }}</div>
-      </button>
-      <button
-        v-else
         @click="savePost(post)"
-        id="save"
-        class="btn d-sm-block d-md-flex align-items-center justify-content-center flex-column d-lg-block"
       >
-        <i class="fa-regular fa-bookmark fa-lg my-3"></i>
-        <div>{{ t('feed.save') }}</div>
+        <Transition name="emoteFade" mode="out-in">
+          <i v-if="post.isSaved" class="fa-solid fa-bookmark fa-lg my-3"></i>
+          <i v-else class="fa-regular fa-bookmark fa-lg my-3"></i>
+        </Transition>
+        <div>{{ post.isSaved ? t('feed.saved') : t('feed.save') }}</div>
       </button>
     </div>
   </div>
@@ -227,7 +248,7 @@ const removeInteraction = async (post: IPostModel | IFeedPost) => {
 
 const savePost = async (post: IPostModel | IFeedPost) => {
   await postStore.savePost(post.id).then(() => {
-    post.isSaved = true
+    post.isSaved = !post.isSaved
   })
 }
 </script>
@@ -253,5 +274,31 @@ const savePost = async (post: IPostModel | IFeedPost) => {
     transform: scale(110%) translateY(-0.5rem);
     box-shadow: 0px 0px 0.5rem -2px black;
   }
+}
+
+.emote {
+  filter: drop-shadow(1px 1px 1px black);
+}
+
+.emoteAnim-enter-active,
+.emoteAnim-leave-active {
+  transition: all 0.3s ease;
+  transform: scale(100%);
+}
+
+.emoteAnim-enter-from,
+.emoteAnim-leave-to {
+  opacity: 0;
+  transform: scale(50%);
+}
+
+.emoteFade-enter-active,
+.emoteFade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.emoteFade-enter-from,
+.emoteFade-leave-to {
+  opacity: 0;
 }
 </style>
