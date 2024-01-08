@@ -98,6 +98,8 @@ export const useAuthStore = defineStore('authStore', {
         }, 3000)
       } catch (error: any) {
         console.log(error)
+        this.statusCode = 0
+        console.log(this.statusCode)
       }
     },
 

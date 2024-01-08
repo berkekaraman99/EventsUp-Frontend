@@ -22,7 +22,7 @@
               :classes="{
                 outer: 'mx-auto',
                 wrapper: 'mx-auto',
-                steps: 'border-0 rounded-4 bg-white'
+                steps: 'border-0 rounded-4 bg-body-tertiary shadow-none'
               }"
             >
               <FormKit type="step" name="Step One">
@@ -125,8 +125,19 @@
           </div>
 
           <!-- ALTERNATIVE SIGNUPS -->
-          <div class="alternative-signups my-4">
-            <div class="btn btn-light w-75 shadow-sm mt-3 rounded-5 hover:tw-bg-slate-50">
+          <div class="alternative-logins my-4">
+            <div
+              class="shadow-sm mt-3 rounded-3 w-100 d-flex align-items-center justify-content-center tw-bg-black hover:tw-bg-slate-900 pointer py-2"
+            >
+              <i class="fa-brands fa-apple fa-lg me-2"></i>
+              <span class="fw-bold">{{ t('login.apple') }}</span>
+            </div>
+
+            <div
+              class="d-flex align-items-center justify-content-center shadow-sm rounded-3 my-3 w-100 tw-bg-white hover:tw-bg-slate-200 pointer py-2"
+              :disabled="!isReady"
+              @click="() => login()"
+            >
               <img
                 src="@/assets/images/logos/ic_google.png"
                 height="16"
@@ -134,12 +145,12 @@
                 alt="Google"
                 class="me-2"
               />
-              <span class="fw-bold">{{ t('signup.google') }}</span>
+              <span class="fw-bold text-dark">{{ t('login.google') }}</span>
             </div>
-            <div class="btn btn-dark w-75 shadow-sm mt-3 rounded-5">
-              <i class="fa-brands fa-apple fa-lg me-2"></i>
-              <span class="fw-bold">{{ t('signup.apple') }}</span>
-            </div>
+
+            <!-- <div class="d-flex align-items-center justify-content-center w-100">
+              <GoogleLogin class="my-3" :callback="callback" />
+            </div> -->
           </div>
 
           <!-- <div
@@ -163,6 +174,11 @@ import type { ISignUpModel } from '@/models/signup_model'
 import { storeToRefs } from 'pinia'
 import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
+import {
+  useTokenClient,
+  type AuthCodeFlowSuccessResponse,
+  type AuthCodeFlowErrorResponse
+} from 'vue3-google-signin'
 
 const { t } = useI18n()
 
@@ -246,6 +262,20 @@ const handleSignUp = async () => {
     }
   }
 }
+
+const handleOnSuccess = (response: AuthCodeFlowSuccessResponse) => {
+  console.log('Access Token: ', response.access_token)
+}
+
+const handleOnError = (errorResponse: AuthCodeFlowErrorResponse) => {
+  console.log('Error: ', errorResponse)
+}
+
+const { isReady, login } = useTokenClient({
+  onSuccess: handleOnSuccess,
+  onError: handleOnError
+  // other options
+})
 
 const handleCheckbox = () => {
   isAccepted.value = !isAccepted.value

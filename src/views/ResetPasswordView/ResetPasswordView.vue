@@ -15,7 +15,7 @@
               :classes="{
                 outer: 'mx-auto',
                 wrapper: 'mx-auto',
-                steps: 'bg-light border-0 rounded-5'
+                steps: 'bg-body border rounded-3'
               }"
             >
               <FormKit type="step" name="Enter email">
@@ -194,7 +194,7 @@
           </FormKit>
         </div>
       </div>
-      <div id="back" class="pointer" @click="router.back()">
+      <div id="back" class="pointer bg-body border rounded-3" @click="router.back()">
         <div class="px-3">
           <i class="fa-solid fa-angle-left"></i>
           <span class="d-none d-sm-none d-md-inline-block ps-2">{{
@@ -328,11 +328,11 @@ input[type='number'] {
 }
 
 #back {
-  background-color: rgba(237, 237, 237, 0.85);
+  // background-color: rgba(237, 237, 237, 0.85);
   height: 40px;
   width: fit-content;
-  border: 1px solid rgba(237, 237, 237, 0.85);
-  border-radius: 12px;
+  // border: 1px solid rgba(237, 237, 237, 0.85);
+  // border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
