@@ -13,7 +13,7 @@
             :classes="{
               outer: 'mx-auto',
               wrapper: 'mx-auto',
-              steps: 'border-0 rounded-4 bg-white'
+              steps: 'border-0 rounded-4 bg-body-tertiary'
             }"
           >
             <FormKit type="step" name="Step One">

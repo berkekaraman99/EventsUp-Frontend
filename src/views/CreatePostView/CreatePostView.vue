@@ -15,7 +15,7 @@
             }
           }"
           :classes="{
-            form: 'mx-auto tw-p-8 border-0 rounded-4 bg-white shadow-sm'
+            form: 'mx-auto tw-p-8 border-0 rounded-4 bg-body-tertiary shadow'
           }"
           style="max-width: 512px"
         >

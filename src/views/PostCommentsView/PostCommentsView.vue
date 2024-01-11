@@ -138,7 +138,7 @@
           </div>
         </div>
         <div class="col-12 col-sm-12 col-md-12 col-lg-6 my-4 px-0 px-sm-2">
-          <div class="card rounded-4 shadow-sm overflow-hidden">
+          <div class="card rounded-4 shadow-sm">
             <div class="card-header"><h1>Yorumunuz</h1></div>
             <div class="card-body">
               <div class="d-flex align-items-center mb-3">
@@ -168,13 +168,21 @@
                   class="post-profile-image me-4"
                   v-else
                 />
+                <div class="p-2" @click="handleEmoji()">
+                  <i class="fa-regular fa-face-smile fa-lg pointer"></i>
+                </div>
                 <textarea
                   class="form-control rounded-3 px-2"
                   id="message"
-                  rows="4"
+                  rows="1"
                   placeholder="Your message"
                   v-model="message"
                 ></textarea>
+                <VuemojiPicker
+                  class="position-fixed translate-middle-x z-3 start-50 bottom-0 rounded-4 overflow-hidden border"
+                  @emoji-click="handleEmojiClick"
+                  v-if="showEmoji"
+                />
               </div>
               <div class="d-flex justify-content-end">
                 <FormKit
@@ -189,7 +197,13 @@
               </div>
             </div>
           </div>
-          <h4 class="col-12 mt-4 mx-3">Yorumlar</h4>
+          <div class="col-12 mt-5 px-3 d-flex align-items-center justify-content-between">
+            <h4>Yorumlar</h4>
+            <div @click="changeOrder()">
+              <i class="fa-solid fa-arrow-up-wide-short fa-lg pointer" v-if="isReversed"></i>
+              <i class="fa-solid fa-arrow-down-wide-short fa-lg pointer" v-else></i>
+            </div>
+          </div>
 
           <div>
             <TransitionGroup
@@ -233,6 +247,7 @@ import { storeToRefs } from 'pinia'
 import { usePostStore } from '@/stores/post'
 import CommentVue from '@/components/shared/CommentVue.vue'
 import PostActions from '@/components/shared/PostActions.vue'
+import { VuemojiPicker, type EmojiClickEventDetail } from 'vuemoji-picker'
 
 const props = defineProps({
   id: {
@@ -266,6 +281,24 @@ const leaveFeed: any = (el: HTMLElement) => {
     delay: 0.1 * index
   })
 }
+
+const isReversed = ref(false)
+const changeOrder = () => {
+  isReversed.value = !isReversed.value
+  postStore.postComments.reverse()
+}
+
+const showEmoji = ref(false)
+const handleEmoji = () => {
+  showEmoji.value = !showEmoji.value
+}
+
+const handleEmojiClick = (detail: EmojiClickEventDetail) => {
+  console.log(detail)
+
+  message.value += detail.unicode
+}
+
 const loading = ref(true)
 const changeLoadingState = () => {
   loading.value = !loading.value
