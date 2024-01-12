@@ -283,9 +283,9 @@ const leaveFeed: any = (el: HTMLElement) => {
 }
 
 const isReversed = ref(false)
-const changeOrder = () => {
+const changeOrder = async () => {
   isReversed.value = !isReversed.value
-  postStore.postComments.reverse()
+  await postStore.getPostComments(props.id, isReversed.value ? 'TimeAscending' : 'TimeDescending')
 }
 
 const showEmoji = ref(false)
@@ -333,7 +333,7 @@ const createComment = async () => {
     })
     .then(async () => {
       changePostingState()
-      await postStore.getPostComments(props.id)
+      // await postStore.getPostComments(props.id)
       setTimeout(() => {
         postStore.$patch({
           statusCode: 0

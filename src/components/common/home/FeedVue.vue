@@ -90,8 +90,6 @@ postStore.getPostFeed(skip.value.toString()).then(changeLoadingState)
 const { _feed: postFeed } = storeToRefs(postStore)
 
 onBeforeUnmount(() => {
-  console.log('UnMounted')
-
   postStore.$patch({
     feed: []
   })

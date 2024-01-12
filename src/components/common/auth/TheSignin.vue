@@ -17,7 +17,7 @@
             {{ t('login.header') }}
           </p>
 
-          <div class="shadow-sm p-4">
+          <div class="shadow-sm p-4 bg-body rounded-3">
             <FormKit
               type="form"
               @submit="handleLogin"
@@ -77,7 +77,10 @@
                   :classes="{ decorator: 'rounded-1' }"
                   @click="toggleRememberMe"
                 />
-                <RouterLink :to="{ name: 'forgetpassword' }" class="text-decoration-none">
+                <RouterLink
+                  :to="{ name: 'forgetpassword' }"
+                  class="text-decoration-none text-primary tw-text-sm"
+                >
                   <span>{{ t('login.forgotpassword') }}</span>
                 </RouterLink>
               </div>
@@ -114,14 +117,14 @@
           <!-- ALTERNATIVE LOGINS -->
           <div class="alternative-logins my-4">
             <div
-              class="shadow-sm mt-3 rounded-3 w-100 d-flex align-items-center justify-content-center tw-bg-black hover:tw-bg-slate-900 pointer py-2"
+              class="shadow-sm mt-3 rounded-3 w-100 d-flex align-items-center justify-content-center tw-bg-black hover:tw-bg-slate-900 pointer py-2 text-white"
             >
               <i class="fa-brands fa-apple fa-lg me-2"></i>
               <span class="fw-bold">{{ t('login.apple') }}</span>
             </div>
 
             <div
-              class="d-flex align-items-center justify-content-center shadow-sm rounded-3 my-3 w-100 tw-bg-white hover:tw-bg-slate-200 pointer py-2"
+              class="d-flex align-items-center justify-content-center shadow-sm rounded-3 my-3 w-100 tw-bg-white hover:tw-bg-slate-200 pointer py-2 text-black"
               :disabled="!isReady"
               @click="() => login()"
             >
@@ -222,20 +225,28 @@ const handleLogin = async () => {
     try {
       await authStore.login(loginObject).then(() => {
         console.log(statusCode.value)
-        if (statusCode.value === 10401) {
-          header.value = 'Giriş Başarısız'
-          content.value = 'Kullanıcı adı veya şifre hatalı.'
-          handleToast()
-        } else if (statusCode.value === 200) {
-          if (isRemembered.value || localStorage.getItem('rememberMe') == null) {
-            localStorage.setItem('rememberMe', JSON.stringify(loginObject))
-          }
-          header.value = 'Giriş Başarılı'
-          content.value = 'Ana sayfaya yönlendiriliyorsunuz.'
-          handleToast()
-          setTimeout(() => {
-            router.push({ name: 'home' })
-          }, 2500)
+        switch (statusCode.value) {
+          case 10401:
+            header.value = 'Giriş Başarısız'
+            content.value = 'Kullanıcı adı veya şifre hatalı.'
+            handleToast()
+            break
+          case 200:
+            if (isRemembered.value || localStorage.getItem('rememberMe') == null) {
+              localStorage.setItem('rememberMe', JSON.stringify(loginObject))
+            }
+            header.value = 'Giriş Başarılı'
+            content.value = 'Ana sayfaya yönlendiriliyorsunuz.'
+            handleToast()
+            setTimeout(() => {
+              router.push({ name: 'home' })
+            }, 2500)
+            break
+          default:
+            header.value = 'Giriş Başarısız'
+            content.value = 'Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz.'
+            handleToast()
+            break
         }
         changeLoadingState()
       })

@@ -2,7 +2,7 @@
   <div>
     <div class="col-12 col-sm-12 col-md-10 offset-md-1">
       <Transition appear @before-enter="beforeEnterTitle" @enter="enterTitle">
-        <h1 class="fw-bold display-6">{{ t('community.header') }}</h1>
+        <h1 class="fw-bold display-6 px-3">{{ t('community.header') }}</h1>
       </Transition>
     </div>
 

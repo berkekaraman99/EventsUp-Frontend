@@ -1,4 +1,5 @@
 import { useAuthStore } from '@/stores/auth'
+import { isAccessTokenExpired } from '@/utils/token_helper'
 import { storeToRefs } from 'pinia'
 import {
   createRouter,
@@ -129,9 +130,13 @@ const router = createRouter({
 router.beforeEach(
   (to: RouteLocationNormalized, from: RouteLocationNormalized, next: NavigationGuardNext) => {
     const authStore = useAuthStore()
-    const { _user: user } = storeToRefs(authStore)
+    const { _user: user, _accessToken: accessToken } = storeToRefs(authStore)
     const authNotRequiredRoutes: string[] = ['auth', 'forgetpassword']
 
+    const isExpired = isAccessTokenExpired(accessToken.value)
+    if (isExpired) {
+      authStore.removeCredentials()
+    }
     if (user.value === null && !authNotRequiredRoutes.includes(to.name?.toString() ?? '')) {
       next({ name: 'auth' })
     } else if (user.value !== null && authNotRequiredRoutes.includes(to.name?.toString() ?? '')) {

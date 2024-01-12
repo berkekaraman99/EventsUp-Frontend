@@ -59,16 +59,16 @@ user.
               aria-expanded="false"
             ></i>
             <ul class="dropdown-menu dropdown-menu-end">
-              <li class="dropdown-item" @click="deletePost(post)" v-if="post.user.id === user.id">
-                <button class="btn w-100 text-danger">
-                  <i class="fa-regular fa-trash-can"></i>
-                  Sil
-                </button>
+              <li
+                class="dropdown-item text-danger"
+                @click="deletePost(post)"
+                v-if="post.user.id === user.id"
+              >
+                <i class="fa-regular fa-trash-can"></i>
+                <span class="mx-2">Sil</span>
               </li>
-              <li class="dropdown-item">
-                <button class="btn w-100 text-danger">
-                  <i class="fa-regular fa-flag"></i> Raporla
-                </button>
+              <li class="dropdown-item text-danger">
+                <i class="fa-regular fa-flag"></i> <span class="mx-2">Raporla</span>
               </li>
             </ul>
           </div>

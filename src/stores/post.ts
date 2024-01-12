@@ -35,11 +35,11 @@ export const usePostStore = defineStore('postStore', {
     async getPostFeed(skip: string) {
       try {
         const res = await instance.get(`/Post/feed?take=10&skip=${skip}`)
-        console.log(res.data)
+        // console.log(res.data)
         this.feed = res.data.data
         // res.data.data.forEach((element: IFeedPost) => this.feed.push(element));
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
@@ -52,52 +52,56 @@ export const usePostStore = defineStore('postStore', {
         //   this.userPosts.push(element)
         // );
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
     async savePost(id: string) {
-      const res = await instance.post(`/post/save/${id}`, {})
-      console.log(res.data)
+      try {
+        const res = await instance.post(`/post/save/${id}`, {})
+        // console.log(res.data)
+      } catch (error: any) {
+        console.error(error.message)
+      }
     },
 
     async getSavedPosts() {
       try {
         const res = await instance.get('/post/saved-posts')
-        console.log(res.data)
+        // console.log(res.data)
         this.savedPosts = res.data.data
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
     async getPostById(id: string) {
       try {
         const res = await instance.get(`/Post/GetPost?id=${id}`)
-        console.log(res.data)
+        // console.log(res.data)
         this.post = res.data.data
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
-    async getPostComments(id: string) {
+    async getPostComments(id: string, sort: string = 'TimeDescending') {
       try {
-        const res = await instance.get(`/post/${id}/comments?skip=0&take=10`)
-        console.log(res.data.data)
+        const res = await instance.get(`/post/${id}/comments?skip=0&take=10&filter=${sort}`)
+        // console.log(res.data.data)
         this.postComments = res.data.data
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
     async getCommentReplies(commentId: string) {
       try {
         const res = await instance.get(`/post/comment/${commentId}/replies?skip=0&take=10`)
-        console.log(res.data)
+        // console.log(res.data)
         this.commentReplies = res.data.data
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
@@ -106,66 +110,64 @@ export const usePostStore = defineStore('postStore', {
         const res = await instance.get(
           `/post/comment/${commentId}/interaction?type=${interactionType}`
         )
-        console.log(res.data)
+        // console.log(res.data)
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
     async getCommunityPosts(communityId: string) {
       try {
         const res = await instance.get(`/Post/community/${communityId}`)
-        console.log(res.data)
-
+        // console.log(res.data)
         this.communityPosts = res.data.data
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
     async createPost(postObject: object) {
       try {
         const res = await instance.post('/post/create', postObject)
-        console.log(res)
+        // console.log(res)
         this.statusCode = res.data.statusCode
       } catch (error: any) {
-        console.log(error.data)
+        console.error(error.message)
       }
     },
 
     async deletePost({ postId, userId }: any) {
       try {
         const res = await instance.post('/post/delete', { postId })
-        // await context.dispatch("getUserPosts");
-        await usePostStore().getUserPosts(userId)
-        console.log(res.data)
+        // await usePostStore().getUserPosts(userId)
+        this.userPosts = this.userPosts.filter((el) => el.id !== postId)
+        // console.log(res.data)
       } catch (error: any) {
-        console.log(error.response.data)
+        console.error(error.message)
       }
     },
 
     async createComment(message: ICreateComment) {
       try {
         const res = await instance.post('/Post/Comment', message)
-        console.log(res.data)
+        // console.log(res.data)
+        this.postComments.unshift(res.data.data)
         this.statusCode = res.data.statusCode
         setTimeout(() => {
           this.statusCode = 0
         }, 3000)
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
     async deleteComment({ commentId, postId }: any) {
       try {
         const res = await instance.post(`/post/comment/delete/${commentId}`)
-        console.log(res.data)
-        if (res.data.statusCode === 200) {
-          await usePostStore().getPostComments(postId)
-        }
+        // console.log(res.data)
+        this.postComments = this.postComments.filter((el) => el.id !== commentId)
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
@@ -174,13 +176,13 @@ export const usePostStore = defineStore('postStore', {
         const res = await instance.put(`/post/comment/${commentId}/update`, {
           message
         })
-        console.log(res.data)
+        // console.log(res.data)
         this.statusCode = res.data.statusCode
         setTimeout(() => {
           this.statusCode = 0
         }, 3000)
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
@@ -189,21 +191,21 @@ export const usePostStore = defineStore('postStore', {
         const res = await instance.post(`/post/interaction/${targetId}`, {
           interactionType
         })
-        console.log(res.data)
+        // console.log(res.data)
       } catch (error: any) {
-        console.log(error.data)
+        console.error(error.message)
       }
     },
 
     async removeInteractionPost(targetId: string) {
       try {
         const res = await instance.post(`/post/remove-interaction/${targetId}`)
-        console.log(res.data)
+        // console.log(res.data)
       } catch (error: any) {
-        console.log(error.data)
+        console.error(error.message)
       }
     },
-    resetPostAndComments(state: any) {
+    async resetPostAndComments(state: any) {
       state.post = {}
       state.postComments = []
     }

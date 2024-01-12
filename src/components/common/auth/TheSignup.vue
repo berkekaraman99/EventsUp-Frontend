@@ -127,14 +127,14 @@
           <!-- ALTERNATIVE SIGNUPS -->
           <div class="alternative-logins my-4">
             <div
-              class="shadow-sm mt-3 rounded-3 w-100 d-flex align-items-center justify-content-center tw-bg-black hover:tw-bg-slate-900 pointer py-2"
+              class="shadow-sm mt-3 rounded-3 w-100 d-flex align-items-center justify-content-center tw-bg-black hover:tw-bg-slate-900 pointer py-2 text-white"
             >
               <i class="fa-brands fa-apple fa-lg me-2"></i>
               <span class="fw-bold">{{ t('login.apple') }}</span>
             </div>
 
             <div
-              class="d-flex align-items-center justify-content-center shadow-sm rounded-3 my-3 w-100 tw-bg-white hover:tw-bg-slate-200 pointer py-2"
+              class="d-flex align-items-center justify-content-center shadow-sm rounded-3 my-3 w-100 tw-bg-white hover:tw-bg-slate-200 pointer py-2 text-black"
               :disabled="!isReady"
               @click="() => login()"
             >
@@ -233,26 +233,31 @@ const handleSignUp = async () => {
         .signup(signUpObject)
         .then(changeLoadingState)
         .then(() => {
-          console.log(statusCode.value)
-          if (statusCode.value === 10001) {
-            header.value = 'Kayıt Başarısız'
-            content.value = 'Kullanıcı adı kullanılmaktadır. Lütfen başka bir kullanıcı adı giriniz'
-            handleToast()
-          } else if (statusCode.value === 10002) {
-            header.value = 'Kayıt Başarısız'
-            content.value = 'Email adresi kullanılmaktadır. Lütfen başka bir email adresi giriniz'
-            handleToast()
-          } else if (statusCode.value === 200) {
-            header.value = 'Kayıt Başarılı'
-            content.value = 'Başarıyla kayıt oldunuz. Ana sayfaya yönlendiriliyorsunuz.'
-            handleToast()
-            setTimeout(() => {
-              router.push({ name: 'home' })
-            }, 2500)
-          } else {
-            header.value = 'Kayıt Başarısız'
-            content.value = 'Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz'
-            handleToast()
+          switch (statusCode.value) {
+            case 10001:
+              header.value = 'Kayıt Başarısız'
+              content.value =
+                'Kullanıcı adı kullanılmaktadır. Lütfen başka bir kullanıcı adı giriniz'
+              handleToast()
+              break
+            case 10002:
+              header.value = 'Kayıt Başarısız'
+              content.value = 'Email adresi kullanılmaktadır. Lütfen başka bir email adresi giriniz'
+              handleToast()
+              break
+            case 200:
+              header.value = 'Kayıt Başarılı'
+              content.value = 'Başarıyla kayıt oldunuz. Ana sayfaya yönlendiriliyorsunuz.'
+              handleToast()
+              setTimeout(() => {
+                router.push({ name: 'home' })
+              }, 2500)
+              break
+            default:
+              header.value = 'Kayıt Başarısız'
+              content.value = 'Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz'
+              handleToast()
+              break
           }
         })
       console.log(userObject)

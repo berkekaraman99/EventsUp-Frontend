@@ -2,10 +2,8 @@
   <ul class="dropdown-menu dropdown-menu-end animate scaleOut">
     <li v-for="link in links" :key="link.id">
       <RouterLink :to="{ name: link.routeName }" class="dropdown-item">
-        <button class="btn w-100 d-flex align-items-center">
-          <i :class="link.icon"></i>
-          <span class="mx-2">{{ t(link.content) }}</span>
-        </button>
+        <i :class="link.icon"></i>
+        <span class="mx-2">{{ t(link.content) }}</span>
       </RouterLink>
     </li>
   </ul>

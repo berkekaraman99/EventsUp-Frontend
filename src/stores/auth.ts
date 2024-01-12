@@ -4,6 +4,7 @@ import type { ISignUpModel } from '../models/signup_model'
 import { instance } from '../utils/network_manager'
 import { defineStore } from 'pinia'
 import SecureLS from 'secure-ls'
+import router from '@/router'
 
 const ls = new SecureLS({ isCompression: false })
 
@@ -29,7 +30,7 @@ export const useAuthStore = defineStore('authStore', {
       try {
         const res = await instance.post('/Authentication/SignIn', logInObject)
         this.statusCode = res.data.statusCode
-        console.log(res.data)
+        // console.log(res.data)
 
         if (res.data.isSuccess) {
           this.accessToken = res.data.data.accessToken
@@ -39,14 +40,14 @@ export const useAuthStore = defineStore('authStore', {
           this.userIsAuthorized = true
 
           await this.getUserAfterLogin()
-          console.log(this.user)
+          // console.log(this.user)
           this.statusCode = res.data.statusCode
           setTimeout(() => {
             this.statusCode = 0
           }, 3000)
         }
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
@@ -62,9 +63,6 @@ export const useAuthStore = defineStore('authStore', {
           instance.defaults.headers['Authorization'] = `Bearer ${this.accessToken}`
           this.userIsAuthorized = true
 
-          // const getUserAfterLogin = await instance.get(
-          //   "/User/GetUserAfterLogin"
-          // );
           await this.getUserAfterLogin()
           this.statusCode = res.data.statusCode
           setTimeout(() => {
@@ -72,7 +70,7 @@ export const useAuthStore = defineStore('authStore', {
           }, 3000)
         }
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
@@ -82,7 +80,7 @@ export const useAuthStore = defineStore('authStore', {
         const res = await instance.post('https://localhost:7149/api/authentication/google-login', {
           idToken: credential
         })
-        console.log(res.data)
+        // console.log(res.data)
         this.accessToken = res.data.data.accessToken
         this.refreshToken = res.data.data.refreshToken
 
@@ -91,15 +89,13 @@ export const useAuthStore = defineStore('authStore', {
 
         const getUserAfterLogin = await instance.get('/User/GetUserAfterLogin')
         this.user = getUserAfterLogin.data.data
-        console.log(this.user)
+        // console.log(this.user)
         this.statusCode = res.data.statusCode
         setTimeout(() => {
           this.statusCode = 0
         }, 3000)
       } catch (error: any) {
-        console.log(error)
-        this.statusCode = 0
-        console.log(this.statusCode)
+        console.error(error.message)
       }
     },
 
@@ -116,27 +112,39 @@ export const useAuthStore = defineStore('authStore', {
             location.reload()
           })
       } catch (error: any) {
-        console.log(error.data)
+        console.error(error.message)
       }
+    },
+
+    async removeCredentials() {
+      ls.remove('authStore')
+      useAuthStore().$reset()
+      instance.defaults.headers['Authorization'] = null
     },
 
     //REFRESH TOKEN
     async refreshUserToken() {
-      const res = await instance.post('/Authentication/RefreshToken', {
-        refreshToken: this.refreshToken
-      })
-
-      console.log(res)
+      try {
+        const res = await instance.post('/Authentication/RefreshToken', {
+          refreshToken: this.refreshToken
+        })
+      } catch (error: any) {
+        console.error(error.message)
+      }
     },
 
     //CHANGE PASSWORD
     async changePassword(passwords: Object) {
-      const res = await instance.post('/authentication/change-password', passwords)
-      this.statusCode = res.data.statusCode
-      setTimeout(() => {
-        this.statusCode = 0
-      }, 3000)
-      console.log(res.data)
+      try {
+        const res = await instance.post('/authentication/change-password', passwords)
+        this.statusCode = res.data.statusCode
+        setTimeout(() => {
+          this.statusCode = 0
+        }, 3000)
+        // console.log(res.data)
+      } catch (error: any) {
+        console.error(error.message)
+      }
     },
 
     //LOAD USER
@@ -152,37 +160,41 @@ export const useAuthStore = defineStore('authStore', {
     },
 
     async getUserAfterLogin() {
-      const res = await instance.get('/User/GetUserAfterLogin')
-      console.log(res.data)
-      this.user = res.data.data
-      // localStorage.removeItem("user");
-      // localStorage.setItem("user", JSON.stringify(this.user));
-      this.loadUser()
+      try {
+        const res = await instance.get('/User/GetUserAfterLogin')
+        // console.log(res.data)
+        this.user = res.data.data
+        // localStorage.removeItem("user");
+        // localStorage.setItem("user", JSON.stringify(this.user));
+        this.loadUser()
+      } catch (error: any) {
+        console.error(error.message)
+      }
     },
 
     async resetPasswordRequest(mail: string) {
       try {
         const res = await instance.post('/authentication/reset-password-request', { mail })
-        console.log(res.data)
+        // console.log(res.data)
         this.statusCode = res.data.statusCode
         setTimeout(() => {
           this.statusCode = 0
         }, 3000)
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
     async resetPassword(credentials: Object) {
       try {
         const res = await instance.post('/authentication/reset-password', credentials)
-        console.log(res.data)
+        // console.log(res.data)
         this.statusCode = res.data.statusCode
         setTimeout(() => {
           this.statusCode = 0
         }, 3000)
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     },
 
@@ -192,13 +204,13 @@ export const useAuthStore = defineStore('authStore', {
           mail,
           code
         })
-        console.log(res.data)
+        // console.log(res.data)
         this.statusCode = res.data.statusCode
         setTimeout(() => {
           this.statusCode = 0
         }, 3000)
       } catch (error: any) {
-        console.log(error.message)
+        console.error(error.message)
       }
     }
   },

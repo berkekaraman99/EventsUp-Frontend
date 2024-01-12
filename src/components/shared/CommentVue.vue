@@ -2,7 +2,7 @@
   <div>
     <div class="row">
       <div class="col-12 my-4">
-        <div class="card shadow-sm rounded-4 overflow-hidden">
+        <div class="card shadow-sm rounded-4">
           <div class="card-header">
             <div class="d-flex align-items-center justify-content-between">
               <div class="d-flex align-items-center">
@@ -112,7 +112,9 @@
           <div class="card-footer border-0">
             <div class="d-flex align-items-center">
               <div class="d-flex align-items-center justify-content-center">
-                <div class="tw-text-lg mx-1">{{ comment.interactionCounts.likeCount }}</div>
+                <div class="tw-text-lg mx-1">
+                  {{ comment.interactionCounts != null ? comment.interactionCounts.likeCount : 0 }}
+                </div>
                 <div
                   class="rounded-3 py-1 hover:tw-bg-orange-500 hover:tw-text-white tw-transition tw-ease-in-out tw-duration-300 pointer"
                 >
@@ -120,7 +122,11 @@
                 </div>
               </div>
               <div class="d-flex align-items-center">
-                <div class="tw-text-lg mx-1">{{ comment.interactionCounts.dislikeCount }}</div>
+                <div class="tw-text-lg mx-1">
+                  {{
+                    comment.interactionCounts != null ? comment.interactionCounts.dislikeCount : 0
+                  }}
+                </div>
                 <div
                   class="rounded-3 py-1 hover:tw-bg-purple-500 hover:tw-text-white tw-transition tw-ease-in-out tw-duration-300 pointer"
                 >
@@ -251,5 +257,15 @@ const formatTime = (time: any) => {
   &:focus {
     border-color: var(--color-primary);
   }
+}
+
+.dropdown-menu {
+  padding: 0.5rem;
+}
+
+.dropdown-item {
+  border-radius: 0.5rem;
+  cursor: pointer;
+  padding: 0.5rem 0.8rem;
 }
 </style>

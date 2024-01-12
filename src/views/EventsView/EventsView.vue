@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="container">
+    <div class="col-12 col-sm-12 col-md-10 offset-md-1">
       <Transition appear @before-enter="beforeEnterTitle" @enter="enterTitle">
-        <h1 class="fw-bold display-6">{{ t('event.header') }}</h1>
+        <h1 class="fw-bold display-6 px-3">{{ t('event.header') }}</h1>
       </Transition>
     </div>
     <LoadingSpinner v-if="loading" />

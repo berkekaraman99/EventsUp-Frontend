@@ -27,17 +27,13 @@
     <ul class="dropdown-menu dropdown-menu-end z-3">
       <li v-for="link in links" :key="link.id">
         <RouterLink :to="{ name: link.routeName }" class="dropdown-item">
-          <button class="btn w-100">
-            <i :class="link.icon"></i>
-            <span class="mx-2">{{ t(link.content) }}</span>
-          </button>
+          <i :class="link.icon"></i>
+          <span class="mx-2">{{ t(link.content) }}</span>
         </RouterLink>
       </li>
-      <li class="dropdown-item" @click="$emit('logout')">
-        <button class="btn w-100 text-danger">
-          <i class="fa-solid fa-arrow-right-from-bracket me-1"></i>
-          {{ t('header.logout') }}
-        </button>
+      <li class="dropdown-item text-danger" @click="$emit('logout')">
+        <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <span class="mx-2">{{ t('header.logout') }}</span>
       </li>
     </ul>
   </div>

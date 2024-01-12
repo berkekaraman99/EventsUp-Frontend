@@ -116,6 +116,7 @@ img {
 
   &:hover {
     background-color: rgb(0, 105, 0);
+    color: white;
   }
 
   &:active {
@@ -131,6 +132,7 @@ img {
 
   &:hover {
     background-color: rgb(0, 114, 159);
+    color: white;
   }
 
   &:active {
@@ -146,6 +148,7 @@ img {
 
   &:hover {
     background-color: rgb(0, 114, 159);
+    color: white;
   }
 
   &:active {
@@ -161,6 +164,7 @@ img {
 
   &:hover {
     background-color: rgb(197, 118, 0);
+    color: white;
   }
 
   &:active {
@@ -182,18 +186,11 @@ textarea {
   border-radius: 0.5rem;
 }
 
-// .card-footer,
-// .card-header {
-//   background-color: white;
-// }
-// .card-header {
-//   border-bottom: none;
-// }
-
-a.router-link-exact-active {
+a {
   color: var(--color-primary);
-  // background-color: rgb(255, 255, 255);
-  /* border: 1px solid var(--color-primary); */
+  &.router-link-exact-active {
+    color: var(--color-primary);
+  }
 }
 
 .dropdown-item {
@@ -202,6 +199,9 @@ a.router-link-exact-active {
     background-color: var(--color-secondary);
     color: var(--color-text-dark);
   }
+  border-radius: 0.5rem;
+  padding: 0.5rem 0.8rem;
+  cursor: pointer;
 }
 
 .glass-effect {
@@ -218,4 +218,8 @@ a.router-link-exact-active {
     background-color: var(--color-primary);
     color: var(--color-text);
   }
+}
+
+.dropdown-menu {
+  padding: 0.5rem;
 }

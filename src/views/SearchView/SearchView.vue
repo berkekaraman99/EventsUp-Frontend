@@ -85,6 +85,7 @@ import { reactive } from 'vue'
 import { useSearchStore } from '@/stores/search'
 import gsap from 'gsap'
 import { useI18n } from 'vue-i18n'
+import { onBeforeUnmount } from 'vue'
 
 const { t } = useI18n()
 
@@ -146,6 +147,12 @@ const handleSearch = async () => {
 const vFocus = {
   mounted: (el: HTMLInputElement) => el.focus()
 }
+
+onBeforeUnmount(() => {
+  searchStore.$patch({
+    searchItemList: []
+  })
+})
 </script>
 
 <style scoped lang="scss">
