@@ -75,7 +75,7 @@
                         v-else
                       />
                       <div>
-                        <div class="fw-bold text-black">
+                        <div class="fw-bold text-body">
                           {{ user.fullName }}
                         </div>
                         <div class="text-secondary">@{{ user.userName }}</div>

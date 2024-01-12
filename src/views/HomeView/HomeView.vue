@@ -3,12 +3,11 @@
 </template>
 
 <script setup lang="ts">
-import FeedVue from "@/components/common/home/FeedVue.vue";
+import FeedVue from '@/components/common/home/FeedVue.vue'
 </script>
 
 <style scope>
 .bg-image {
-  background-image: url("@/assets/images/home-bg.jpg");
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

@@ -14,7 +14,7 @@
           <div class="my-1">
             <div>
               <div
-                class="tile"
+                class="tile bg-body-secondary"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapsePassword"
                 aria-expanded="false"
@@ -29,7 +29,7 @@
 
           <!-- DELETE ACCOUNT -->
           <div
-            class="tile text-danger"
+            class="tile text-danger bg-body-secondary"
             data-bs-toggle="modal"
             data-bs-target="#offcanvasDeleteMyAccount"
           >
@@ -70,7 +70,7 @@
           <div class="my-1">
             <div>
               <div
-                class="tile"
+                class="tile bg-body-secondary"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapseEditProfile"
                 aria-expanded="false"
@@ -87,7 +87,7 @@
           <div class="my-1">
             <div>
               <div
-                class="tile"
+                class="tile bg-body-secondary"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapseProfileImage"
                 aria-expanded="false"
@@ -104,7 +104,7 @@
           <div class="my-1">
             <div>
               <div
-                class="tile"
+                class="tile bg-body-secondary"
                 data-bs-toggle="collapse"
                 data-bs-target="#collapseBannerImage"
                 aria-expanded="false"
@@ -186,12 +186,12 @@ const { _currentUser: userInformation } = storeToRefs(userStore)
   border-radius: 0.5rem;
   padding: 12px 0.75rem;
   font-weight: bold;
-  background-color: white;
+  // background-color: white;
   margin: 0.75rem 0px;
 
   &:hover {
     transition: 0.3s ease;
-    background-color: rgb(244, 244, 244);
+    // background-color: rgb(244, 244, 244);
     // border-top: 1px solid lightgrey;
     // border-bottom: 1px solid lightgrey;
   }

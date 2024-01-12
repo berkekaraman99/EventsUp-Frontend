@@ -1,12 +1,6 @@
 <template>
-  <div class="container community shadow-sm mb-5 rounded-3">
-    <RouterLink
-      :to="{
-        name: 'communitydetails',
-        params: { id: props.community.id }
-      }"
-      class="text-decoration-none text-dark"
-    >
+  <div class="container bg-body community border shadow-sm mb-5 rounded-3">
+    <RouterLink :to="communityLink" class="text-decoration-none text-body">
       <div class="row">
         <div class="col-sm-12 col-md-4 d-sm-flex align-items-sm-center justify-content-sm-center">
           <img
@@ -50,12 +44,19 @@
 
 <script setup lang="ts">
 import type { ICommunityPreview } from '@/models/community_preview_model'
-import type { PropType } from 'vue'
+import { computed, type PropType } from 'vue'
 
 const props = defineProps({
   community: {
     type: Object as PropType<ICommunityPreview>,
     required: true
+  }
+})
+
+const communityLink = computed(() => {
+  return {
+    name: 'communitydetails',
+    params: { id: props.community.id }
   }
 })
 
@@ -76,25 +77,20 @@ const getDescriptionCharacters = (str: string) => {
   border-radius: 0.5rem;
   max-width: 880px;
   max-height: 300px;
-  background-color: white;
 
   @media (max-width: 768px) {
     max-height: fit-content;
   }
-
-  &:hover {
-    background-color: whitesmoke;
-  }
 }
-.text {
-  color: white;
-  font-size: 20px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-}
+// .text {
+//   color: white;
+//   font-size: 20px;
+//   position: absolute;
+//   top: 50%;
+//   left: 50%;
+//   transform: translate(-50%, -50%);
+//   -ms-transform: translate(-50%, -50%);
+// }
 
 .description {
   letter-spacing: 1px;

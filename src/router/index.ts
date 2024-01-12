@@ -4,18 +4,12 @@ import {
   createRouter,
   createWebHistory,
   type NavigationGuardNext,
-  type RouteLocationNormalized,
-  type RouteRecord
+  type RouteLocationNormalized
 } from 'vue-router'
 
 const routes = [
-  // {
-  //   path: "/",
-  //   name: "login",
-  //   component: () => import("@/views/LoginView/LoginView.vue"),
-  // },
   {
-    path: '/',
+    path: '/auth',
     name: 'auth',
     component: () => import('@/views/AuthView/AuthView.vue')
   },
@@ -23,6 +17,12 @@ const routes = [
     path: '/home',
     name: 'home',
     component: () => import('@/views/HomeView/HomeView.vue')
+    // alias: '/'
+  },
+  {
+    path: '/forget-password',
+    name: 'forgetpassword',
+    component: () => import('@/views/ResetPasswordView/ResetPasswordView.vue')
   },
   {
     path: '/communities',
@@ -34,34 +34,38 @@ const routes = [
     name: 'communitydetails',
     component: () => import('@/views/CommunityDetailsView/CommunityDetailsView.vue'),
     props: true
-    // children: [
-    //   {
-    //     path: '',
-    //     name: 'community-details',
-    //     component: () => import('@/components/common/community/CommunityAbout.vue')
-    //   },
-    //   {
-    //     path: 'posts',
-    //     name: 'community-posts',
-    //     component: () => import('@/components/common/community/CommunityPosts.vue')
-    //   },
-    //   {
-    //     path: 'participiants',
-    //     name: 'community-participiants',
-    //     component: () => import('@/components/common/community/CommunityParticipiants.vue')
-    //   },
-    //   {
-    //     path: 'settings',
-    //     name: 'community-settings',
-    //     component: () => import('@/components/common/community/CommunitySettings.vue')
-    //   }
-    // ]
+  },
+  {
+    path: '/events',
+    name: 'events',
+    component: () => import('@/views/EventsView/EventsView.vue')
   },
   {
     path: '/event/:id',
     name: 'eventdetails',
     component: () => import('@/views/EventDetailsView/EventDetailsView.vue'),
     props: true
+  },
+  {
+    path: '/profile',
+    name: 'profile',
+    component: () => import('@/views/ProfileView/ProfileView.vue')
+  },
+  {
+    path: '/profile-settings',
+    name: 'profileSettings',
+    component: () => import('@/views/SettingsView/SettingsView.vue')
+  },
+  {
+    path: '/profile/:id',
+    name: 'userprofile',
+    component: () => import('@/views/UserProfileView/UserProfile.vue'),
+    props: true
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: () => import('@/views/SearchView/SearchView.vue')
   },
   {
     path: '/post/:id',
@@ -75,28 +79,7 @@ const routes = [
     component: () => import('@/views/CommentRepliesView/CommentReplies.vue'),
     props: true
   },
-  {
-    path: '/profile/:id',
-    name: 'userprofile',
-    component: () => import('@/views/UserProfileView/UserProfile.vue'),
-    props: true
-  },
-  {
-    path: '/events',
-    name: 'events',
-    component: () => import('@/views/EventsView/EventsView.vue')
-  },
-
-  // {
-  //   path: "/signup",
-  //   name: "signup",
-  //   component: () => import("@/views/SignUpView/SignUpView.vue"),
-  // },
-  {
-    path: '/search',
-    name: 'search',
-    component: () => import('@/views/SearchView/SearchView.vue')
-  },
+  // CREATE PAGES
   {
     path: '/createcommunity',
     name: 'createCommunity',
@@ -108,47 +91,39 @@ const routes = [
     component: () => import('@/views/CreateEventView/CreateEvent.vue')
   },
   {
-    path: '/profile',
-    name: 'profile',
-    component: () => import('@/views/ProfileView/ProfileView.vue')
-  },
-  {
-    path: '/profile-settings',
-    name: 'profileSettings',
-    component: () => import('@/views/SettingsView/SettingsView.vue')
-  },
-  {
     path: '/createpost',
     name: 'createPost',
     component: () => import('@/views/CreatePostView/CreatePostView.vue')
   },
   {
+    // CHAT PAGE
     path: '/chat',
     name: 'chat',
     component: () => import('@/views/ChatView/ChatVue.vue')
   },
   {
-    path: '/forget-password',
-    name: 'forgetpassword',
-    component: () => import('@/views/ResetPasswordView/ResetPasswordView.vue')
-  },
-  //catch all 404
-  {
-    path: '/:pathMatch(.*)*',
-    name: 'notfound',
-    component: () => import('@/views/PageNotFound/NotFound.vue')
-  },
-  //Test
-  {
+    // TEST PAGE
     path: '/test',
     name: 'test',
     component: () => import('@/views/TestView/TestView.vue')
+  },
+  {
+    // NOT FOUND CATCH ALL 404
+    path: '/:notFound(.*)',
+    name: 'notfound',
+    component: () => import('@/views/PageNotFound/NotFound.vue')
   }
 ]
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes
+  routes,
+  scrollBehavior(to, from, savedPosition) {
+    if (savedPosition) {
+      return savedPosition
+    }
+    return { left: 0, top: 0 }
+  }
 })
 
 router.beforeEach(

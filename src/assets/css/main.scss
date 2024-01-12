@@ -7,6 +7,17 @@
   --color-accent: #ff9c66;
   --color-bg-light: #fff;
   --color-bg-dark: #111;
+
+  @media (prefers-color-scheme: dark) {
+    --fk-color-input: #fff;
+    select.formkit-input option {
+      color: #000 !important;
+    }
+  }
+
+  @media (prefers-color-scheme: light) {
+    --fk-color-input: #000;
+  }
 }
 
 button,
@@ -102,72 +113,60 @@ img {
   border-radius: 8px;
   transition: 0.3s ease;
   padding: 12px 16px;
-}
 
-#save:hover {
-  transition: 0.3s ease;
-  background-color: rgb(243, 243, 243);
-}
+  &:hover {
+    background-color: rgb(0, 105, 0);
+  }
 
-#save:active {
-  background-color: rgb(0, 105, 0);
-  color: white;
+  &:active {
+    background-color: rgb(0, 105, 0);
+    color: white;
+  }
 }
 
 #share {
   border-radius: 8px;
   transition: 0.3s ease;
   padding: 12px 16px;
-}
 
-#share:hover {
-  transition: 0.3s ease;
-  background-color: rgb(243, 243, 243);
-}
+  &:hover {
+    background-color: rgb(0, 114, 159);
+  }
 
-#share:active {
-  background-color: rgb(0, 114, 159);
-  color: white;
+  &:active {
+    background-color: rgb(0, 114, 159);
+    color: white;
+  }
 }
 
 #comments {
   border-radius: 8px;
   transition: 0.3s ease;
   padding: 12px 16px;
-}
 
-#comments:hover {
-  transition: 0.3s ease;
-  background-color: rgb(243, 243, 243);
-}
+  &:hover {
+    background-color: rgb(0, 114, 159);
+  }
 
-#comments:active {
-  background-color: rgb(0, 114, 159);
-  color: white;
+  &:active {
+    background-color: rgb(0, 114, 159);
+    color: white;
+  }
 }
 
 #interactions {
   border-radius: 8px;
   transition: 0.3s ease;
   padding: 12px 16px;
-}
 
-#interactions:hover {
-  transition: 0.3s ease;
-  background-color: rgb(243, 243, 243);
-}
+  &:hover {
+    background-color: rgb(197, 118, 0);
+  }
 
-#interactions:active {
-  background-color: rgb(0, 114, 159);
-  color: white;
-}
-
-#back {
-  background-color: rgba(255, 255, 255, 0.9);
-}
-
-#back:hover {
-  background-color: #fff;
+  &:active {
+    background-color: rgb(0, 114, 159);
+    color: white;
+  }
 }
 
 textarea {
@@ -179,21 +178,21 @@ textarea {
 }
 
 .card {
-  border: none;
+  // border: none;
   border-radius: 0.5rem;
 }
 
-.card-footer,
-.card-header {
-  background-color: white;
-}
-.card-header {
-  border-bottom: none;
-}
+// .card-footer,
+// .card-header {
+//   background-color: white;
+// }
+// .card-header {
+//   border-bottom: none;
+// }
 
 a.router-link-exact-active {
   color: var(--color-primary);
-  background-color: rgb(255, 255, 255);
+  // background-color: rgb(255, 255, 255);
   /* border: 1px solid var(--color-primary); */
 }
 
@@ -207,9 +206,16 @@ a.router-link-exact-active {
 
 .glass-effect {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
-  -webkit-backdrop-filter: blur(20px);
-  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(1.5rem);
+  backdrop-filter: blur(1.5rem);
   box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.37);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 0.5rem;
+}
+
+.bars {
+  &:hover {
+    background-color: var(--color-primary);
+    color: var(--color-text);
+  }
 }

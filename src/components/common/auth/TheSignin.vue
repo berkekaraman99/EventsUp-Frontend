@@ -17,7 +17,7 @@
             {{ t('login.header') }}
           </p>
 
-          <div class="card shadow-sm p-4">
+          <div class="shadow-sm p-4">
             <FormKit
               type="form"
               @submit="handleLogin"
@@ -84,7 +84,7 @@
               <FormKit
                 type="submit"
                 :label="loading ? t('login.loginprogress') : t('login.login')"
-                :classes="{ input: 'w-100 rounded-5' }"
+                :classes="{ input: 'w-100 rounded-3' }"
                 :disabled="loading || statusCode === 200"
                 :wrapper-class="{
                   'formkit-wrapper': false,
@@ -113,17 +113,17 @@
 
           <!-- ALTERNATIVE LOGINS -->
           <div class="alternative-logins my-4">
-            <div class="btn btn-dark shadow-sm mt-3 rounded-2">
+            <div
+              class="shadow-sm mt-3 rounded-3 w-100 d-flex align-items-center justify-content-center tw-bg-black hover:tw-bg-slate-900 pointer py-2"
+            >
               <i class="fa-brands fa-apple fa-lg me-2"></i>
               <span class="fw-bold">{{ t('login.apple') }}</span>
             </div>
 
-            <div class="d-flex align-items-center justify-content-center">
-              <GoogleLogin class="my-3" :callback="callback" theme="filled_blue" />
-            </div>
-            <!-- <GoogleLogin class="my-3" :callback="callback" popup-type="TOKEN">
             <div
-              class="btn btn-light d-block shadow-sm rounded-5 hover:tw-bg-slate-50"
+              class="d-flex align-items-center justify-content-center shadow-sm rounded-3 my-3 w-100 tw-bg-white hover:tw-bg-slate-200 pointer py-2"
+              :disabled="!isReady"
+              @click="() => login()"
             >
               <img
                 src="@/assets/images/logos/ic_google.png"
@@ -132,9 +132,12 @@
                 alt="Google"
                 class="me-2"
               />
-              <span class="fw-bold">{{ t("login.google") }}</span>
+              <span class="fw-bold text-dark">{{ t('login.google') }}</span>
             </div>
-          </GoogleLogin> -->
+
+            <!-- <div class="d-flex align-items-center justify-content-center w-100">
+              <GoogleLogin class="my-3" :callback="callback" />
+            </div> -->
           </div>
         </div>
       </div>
@@ -149,8 +152,13 @@ import { useAuthStore } from '@/stores/auth'
 import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
-import { type GoogleLogin, type CallbackTypes } from 'vue3-google-login'
+// import { type GoogleLogin, type CallbackTypes } from 'vue3-google-login'
 import { inject } from 'vue'
+import {
+  useTokenClient,
+  type AuthCodeFlowSuccessResponse,
+  type AuthCodeFlowErrorResponse
+} from 'vue3-google-signin'
 
 const { t } = useI18n()
 
@@ -160,33 +168,6 @@ const changetype = inject('change-type') as Function
 
 const changeType = (name: string) => {
   changetype(name)
-}
-
-const callback: CallbackTypes.CredentialCallback = async (response) => {
-  console.log('Handle the response', response)
-
-  await authStore
-    .loginWithGoogle(response.credential)
-    .then(changeLoadingState)
-    .then(() => {
-      console.log(statusCode.value)
-      if (statusCode.value === 10401) {
-        header.value = 'Giriş Başarısız'
-        content.value = 'Kullanıcı adı veya şifre hatalı.'
-        handleToast()
-      } else if (statusCode.value === 200) {
-        header.value = 'Giriş Başarılı'
-        content.value = 'Ana sayfaya yönlendiriliyorsunuz.'
-        handleToast()
-        setTimeout(() => {
-          router.push({ name: 'home' })
-        }, 2500)
-      } else {
-        header.value = 'Giriş Başarısız'
-        content.value = 'Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz'
-        handleToast()
-      }
-    })
 }
 
 const handleIconClick = (node: any, e: any) => {
@@ -239,33 +220,78 @@ const handleLogin = async () => {
     }
     changeLoadingState()
     try {
-      authStore
-        .login(loginObject)
-        .then(changeLoadingState)
-        .then(() => {
-          console.log(statusCode.value)
-          if (statusCode.value === 10401) {
-            header.value = 'Giriş Başarısız'
-            content.value = 'Kullanıcı adı veya şifre hatalı.'
-            handleToast()
-          } else if (statusCode.value === 200) {
-            if (isRemembered.value || localStorage.getItem('rememberMe') == null) {
-              localStorage.setItem('rememberMe', JSON.stringify(loginObject))
-            }
-            header.value = 'Giriş Başarılı'
-            content.value = 'Ana sayfaya yönlendiriliyorsunuz.'
-            handleToast()
-            setTimeout(() => {
-              router.push({ name: 'home' })
-            }, 2500)
+      await authStore.login(loginObject).then(() => {
+        console.log(statusCode.value)
+        if (statusCode.value === 10401) {
+          header.value = 'Giriş Başarısız'
+          content.value = 'Kullanıcı adı veya şifre hatalı.'
+          handleToast()
+        } else if (statusCode.value === 200) {
+          if (isRemembered.value || localStorage.getItem('rememberMe') == null) {
+            localStorage.setItem('rememberMe', JSON.stringify(loginObject))
           }
-        })
+          header.value = 'Giriş Başarılı'
+          content.value = 'Ana sayfaya yönlendiriliyorsunuz.'
+          handleToast()
+          setTimeout(() => {
+            router.push({ name: 'home' })
+          }, 2500)
+        }
+        changeLoadingState()
+      })
     } catch (err: any) {
       error.value = err.message
       changeLoadingState()
     }
   }
 }
+
+const handleOnSuccess = (response: AuthCodeFlowSuccessResponse) => {
+  console.log('Access Token: ', response.access_token)
+}
+
+const handleOnError = (errorResponse: AuthCodeFlowErrorResponse) => {
+  console.log('Error: ', errorResponse)
+}
+
+const { isReady, login } = useTokenClient({
+  onSuccess: handleOnSuccess,
+  onError: handleOnError
+  // other options
+})
+
+// const callback: CallbackTypes.CredentialCallback = async (response) => {
+//   console.log('Handle the response', response)
+
+//   await authStore
+//     .loginWithGoogle(response.credential)
+//     .then(() => {
+//       console.log(statusCode.value)
+//       if (statusCode.value === 10401) {
+//         header.value = 'Giriş Başarısız'
+//         content.value = 'Kullanıcı adı veya şifre hatalı.'
+//         handleToast()
+//       } else if (statusCode.value === 200) {
+//         header.value = 'Giriş Başarılı'
+//         content.value = 'Ana sayfaya yönlendiriliyorsunuz.'
+//         handleToast()
+//         setTimeout(() => {
+//           router.push({ name: 'home' })
+//         }, 2500)
+//       } else {
+//         header.value = 'Giriş Başarısız'
+//         content.value = 'Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz'
+//         handleToast()
+//       }
+//     })
+//     .finally(() => {
+//       console.log(loading.value)
+//     })
+//   // .catch((e) => {
+//   //   changeLoadingState()
+//   //   console.log(loading.value)
+//   // })
+// }
 </script>
 
 <style scoped lang="scss">

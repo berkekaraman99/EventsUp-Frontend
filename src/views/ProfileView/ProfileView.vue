@@ -22,7 +22,7 @@
             </div>
           </div>
         </div>
-        <div class="col-12 mt-3" v-else>
+        <div class="col-12 mt-3 mb-sm-0 mb-md-3 mb-lg-0" v-else>
           <div class="profile-header position-relative card shadow-sm rounded-4">
             <img
               v-if="currentUser.bannerImage != null"
@@ -247,7 +247,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div v-if="!loading">
       <Transition name="scaleInOut" mode="out-in">
         <component :is="component" />
       </Transition>
@@ -346,6 +346,7 @@ export default defineComponent({
 #options {
   padding: 0px 0.75rem;
   margin: 16px 0px;
+  z-index: 9;
 
   & div {
     border-radius: 1rem;
@@ -365,6 +366,7 @@ export default defineComponent({
     right: 0;
     margin: 0;
     padding: 0;
+    border-top: 1px solid grey;
   }
 }
 .profile-details {
@@ -373,6 +375,9 @@ export default defineComponent({
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  @media (min-width: 768px) and (max-width: 992px) {
+  }
 }
 
 .profile-header {
@@ -407,6 +412,7 @@ label span {
   z-index: 1;
   position: relative;
   font-size: 1.25rem;
+  cursor: pointer;
 
   @media (min-width: 768px) and (max-width: 992px) {
     font-size: 0.9rem;
@@ -417,7 +423,7 @@ label span {
   }
 
   &:hover {
-    color: #111;
+    // color: #111;
     letter-spacing: 1px;
   }
 }
@@ -455,6 +461,7 @@ label span {
 
 #suggestion {
   position: absolute;
+  bottom: 2rem;
   right: 2rem;
 }
 </style>

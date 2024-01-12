@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="container h-100 px-3">
     <div class="row h-100 pb-3">
       <div class="card">
@@ -182,14 +182,6 @@
                             >
                           </div>
                         </div>
-                        <!-- <div
-                          class="pt-1 pb-3"
-                          :class="{
-                            'align-self-end': message.senderId === mainUser.id,
-                          }"
-                        >
-                          <span>{{ formatTime(message.createdAt) }}</span>
-                        </div> -->
                       </div>
                     </div>
                   </div>
@@ -214,9 +206,13 @@
       </div>
     </div>
   </div>
+</template> -->
+
+<template>
+  <div></div>
 </template>
 
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { useAuthStore } from "@/stores/auth";
 import { storeToRefs } from "pinia";
 import { inject, onMounted, ref } from "vue";
@@ -366,9 +362,9 @@ const sendMessage = () => {
 //   connection.value.emit("sendMessageToGroup", data);
 //   message.value = "";
 // };
-</script>
+</script> -->
 
-<style scoped lang="scss">
+<!-- <style scoped lang="scss">
 .card {
   border: 2px solid var(--color-primary);
   border-radius: 8px;
@@ -489,4 +485,4 @@ const sendMessage = () => {
   align-items: center;
   justify-content: center;
 }
-</style>
+</style> -->

@@ -38,10 +38,6 @@ export const useAuthStore = defineStore('authStore', {
           instance.defaults.headers['Authorization'] = `Bearer ${this.accessToken}`
           this.userIsAuthorized = true
 
-          // const getUserAfterLogin = await instance.get(
-          //   "/User/GetUserAfterLogin"
-          // );
-
           await this.getUserAfterLogin()
           console.log(this.user)
           this.statusCode = res.data.statusCode
@@ -102,6 +98,8 @@ export const useAuthStore = defineStore('authStore', {
         }, 3000)
       } catch (error: any) {
         console.log(error)
+        this.statusCode = 0
+        console.log(this.statusCode)
       }
     },
 

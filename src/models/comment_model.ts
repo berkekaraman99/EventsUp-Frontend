@@ -1,4 +1,4 @@
-export interface IComment {
+export type IComment = {
   createdAt: string
   id: string
   interactionCounts: {

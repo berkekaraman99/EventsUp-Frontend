@@ -2,9 +2,7 @@
   <div class="glass-effect" style="width: 300px">
     <div id="suggestions" v-if="!loading">
       <div class="p-0">
-        <h4 class="fw-medium my-3 text-center text-white" style="text-shadow: 0px 0px 3px black">
-          Takip Önerileri
-        </h4>
+        <h4 class="fw-medium my-3 text-center text-body">Takip Önerileri</h4>
       </div>
       <div class="py-0 tw-px-1 overflow-auto">
         <ul class="list-unstyled">
@@ -52,7 +50,7 @@
                     :to="{ name: 'userprofile', params: { id: suggested.id } }"
                     class="text-decoration-none"
                   >
-                    <div class="fw-medium text-black">
+                    <div class="fw-medium text-body">
                       {{ suggested.fullName }}
                     </div>
                   </RouterLink>
@@ -63,7 +61,7 @@
                   </button>
                   <button
                     v-else
-                    class="btn follow px-4 mt-2 fw-light"
+                    class="btn follow px-4 mt-2 tw-text-sm"
                     @click="followUser(suggested)"
                   >
                     Takip Et
@@ -148,10 +146,6 @@ const followUser = async (user: IFollowSuggestion) => {
 
 .suggestion {
   transition: 0.4s all;
-  background-color: rgba(255, 255, 255, 0.75);
-}
-.suggestion:hover {
-  transition: 0.4s all;
-  background-color: rgb(241, 245, 249);
+  /* background-color: rgba(255, 255, 255, 0.75); */
 }
 </style>
