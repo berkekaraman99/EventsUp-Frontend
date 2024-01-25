@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="vh-100">
     <!-- <div
       class="app-background"
       v-if="$route.name !== 'auth' && $route.name !== 'forgetpassword' && $route.path !== '/'"
@@ -27,8 +27,9 @@
         <div
           class="main"
           :class="{
-            'container-fluid': $route.name === 'auth' || $route.name === 'forgetpassword',
-            'container-lg': $route.name !== 'auth' && $route.name !== 'forgetpassword'
+            'tw-w-screen tw-px-3': $route.name === 'auth' || $route.name === 'forgetpassword',
+            'tw-max-w-screen-xl tw-mx-auto tw-px-3':
+              $route.name !== 'auth' && $route.name !== 'forgetpassword'
           }"
         >
           <div class="row overflow-hidden h-100">
@@ -66,29 +67,29 @@
 </template>
 
 <script setup lang="ts">
-import { defineComponent, watchEffect } from 'vue'
+import { watchEffect } from 'vue'
 import SidebarRight from './components/Sidebar/Right/SidebarRight.vue'
 import TheHeader from './components/header/TheHeader.vue'
 import LeftBar from '@/components/Sidebar/Left/LeftBar.vue'
 import BaseApp from './components/UI/BaseApp.vue'
 
-const body = document.querySelector('body')
+// const body = document.querySelector('body')
 
-window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches }) => {
-  if (matches) {
-    body?.setAttribute('data-bs-theme', 'dark')
-  } else {
-    body?.setAttribute('data-bs-theme', 'light')
-  }
-})
+// window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', ({ matches }) => {
+//   if (matches) {
+//     body?.setAttribute('data-bs-theme', 'dark')
+//   } else {
+//     body?.setAttribute('data-bs-theme', 'light')
+//   }
+// })
 
-watchEffect(() => {
-  if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-    body?.setAttribute('data-bs-theme', 'dark')
-  } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-    body?.setAttribute('data-bs-theme', 'light')
-  }
-})
+// watchEffect(() => {
+//   if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+//     body?.setAttribute('data-bs-theme', 'dark')
+//   } else if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+//     body?.setAttribute('data-bs-theme', 'light')
+//   }
+// })
 </script>
 
 <style lang="scss">

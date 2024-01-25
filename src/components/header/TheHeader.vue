@@ -1,10 +1,10 @@
 <template>
-  <nav class="container-lg p-0 sticky-top z-1">
+  <nav class="tw-max-w-screen-xl tw-mx-auto tw-p-0 sticky-top z-1">
     <div
       id="navbar"
       class="navbar-expand-lg bg-transparent glass-effect border shadow-sm navbar m-0 mx-sm-2 mx-lg-0 my-sm-3"
     >
-      <div class="container-fluid d-flex">
+      <div class="tw-w-screen tw-flex tw-justify-between tw-px-2">
         <div class="d-flex align-items-center justify-content-center">
           <span
             class="pointer rounded-3 p-2 tw-transition tw-ease-in-out tw-duration-350 bars"
@@ -14,11 +14,11 @@
             ><i class="fa-solid fa-bars-staggered fa-lg"></i
           ></span>
           <span
-            class="navbar-brand pointer fw-bold px-2 fs-4"
+            class="navbar-brand pointer dark:tw-text-white fw-bold tw-px-2 tw-text-2xl"
             @click="router.push({ name: 'home' })"
           >
             {{ t('header.title') }}
-            <span class="fw-light tw-text-base"> (Beta) </span>
+            <span class="tw-font-light dark:tw-text-white tw-text-base"> (Beta) </span>
           </span>
         </div>
 
@@ -35,9 +35,25 @@
       </button> -->
 
         <div class="">
-          <div class="d-flex align-items-center justify-content-end">
+          <div class="tw-flex tw-items-center tw-justify-center">
             <template v-if="userIsAuthorized">
-              <div class="d-flex align-items-center justify-content-center" v-if="user">
+              <div class="tw-flex tw-items-center tw-justify-center" v-if="user">
+                <div class="dropdown mx-2">
+                  <div class="pointer" data-bs-toggle="dropdown" aria-expanded="false">
+                    <div class="tw-relative">
+                      <img src="@/assets/images/ic_notification.png" height="24" alt="bell" />
+                      <span
+                        class="tw-absolute start-100 bottom-50 translate-middle p-1 bg-danger border border-light rounded-circle"
+                      >
+                        <span class="visually-hidden">New alerts</span>
+                      </span>
+                    </div>
+                  </div>
+                  <ul class="dropdown-menu dropdown-menu-end">
+                    <li><h6 class="dropdown-header">Notifications</h6></li>
+                  </ul>
+                </div>
+
                 <div class="dropdown create-nav">
                   <button type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     {{ t('header.create') }}
@@ -59,25 +75,9 @@
               </RouterLink>
               </div> -->
 
-                <div class="dropdown ms-2">
-                  <div class="pointer" data-bs-toggle="dropdown" aria-expanded="false">
-                    <div class="position-relative">
-                      <img src="@/assets/images/ic_notification.png" height="24" alt="bell" />
-                      <span
-                        class="position-absolute start-100 bottom-50 translate-middle p-1 bg-danger border border-light rounded-circle"
-                      >
-                        <span class="visually-hidden">New alerts</span>
-                      </span>
-                    </div>
-                  </div>
-                  <ul class="dropdown-menu dropdown-menu-end">
-                    <li><h6 class="dropdown-header">Notifications</h6></li>
-                  </ul>
-                </div>
-
                 <ProfileIcon :user="user" @logout="logout" />
               </div>
-              <div class="d-flex" v-else>
+              <div class="tw-flex" v-else>
                 <RouterLink :to="{ name: 'login' }" class="btn btn-primary me-3">{{
                   t('header.login')
                 }}</RouterLink>
@@ -154,7 +154,7 @@ export default defineComponent({
 }
 
 .create-nav button {
-  background-color: var(--color-primary);
+  background-color: var(--color-primary-h);
   color: white;
   border-radius: 6px;
   border: none;
@@ -164,11 +164,11 @@ export default defineComponent({
   height: 48px;
 
   &:hover {
-    background-color: var(--color-primary-hover);
+    background-color: var(--color-primary-l);
   }
 
   &:active {
-    background-color: var(--color-primary);
+    background-color: var(--color-primary-h);
   }
 }
 </style>

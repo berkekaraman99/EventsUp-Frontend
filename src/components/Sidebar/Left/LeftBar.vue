@@ -163,6 +163,9 @@ import { storeToRefs } from 'pinia'
 import { useI18n } from 'vue-i18n'
 import TabVue from '@/components/Sidebar/Left/TabVue.vue'
 import { watch } from 'vue'
+import { useTailwindConfig } from '@/composables/useTailwindConfig'
+
+const { defaultTransition } = useTailwindConfig()
 
 const { t } = useI18n()
 
@@ -213,7 +216,7 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
   background-color: white;
 
   &:hover {
-    background-color: var(--color-primary);
+    background-color: var(--color-primary-h);
     color: var(--color-text);
   }
 }
@@ -245,7 +248,7 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
 
   &:hover {
     &:not(a.router-link-exact-active) {
-      color: var(--color-primary) !important;
+      color: var(--color-primary-h) !important;
       box-shadow: inset 8px 0px 0px -2px grey;
       border: 1px solid grey;
       border-radius: 0 0.5rem 0.5rem 0;
@@ -270,7 +273,7 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
 
   &:hover {
     &:not(a.router-link-exact-active) {
-      color: var(--color-primary) !important;
+      color: var(--color-primary-h) !important;
       box-shadow: inset 8px 0px 0px -2px grey;
       border: 1px solid grey;
       border-radius: 0 0.5rem 0.5rem 0;
@@ -284,18 +287,18 @@ a {
   background-color: white;
 
   &:hover {
-    color: var(--color-primary);
+    color: var(--color-primary-h);
     background-color: #f5f5f5;
     // box-shadow: inset -6px 0px 0px -2px grey;
   }
 }
 
 a.router-link-exact-active {
-  color: var(--color-primary) !important;
+  color: var(--color-primary-h) !important;
   background-color: #f5f5f5;
   font-weight: bold;
-  box-shadow: inset 8px 0px 0px -2px var(--color-primary);
-  border: 1px solid var(--color-primary);
+  box-shadow: inset 8px 0px 0px -2px var(--color-primary-h);
+  border: 1px solid var(--color-primary-h);
   border-radius: 0 0.5rem 0.5rem 0;
 }
 

@@ -3,10 +3,19 @@ import type { ILogInModel } from '../models/login_model'
 import type { ISignUpModel } from '../models/signup_model'
 import { instance } from '../utils/network_manager'
 import { defineStore } from 'pinia'
-import SecureLS from 'secure-ls'
-import router from '@/router'
+// import SecureLS from 'secure-ls'
+import CryptoJS from 'crypto-js'
 
-const ls = new SecureLS({ isCompression: false })
+const encryptionKey = import.meta.env.ENCRYPTION_KEY ?? 'mysecretkey 123'
+
+const removeFromStorage = async (key: string) => {
+  const encryptedValue = localStorage.getItem(key)
+  if (encryptedValue) {
+    localStorage.removeItem(key)
+  }
+}
+
+// const ls = new SecureLS({ isCompression: false })
 
 export const useAuthStore = defineStore('authStore', {
   state: () => ({
@@ -104,9 +113,9 @@ export const useAuthStore = defineStore('authStore', {
       try {
         await instance
           .post('/authentication/signout', { refreshToken: this.refreshToken })
-          .then(() => {
+          .then(async () => {
             // this.user = null;
-            ls.remove('authStore')
+            await removeFromStorage('authStore')
             useAuthStore().$reset()
             instance.defaults.headers['Authorization'] = null
             location.reload()
@@ -117,7 +126,7 @@ export const useAuthStore = defineStore('authStore', {
     },
 
     async removeCredentials() {
-      ls.remove('authStore')
+      await removeFromStorage('authStore')
       useAuthStore().$reset()
       instance.defaults.headers['Authorization'] = null
     },
@@ -216,8 +225,20 @@ export const useAuthStore = defineStore('authStore', {
   },
   persist: {
     storage: {
-      getItem: (key) => ls.get(key),
-      setItem: (key, value) => ls.set(key, value)
+      // getItem: (key) => ls.get(key),
+      // setItem: (key, value) => ls.set(key, value)
+      getItem: (key) => {
+        const encryptedValue = localStorage.getItem(key)
+        if (encryptedValue) {
+          const bytes = CryptoJS.AES.decrypt(encryptedValue, encryptionKey)
+          return bytes.toString(CryptoJS.enc.Utf8)
+        }
+        return null
+      },
+      setItem: (key, value) => {
+        const encryptedValue = CryptoJS.AES.encrypt(value, encryptionKey).toString()
+        localStorage.setItem(key, encryptedValue)
+      }
     }
   }
 })

@@ -9,24 +9,24 @@
       ></the-toast>
     </Teleport>
     <div
-      class="container-fluid d-flex align-items-center justify-content-center overflow-auto min-vh-100"
+      class="tw-max-w-screen-fluid tw-flex tw-items-center tw-justify-center overflow-auto tw-h-screen"
     >
-      <div class="row w-100 h-100 align-items-center mx-3">
+      <div class="row w-100 h-100 align-items-center tw-mx-3">
         <div class="col-md-12 col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
-          <p class="fw-bold text-center fs-2 py-4">
+          <p class="tw-font-bold tw-text-center tw-text-3xl tw-py-6">
             {{ t('login.header') }}
           </p>
 
-          <div class="shadow-sm p-4 bg-body rounded-3">
+          <div class="tw-shadow-md tw-p-6 tw-bg-white tw-rounded-lg">
             <FormKit
               type="form"
               @submit="handleLogin"
               :actions="false"
               :config="{
                 classes: {
-                  outer: 'mx-auto',
-                  wrapper: 'mx-auto w-100',
-                  messages: 'text-center',
+                  outer: 'tw-mx-auto',
+                  wrapper: 'tw-mx-auto w-100',
+                  messages: 'tw-text-center',
                   input: 'w-100'
                 }
               }"
@@ -41,8 +41,8 @@
                   'formkit-wrapper': false
                 }"
                 :classes="{
-                  inner: 'rounded-1',
-                  prefixIcon: 'rounded-1'
+                  inner: 'rounded-3',
+                  prefixIcon: 'rounded-3'
                 }"
               />
               <FormKit
@@ -58,23 +58,23 @@
                   'formkit-wrapper': false
                 }"
                 :classes="{
-                  inner: 'rounded-1',
-                  prefixIcon: 'rounded-1'
+                  inner: 'rounded-3',
+                  prefixIcon: 'rounded-3'
                 }"
               />
-              <div class="d-flex justify-content-between align-items-center my-3">
+              <div class="tw-flex tw-justify-between tw-items-center tw-my-5">
                 <FormKit
                   type="checkbox"
                   :label="t('login.rememberme')"
                   name="terms"
                   :value="false"
                   :outer-class="{
-                    'mx-auto': false,
-                    'd-flex': true,
-                    'align-items-center': true,
-                    'm-0': true
+                    'tw-mx-auto': false,
+                    'tw-flex': true,
+                    'tw-items-center': true,
+                    'tw-m-0': true
                   }"
-                  :classes="{ decorator: 'rounded-1' }"
+                  :classes="{ decorator: 'rounded-3' }"
                   @click="toggleRememberMe"
                 />
                 <RouterLink
@@ -91,7 +91,7 @@
                 :disabled="loading || statusCode === 200"
                 :wrapper-class="{
                   'formkit-wrapper': false,
-                  'mx-auto text-center': true
+                  'mx-auto tw-text-center': true
                 }"
                 :outer-class="{
                   'mb-0': true
@@ -101,7 +101,7 @@
           </div>
 
           <!-- PUSH SIGN UP -->
-          <div class="text-center mt-4">
+          <div class="tw-text-center tw-mt-6">
             <p>
               {{ t('login.donthaveaccount') }}
               <span class="text-primary pointer" @click="changeType('the-signup')">{{
@@ -117,14 +117,14 @@
           <!-- ALTERNATIVE LOGINS -->
           <div class="alternative-logins my-4">
             <div
-              class="shadow-sm mt-3 rounded-3 w-100 d-flex align-items-center justify-content-center tw-bg-black hover:tw-bg-slate-900 pointer py-2 text-white"
+              class="tw-shadow mt-3 rounded-3 w-100 tw-flex tw-items-center tw-justify-center tw-bg-black hover:tw-bg-slate-900 pointer py-2 text-white"
             >
               <i class="fa-brands fa-apple fa-lg me-2"></i>
-              <span class="fw-bold">{{ t('login.apple') }}</span>
+              <span class="tw-font-bold tw-text-white">{{ t('login.apple') }}</span>
             </div>
 
             <div
-              class="d-flex align-items-center justify-content-center shadow-sm rounded-3 my-3 w-100 tw-bg-white hover:tw-bg-slate-200 pointer py-2 text-black"
+              class="tw-flex tw-items-center tw-justify-center tw-shadow rounded-3 my-3 w-100 tw-bg-white hover:tw-bg-slate-200 pointer py-2 text-black"
               :disabled="!isReady"
               @click="() => login()"
             >
@@ -135,7 +135,7 @@
                 alt="Google"
                 class="me-2"
               />
-              <span class="fw-bold text-dark">{{ t('login.google') }}</span>
+              <span class="tw-font-bold tw-text-black">{{ t('login.google') }}</span>
             </div>
 
             <!-- <div class="d-flex align-items-center justify-content-center w-100">

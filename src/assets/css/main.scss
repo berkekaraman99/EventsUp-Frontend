@@ -1,7 +1,8 @@
 :root {
-  --color-primary: #5c60db;
-  --color-primary-hover: #4b4eb5;
-  --color-secondary: #f6f6f6;
+  --color-primary-h: #392467;
+  --color-primary-l: #5d3587;
+  --color-secondary-h: #a367b1;
+  --color-secondary-l: #ffd1e3;
   --color-text: #ffffff;
   --color-text-dark: #000000;
   --color-accent: #ff9c66;
@@ -187,16 +188,23 @@ textarea {
 }
 
 a {
-  color: var(--color-primary);
+  color: var(--color-primary-h);
   &.router-link-exact-active {
-    color: var(--color-primary);
+    color: var(--color-primary-h);
+    @media (prefers-color-scheme: dark) {
+      background-color: #111;
+    }
+
+    @media (prefers-color-scheme: light) {
+      background-color: #f3f3f3;
+    }
   }
 }
 
 .dropdown-item {
   background-color: rgba(255, 255, 255, 0);
   &:active {
-    background-color: var(--color-secondary);
+    background-color: var(--color-secondary-h);
     color: var(--color-text-dark);
   }
   border-radius: 0.5rem;
@@ -215,7 +223,7 @@ a {
 
 .bars {
   &:hover {
-    background-color: var(--color-primary);
+    background-color: var(--color-primary-h);
     color: var(--color-text);
   }
 }
