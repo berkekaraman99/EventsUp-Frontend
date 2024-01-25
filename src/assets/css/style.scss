@@ -59,13 +59,16 @@ body * {
 }
 
 .follow {
-  background-color: var(--color-primary);
-  color: white;
-  border-radius: 99px;
+  background-color: var(--color-primary-h);
+  color: var(--color-text);
+  border-radius: 0.5rem;
+  border: none;
+  transition: 0.3s ease;
+  padding: 0.4rem 0.3rem;
 
   &:hover {
-    background-color: var(--color-primary-hover);
-    color: white;
+    background-color: var(--color-secondary-h);
+    color: var(--color-text);
   }
 }
 

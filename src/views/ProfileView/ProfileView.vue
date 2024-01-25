@@ -24,13 +24,18 @@
         </div>
         <div class="col-12 mt-3 mb-sm-0 mb-md-3 mb-lg-0" v-else>
           <div class="profile-header position-relative card shadow-sm rounded-4">
-            <img
-              v-if="currentUser.bannerImage != null"
-              class="profile-banner rounded-top-4"
-              :src="currentUser.bannerImage"
-              alt="banner"
-            />
-            <div v-else class="profile-banner rounded-top-4 tw-bg-slate-100"></div>
+            <div class="w-100 pro rounded-4" style="height: 267px">
+              <img
+                v-if="currentUser.bannerImage != null"
+                class="profile-banner d-block border-0 rounded-top-4 tw-bg-slate-100"
+                :src="currentUser.bannerImage"
+                alt="banner-image"
+              />
+              <div v-else class="profile-banner rounded-top-4 tw-bg-slate-100"></div>
+              <div class="banner-hover d-grid align-content-center justify-content-center">
+                <span>Arkaplan resmini değiştir</span>
+              </div>
+            </div>
 
             <img
               class="profile-image shadow"
@@ -50,7 +55,14 @@
               v-else-if="currentUser.gender == 1"
             />
             <img src="@/assets/images/user.png" alt="profile" class="profile-image me-4" v-else />
-            <div class="img-plus border">
+            <div class="img-plus border tw-shadow-md" @click="openImagePicker()">
+              <input
+                type="file"
+                id="fileInput"
+                class="d-none"
+                accept="image/*"
+                v-on:change="onFileChangeProfile"
+              />
               <i class="fa-solid fa-plus fa-xl"></i>
             </div>
 
@@ -318,6 +330,31 @@ export default defineComponent({
     const getFollowings = async () => {
       await userStore.getUserFollowings(userId, '')
     }
+
+    const openImagePicker = () => {
+      var fileInput = document.getElementById('fileInput') as HTMLInputElement
+      fileInput.click()
+    }
+
+    const profileImage: any = ref(null)
+    const onFileChangeProfile = async (e: any) => {
+      let files = e.target.files || e.dataTransfer.files
+      console.log(files[0])
+      profileImage.value = files[0]
+      console.log(profileImage.value)
+      await changeProfileImage()
+    }
+
+    const changeProfileImage = async () => {
+      const body = new FormData()
+      body.append('files', profileImage.value)
+      try {
+        await userStore.changeProfileImage(body).then(() => {})
+      } catch (error: any) {
+        console.log(error.response.data)
+      }
+    }
+
     return {
       t,
       loading,
@@ -331,7 +368,9 @@ export default defineComponent({
       currentUser,
       followerCount,
       followingCount,
-      user
+      user,
+      openImagePicker,
+      onFileChangeProfile
     }
   },
   beforeUnmount() {
@@ -439,10 +478,10 @@ label span {
 }
 
 .img-plus {
-  background-color: white;
+  background-color: var(--color-bg-light);
   border-radius: 99px;
   padding: 2px;
-  color: var(--color-primary);
+  color: var(--color-accent);
   position: absolute;
   left: 144px;
   top: 272px;
@@ -455,7 +494,7 @@ label span {
   cursor: pointer;
 
   &:hover {
-    background-color: var(--color-secondary);
+    background-color: var(--color-bg-light-secondary);
   }
 }
 
@@ -463,5 +502,28 @@ label span {
   position: absolute;
   bottom: 2rem;
   right: 2rem;
+}
+
+.banner-hover {
+  transition: opacity 0.3s ease;
+  position: absolute;
+  height: 267px;
+  top: 0;
+  left: 0;
+  right: 0;
+  border-radius: 1rem 1rem 0 0;
+  background-color: rgba($color: #000000, $alpha: 0.7);
+  opacity: 0;
+
+  & span {
+    color: var(--color-text);
+    font-weight: bold;
+  }
+
+  &:hover {
+    opacity: 1;
+    cursor: pointer;
+    transition-delay: 0.3s;
+  }
 }
 </style>

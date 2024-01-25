@@ -284,7 +284,7 @@
         {{ t('profile.profileisprivatedescription') }}
       </p>
     </div>
-    <div v-if="!currentUser.isPrivate || currentUser.isFollowing">
+    <div v-if="!currentUser.isPrivate || currentUser.isFollowing || !loading">
       <Transition name="scaleInOut" mode="out-in">
         <component :is="component" />
       </Transition>

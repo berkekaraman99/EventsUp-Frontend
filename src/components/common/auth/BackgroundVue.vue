@@ -1,6 +1,6 @@
 <template>
-  <div class="container-fluid d-none d-md-block">
-    <div class="bg-image"></div>
+  <div class="container-fluid d-none d-md-block p-3 rounded-end-5">
+    <div class="bg-image rounded-4"></div>
   </div>
 </template>
 
@@ -8,7 +8,7 @@
 
 <style scoped>
 .bg-image {
-  background-image: url("@/assets/images/login-signup-bg.jpg");
+  background-image: url('@/assets/images/login-signup-bg.jpg');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;

@@ -43,7 +43,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background-color: var(--color-primary);
+  background-color: var(--color-primary-l);
 
   margin: -4px 0 0 -4px;
 }

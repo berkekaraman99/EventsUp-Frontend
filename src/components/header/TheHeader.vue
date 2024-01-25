@@ -1,8 +1,8 @@
 <template>
-  <nav class="tw-max-w-screen-xl tw-mx-auto tw-p-0 sticky-top z-1">
+  <nav class="tw-max-w-screen-xl tw-mx-auto sticky-top py-sm-2 tw-p-0 z-1">
     <div
       id="navbar"
-      class="navbar-expand-lg bg-transparent glass-effect border shadow-sm navbar m-0 mx-sm-2 mx-lg-0 my-sm-3"
+      class="navbar-expand-lg bg-transparent glass-effect border shadow-sm navbar m-0 mx-sm-2 mx-lg-0"
     >
       <div class="tw-w-screen tw-flex tw-justify-between tw-px-2">
         <div class="d-flex align-items-center justify-content-center">
@@ -148,6 +148,7 @@ export default defineComponent({
   display: flex;
   align-items: center;
   justify-content: space-between;
+  border-radius: 0.5rem;
 
   cursor: pointer;
   text-decoration: none;
@@ -156,7 +157,7 @@ export default defineComponent({
 .create-nav button {
   background-color: var(--color-primary-h);
   color: white;
-  border-radius: 6px;
+  border-radius: 0.5rem;
   border: none;
   padding: 12px;
   transition: 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28);

@@ -1,5 +1,5 @@
 <template>
-  <div class="glass-effect" style="width: 300px">
+  <div class="glass-effect tw-shadow-md" style="width: 300px">
     <div id="suggestions" v-if="!loading">
       <div class="p-0">
         <h4 class="fw-medium my-3 text-center text-body">Takip Önerileri</h4>
@@ -56,14 +56,10 @@
                   </RouterLink>
                   <!-- <div class="text-secondary">@{{ suggested.userName }}</div> -->
                   <div class="fw-light">{{ suggested.mutualFriendCount }} ortak arkadaş</div>
-                  <button disabled class="btn follow px-4" v-if="suggested.isFollowRequested">
+                  <button disabled class="follow px-4" v-if="suggested.isFollowRequested">
                     Takip İsteği Gönderildi
                   </button>
-                  <button
-                    v-else
-                    class="btn follow px-4 mt-2 tw-text-sm"
-                    @click="followUser(suggested)"
-                  >
+                  <button v-else class="follow px-4 mt-2 tw-text-sm" @click="followUser(suggested)">
                     Takip Et
                   </button>
                 </div>

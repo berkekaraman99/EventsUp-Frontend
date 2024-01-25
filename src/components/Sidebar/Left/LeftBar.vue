@@ -241,7 +241,7 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
   padding: 0 4px;
   display: flex;
   border-radius: 0.5rem;
-  // border: 1px solid rgba($color: #ffffff, $alpha: 0.67);
+  border: 1px solid rgba($color: #f0f0f0, $alpha: 0.67) !important;
   text-decoration: none;
   // color: rgb(27, 27, 27);
   // background-color: rgba($color: #ffffff, $alpha: 0.67);
@@ -249,9 +249,9 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
   &:hover {
     &:not(a.router-link-exact-active) {
       color: var(--color-primary-h) !important;
-      box-shadow: inset 8px 0px 0px -2px grey;
-      border: 1px solid grey;
-      border-radius: 0 0.5rem 0.5rem 0;
+      // box-shadow: inset 8px 0px 0px -2px grey;
+      border-color: var(--color-secondary-h) !important;
+      // border-radius: 0 0.5rem 0.5rem 0;
       // background-color: rgba($color: #ffffff, $alpha: 1);
     }
   }
@@ -274,9 +274,9 @@ const { _authUserCommunities: communities } = storeToRefs(communityStore)
   &:hover {
     &:not(a.router-link-exact-active) {
       color: var(--color-primary-h) !important;
-      box-shadow: inset 8px 0px 0px -2px grey;
+      // box-shadow: inset 8px 0px 0px -2px grey;
       border: 1px solid grey;
-      border-radius: 0 0.5rem 0.5rem 0;
+      border-color: var(--color-secondary-h) !important;
       // background-color: rgba($color: #ffffff, $alpha: 1);
     }
   }
@@ -297,9 +297,9 @@ a.router-link-exact-active {
   color: var(--color-primary-h) !important;
   background-color: #f5f5f5;
   font-weight: bold;
-  box-shadow: inset 8px 0px 0px -2px var(--color-primary-h);
-  border: 1px solid var(--color-primary-h);
-  border-radius: 0 0.5rem 0.5rem 0;
+  // box-shadow: inset 8px 0px 0px -2px var(--color-primary-h);
+  border: 1px solid var(--color-primary-h) !important;
+  // border-radius: 0 0.5rem 0.5rem 0;
 }
 
 // .ctooltip {

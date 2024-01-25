@@ -7,7 +7,9 @@
   --color-text-dark: #000000;
   --color-accent: #ff9c66;
   --color-bg-light: #fff;
+  --color-bg-light-secondary: #f0f0f0;
   --color-bg-dark: #111;
+  --color-bg-dark-secondary: #222;
 
   @media (prefers-color-scheme: dark) {
     --fk-color-input: #fff;
@@ -216,7 +218,7 @@ a {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
   -webkit-backdrop-filter: blur(1.5rem);
   backdrop-filter: blur(1.5rem);
-  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.37);
+  // box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.37);
   border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: 0.5rem;
 }
