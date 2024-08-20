@@ -1,21 +1,19 @@
-/* eslint-disable no-undef */
-const { app, BrowserWindow } = require('electron')
-const path = require('node:path')
+import { app, BrowserWindow } from 'electron'
+import { dirname, join, resolve } from 'node:path'
 
-function createWindow() {
-  const mainWindow = new BrowserWindow({
-    width: 1280,
+const __dirname = resolve(dirname(''))
+
+const createWindow = () => {
+  const win = new BrowserWindow({
     height: 720,
+    width: 1280,
     webPreferences: {
-      nodeIntegration: true,
-      contextIsolation: true,
-      preload: path.join(__dirname, 'preload.js'),
-      devTools: true,
-      webSecurity: false
+      preload: join(__dirname, 'preload.js')
     }
   })
 
-  mainWindow.loadFile('dist/index.html')
+  win.webContents.openDevTools()
+  win.loadFile('dist/index.html')
 }
 
 app.whenReady().then(() => {

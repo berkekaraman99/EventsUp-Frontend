@@ -1,17 +1,12 @@
 <template>
   <div class="col-12 col-sm-12 col-md-6">
     <Teleport to="body">
-      <the-toast
-        :show-toast="showToast"
-        :status-code="statusCode"
-        :header="header"
-        :content="content"
-      ></the-toast>
+      <the-toast :show-toast="showToast" :status-code="statusCode" :header="header" :content="content"></the-toast>
     </Teleport>
     <div class="container-fluid d-flex justify-content-center overflow-auto vh-100">
       <div class="row w-100 align-items-center mt-4">
         <div class="col-md-12 col-lg-10 offset-lg-1 col-xl-8 offset-xl-2">
-          <p class="fw-bold text-center fs-2 py-4">{{ t('signup.header') }}</p>
+          <p class="fw-bold text-center fs-2 py-4">{{ t("signup.header") }}</p>
           <FormKit type="form" submit-label="Hesap Oluştur" @submit="handleSignUp" :actions="false">
             <FormKit
               type="multi-step"
@@ -22,7 +17,7 @@
               :classes="{
                 outer: 'mx-auto',
                 wrapper: 'mx-auto',
-                steps: 'border-0 rounded-4 bg-body-tertiary shadow-none'
+                steps: 'border-0 rounded-4 bg-body-tertiary shadow-none',
               }"
             >
               <FormKit type="step" name="Step One">
@@ -32,7 +27,7 @@
                   validation="required"
                   v-model="userObject.fullName"
                   :classes="{
-                    inner: 'rounded-1'
+                    inner: 'rounded-1',
                   }"
                 />
                 <FormKit
@@ -42,7 +37,7 @@
                   v-model="userObject.email"
                   :classes="{
                     inner: 'rounded-1',
-                    prefixIcon: 'rounded-1'
+                    prefixIcon: 'rounded-1',
                   }"
                 />
               </FormKit>
@@ -55,7 +50,7 @@
                   v-model="userObject.userName"
                   :classes="{
                     inner: 'rounded-1',
-                    prefixIcon: 'rounded-1'
+                    prefixIcon: 'rounded-1',
                   }"
                 />
                 <FormKit
@@ -65,7 +60,7 @@
                   v-model="userObject.password"
                   :classes="{
                     inner: 'rounded-1',
-                    prefixIcon: 'rounded-1'
+                    prefixIcon: 'rounded-1',
                   }"
                 />
                 <FormKit
@@ -75,12 +70,12 @@
                   :options="[
                     { label: t('signup.woman'), value: '1' },
                     { label: t('signup.man'), value: '2' },
-                    { label: t('signup.other'), value: '3' }
+                    { label: t('signup.other'), value: '3' },
                   ]"
                   validation="required"
                   v-model="userObject.gender"
                   :classes="{
-                    inner: 'rounded-1'
+                    inner: 'rounded-1',
                   }"
                 />
               </FormKit>
@@ -99,10 +94,8 @@
             />
             <div class="text-center mt-4 tw-text-sm">
               <p>
-                {{ t('signup.haveanaccount') }}
-                <span class="text-primary pointer" @click="changetype('the-signin')">{{
-                  t('signup.login')
-                }}</span>
+                {{ t("signup.haveanaccount") }}
+                <span class="text-primary pointer" @click="changetype('the-signin')">{{ t("signup.login") }}</span>
               </p>
             </div>
             <FormKit
@@ -111,56 +104,26 @@
               :disabled="!isAccepted"
               :wrapper-class="{
                 'formkit-wrapper': false,
-                'mx-auto text-center': true
+                'mx-auto text-center': true,
               }"
               :classes="{
-                input: 'rounded-1'
+                input: 'rounded-1',
               }"
             />
           </FormKit>
           <!-- PUSH LOGIN -->
 
           <div class="d-flex justify-content-center align-items-center my-4">
-            <span class="text-secondary">{{ t('signup.or') }}</span>
+            <span class="text-secondary">{{ t("signup.or") }}</span>
           </div>
 
           <!-- ALTERNATIVE SIGNUPS -->
           <div class="alternative-logins my-4">
-            <div
-              class="shadow-sm mt-3 rounded-3 w-100 d-flex align-items-center justify-content-center tw-bg-black hover:tw-bg-slate-900 pointer py-2"
-            >
+            <div class="shadow-sm mt-3 rounded-3 w-100 d-flex align-items-center justify-content-center pointer py-2">
               <i class="fa-brands fa-apple fa-lg me-2"></i>
-              <span class="fw-bold">{{ t('login.apple') }}</span>
+              <span class="fw-bold">{{ t("login.apple") }}</span>
             </div>
-
-            <div
-              class="d-flex align-items-center justify-content-center shadow-sm rounded-3 my-3 w-100 tw-bg-white hover:tw-bg-slate-200 pointer py-2"
-              :disabled="!isReady"
-              @click="() => login()"
-            >
-              <img
-                src="@/assets/images/logos/ic_google.png"
-                height="16"
-                width="16"
-                alt="Google"
-                class="me-2"
-              />
-              <span class="fw-bold text-dark">{{ t('login.google') }}</span>
-            </div>
-
-            <!-- <div class="d-flex align-items-center justify-content-center w-100">
-              <GoogleLogin class="my-3" :callback="callback" />
-            </div> -->
           </div>
-
-          <!-- <div
-            id="back"
-            class="btn mt-2 text-black d-inline-block position-fixed top-0 start-0 ms-2 mt-1"
-            @click="router.back()"
-          >
-            <i class="fa-solid fa-angle-left"></i>
-            <span class="ps-2">{{ t("signup.return") }}</span>
-          </div> -->
         </div>
       </div>
     </div>
@@ -168,55 +131,43 @@
 </template>
 
 <script setup lang="ts">
-import { inject, reactive, ref } from 'vue'
-import { useRouter } from 'vue-router'
-import type { ISignUpModel } from '@/models/signup_model'
-import { storeToRefs } from 'pinia'
-import { useAuthStore } from '@/stores/auth'
-import { useI18n } from 'vue-i18n'
-import {
-  useTokenClient,
-  type AuthCodeFlowSuccessResponse,
-  type AuthCodeFlowErrorResponse
-} from 'vue3-google-signin'
+import { inject, reactive, ref } from "vue";
+import { useRouter } from "vue-router";
+import type { ISignUpModel } from "@/models/signup_model";
+import { storeToRefs } from "pinia";
+import { useAuthStore } from "@/stores/auth";
+import { useI18n } from "vue-i18n";
 
-const { t } = useI18n()
+const { t } = useI18n();
+const emit = defineEmits(["changetype"]);
+const changetype = inject("change-type") as Function;
+const isAccepted = ref(false);
+const authStore = useAuthStore();
+const router = useRouter();
+const { _statusCode: statusCode } = storeToRefs(authStore);
 
-const emit = defineEmits(['changetype'])
-
-const changetype = inject('change-type') as Function
-
-// const changetype = () => {
-//   emit('changetype', 'login')
-// }
-
-const isAccepted = ref(false)
-const authStore = useAuthStore()
-const router = useRouter()
-const { _statusCode: statusCode } = storeToRefs(authStore)
-
-const loading = ref(false)
+const loading = ref(false);
 const changeLoadingState = () => {
-  loading.value = !loading.value
-}
+  loading.value = !loading.value;
+};
 
-const showToast = ref(false)
-const header = ref('')
-const content = ref('')
+const showToast = ref(false);
+const header = ref("");
+const content = ref("");
 const handleToast = () => {
-  showToast.value = true
+  showToast.value = true;
   setTimeout(() => {
-    showToast.value = false
-  }, 3000)
-}
+    showToast.value = false;
+  }, 3000);
+};
 
 const userObject = reactive({
-  fullName: '',
-  userName: '',
-  email: '',
-  password: '',
-  gender: '0'
-})
+  fullName: "",
+  userName: "",
+  email: "",
+  password: "",
+  gender: "0",
+});
 
 const handleSignUp = async () => {
   if (userObject.userName.length >= 6 && userObject.password.length >= 6) {
@@ -225,61 +176,47 @@ const handleSignUp = async () => {
       userName: userObject.userName,
       email: userObject.email,
       password: userObject.password,
-      gender: Number(userObject.gender)
-    }
-    changeLoadingState()
+      gender: Number(userObject.gender),
+    };
+    changeLoadingState();
     try {
       await authStore
         .signup(signUpObject)
         .then(changeLoadingState)
         .then(() => {
-          console.log(statusCode.value)
+          console.log(statusCode.value);
           if (statusCode.value === 10001) {
-            header.value = 'Kayıt Başarısız'
-            content.value = 'Kullanıcı adı kullanılmaktadır. Lütfen başka bir kullanıcı adı giriniz'
-            handleToast()
+            header.value = "Kayıt Başarısız";
+            content.value = "Kullanıcı adı kullanılmaktadır. Lütfen başka bir kullanıcı adı giriniz";
+            handleToast();
           } else if (statusCode.value === 10002) {
-            header.value = 'Kayıt Başarısız'
-            content.value = 'Email adresi kullanılmaktadır. Lütfen başka bir email adresi giriniz'
-            handleToast()
+            header.value = "Kayıt Başarısız";
+            content.value = "Email adresi kullanılmaktadır. Lütfen başka bir email adresi giriniz";
+            handleToast();
           } else if (statusCode.value === 200) {
-            header.value = 'Kayıt Başarılı'
-            content.value = 'Başarıyla kayıt oldunuz. Ana sayfaya yönlendiriliyorsunuz.'
-            handleToast()
+            header.value = "Kayıt Başarılı";
+            content.value = "Başarıyla kayıt oldunuz. Ana sayfaya yönlendiriliyorsunuz.";
+            handleToast();
             setTimeout(() => {
-              router.push({ name: 'home' })
-            }, 2500)
+              router.push({ name: "home" });
+            }, 2500);
           } else {
-            header.value = 'Kayıt Başarısız'
-            content.value = 'Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz'
-            handleToast()
+            header.value = "Kayıt Başarısız";
+            content.value = "Bir hata oluştu. Lütfen daha sonra tekrar deneyiniz";
+            handleToast();
           }
-        })
-      console.log(userObject)
+        });
+      console.log(userObject);
     } catch (err: any) {
-      console.log(err.response.data)
-      changeLoadingState()
+      console.log(err.response.data);
+      changeLoadingState();
     }
   }
-}
-
-const handleOnSuccess = (response: AuthCodeFlowSuccessResponse) => {
-  console.log('Access Token: ', response.access_token)
-}
-
-const handleOnError = (errorResponse: AuthCodeFlowErrorResponse) => {
-  console.log('Error: ', errorResponse)
-}
-
-const { isReady, login } = useTokenClient({
-  onSuccess: handleOnSuccess,
-  onError: handleOnError
-  // other options
-})
+};
 
 const handleCheckbox = () => {
-  isAccepted.value = !isAccepted.value
-}
+  isAccepted.value = !isAccepted.value;
+};
 </script>
 
 <style scoped lang="scss">
